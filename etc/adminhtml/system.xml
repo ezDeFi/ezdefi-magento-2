@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="1000" translate="label">
+            <group id="ezdefi_paymentmethod" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
+                <label>Ezdefi</label>
+                <field id="active" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label"
+                       type="select">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="gateway_api_url" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20"
+                       translate="label" type="text">
+                    <label>GATEWAY API URL</label>
+                    <validate>validate-url</validate>
+                </field>
+                <field id="api_key" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30"
+                       translate="label" type="text">
+                    <label>API KEY</label>
+                </field>
+                <field id="payment_method" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="40"
+                       translate="label" type="multiselect">
+                    <label>PaymentMethod</label>
+                    <source_model>Ezdefi\PaymentMethod\Model\Adminhtml\Source\PaymentMethod</source_model>
+                </field>
+                <field id="variation" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="50"
+                       translate="label" type="text">
+                    <label>ACCEPTABLE PRICE AVAILABLE</label>
+                    <comment>Allowable amount variation</comment>
+                </field>
+
+                <field id="currency" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="60" translate="label">
+                    <label>Coins</label>
+                    <frontend_model>Ezdefi\PaymentMethod\Block\Adminhtml\Form\Field\CryptoCurrencies</frontend_model>
+                    <backend_model>Ezdefi\PaymentMethod\Model\Adminhtml\System\Config\CryptoCurrencies</backend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

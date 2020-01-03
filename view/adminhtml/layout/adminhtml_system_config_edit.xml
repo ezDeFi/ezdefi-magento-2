@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Ezdefi_PaymentMethod::css/select2.min.css"/>
+        <css src="Ezdefi_PaymentMethod::css/ezdefi.css"/>
+        <link src="Ezdefi_PaymentMethod::js/ezdefi.js"/>
+    </head>
+</page>

@@ -1,0 +1,16 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+  <type name="Magento\Payment\Model\CcGenericConfigProvider">
+    <arguments>
+      <argument name="methodCodes" xsi:type="array">
+        <item name="ezdefi_paymentmethod" xsi:type="const">Ezdefi\PaymentMethod\Model\Ezdefi::CODE</item>
+      </argument>
+    </arguments>
+  </type>
+  <type name="Magento\Checkout\Model\CompositeConfigProvider">
+    <arguments>
+      <argument name="configProviders" xsi:type="array">
+        <item name="ezdefi_paymentmethod_config_provider" xsi:type="object">Ezdefi\PaymentMethod\Model\SampleConfigProvider</item>
+      </argument>
+    </arguments>
+  </type>
+</config>
