@@ -1,5 +1,5 @@
 <?php
-namespace Ezdefi\PaymentMethod\Model;
+namespace Ezdefi\Payment\Model;
 
 class Currency extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -11,7 +11,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel implements \Magent
 
     protected function _construct()
     {
-        $this->_init('Ezdefi\PaymentMethod\Model\ResourceModel\Currency');
+        $this->_init('Ezdefi\Payment\Model\ResourceModel\Currency');
     }
 
     public function getIdentities()

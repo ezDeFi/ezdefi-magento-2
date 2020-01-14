@@ -1,15 +1,14 @@
 <?php
 
-namespace Ezdefi\PaymentMethod\Model\Adminhtml\System\Config;
+namespace Ezdefi\Payment\Model\Adminhtml\System\Config;
 
 use \Magento\Framework\Exception\ValidatorException;
-use \Ezdefi\PaymentMethod\Model\CurrencyFactory;
+use \Ezdefi\Payment\Model\CurrencyFactory;
 
 class CryptoCurrencies extends \Magento\Framework\App\Config\Value
 {
 
-    protected $_configValueFactory;
-    protected $currencyFactory;
+    protected $_currencyFactory;
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -26,14 +25,12 @@ class CryptoCurrencies extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Framework\App\Config\ValueFactory $configValueFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         CurrencyFactory $currencyFactory,
         array $data = []
     ) {
-        $this->_configValueFactory = $configValueFactory;
-        $this->currencyFactory = $currencyFactory;
+        $this->_currencyFactory = $currencyFactory;
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
@@ -78,13 +75,11 @@ class CryptoCurrencies extends \Magento\Framework\App\Config\Value
     }
 
     private function saveCurrency($currenciesData) {
-//        echo "<pre>";
-//        print_r($currenciesData);die;
-        $model = $this->currencyFactory->create();
+        $model = $this->_currencyFactory->create();
 
         foreach ($currenciesData as $currencyData) {
             $model->addData([
-                'currency_id'                 => $currencyData['id'],
+                'currency_id'        => $currencyData['id'],
                 'logo'               => $currencyData['logo'],
                 'symbol'             => $currencyData['symbol'],
                 'name'               => $currencyData['name'],

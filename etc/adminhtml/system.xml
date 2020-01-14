@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="payment" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="1000" translate="label">
-            <group id="ezdefi_paymentmethod" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
+            <group id="ezdefi_payment" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
                 <label>Ezdefi</label>
                 <field id="active" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label"
                        type="select">
@@ -22,18 +22,17 @@
                 <field id="payment_method" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="40"
                        translate="label" type="multiselect">
                     <label>PaymentMethod</label>
-                    <source_model>Ezdefi\PaymentMethod\Model\Adminhtml\Source\PaymentMethod</source_model>
+                    <source_model>Ezdefi\Payment\Model\Adminhtml\Source\PaymentMethod</source_model>
                 </field>
                 <field id="variation" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="50"
                        translate="label" type="text">
                     <label>ACCEPTABLE PRICE AVAILABLE</label>
                     <comment>Allowable amount variation</comment>
                 </field>
-
-                <field id="currency" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="60" translate="label">
+                <field id="currency" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="60" translate="label" type="text">
                     <label>Coins</label>
-                    <frontend_model>Ezdefi\PaymentMethod\Block\Adminhtml\Form\Field\CryptoCurrencies</frontend_model>
-                    <backend_model>Ezdefi\PaymentMethod\Model\Adminhtml\System\Config\CryptoCurrencies</backend_model>
+                    <frontend_model>Ezdefi\Payment\Block\Adminhtml\Form\Field\CryptoCurrencies</frontend_model>
+                    <backend_model>Ezdefi\Payment\Model\Adminhtml\System\Config\CryptoCurrencies</backend_model>
                 </field>
             </group>
         </section>

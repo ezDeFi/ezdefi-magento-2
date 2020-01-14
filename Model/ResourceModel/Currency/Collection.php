@@ -1,5 +1,5 @@
 <?php
-namespace Ezdefi\PaymentMethod\Model\ResourceModel\Currency;
+namespace Ezdefi\Payment\Model\ResourceModel\Currency;
 
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -14,7 +14,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Ezdefi\PaymentMethod\Model\Currency', 'Ezdefi\PaymentMethod\Model\ResourceModel\Currency');
+        $this->_init('Ezdefi\Payment\Model\Currency', 'Ezdefi\Payment\Model\ResourceModel\Currency');
     }
 
 }

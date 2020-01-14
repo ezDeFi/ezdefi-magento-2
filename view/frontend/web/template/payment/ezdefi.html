@@ -1,3 +1,7 @@
+<link rel="stylesheet"
+      href="../../../../../../../../../pub/static/frontend/Magento/luma/en_US/Ezdefi_Payment/css/ezdefi.css">
+<script src="../../js/view/payment/method-renderer/ezdefi.js"></script>
+<link rel="stylesheet" href="../../css/ezdefi.css">
 <div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
     <div class="payment-method-title field choice">
         <input type="radio"
@@ -8,13 +12,88 @@
             <span data-bind="text: getTitle()"></span>
         </label>
     </div>
+
     <div class="payment-method-content">
         <div class="payment-method-billing-address">
             <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <h1>ezdefi</h1>
+
+        <div class="ezdefi__select-currency-box">
+            <div class="ezdefi__select-currency--list">
+                <!-- ko foreach: {data: getCurrencies(), as: 'currency'} -->
+                <label class="ezdefi__select-currency--label" data-bind="attr: {for: 'ezdefi__select-currency-' + currency.currency_id}">
+                    <!-- ko if: currency.description -->
+                    <img data-bind="attr: {'src':currency.logo }" alt="" class="ezdefi-select-currency-item--logo" data-toggle="tooltip" title="{{ currency.description }}">
+                    <!--/ko-->
+                    <!-- ko ifnot: currency.description -->
+                    <img data-bind="attr: {'src':currency.logo }" alt="" class="ezdefi__select-currency-item--logo">
+                    <!--/ko-->
+                    <span class="ezdefi__select-currency-item--symbol" data-bind="text: currency.symbol"></span>
+                    <span class="ezdefi__select-currency-item--discount" data-bind="text: '-' + (currency.discount)+'%'"></span>
+                    <input  type="radio" name="currency-selected-to-order" class="hidden ezdefi__select-currency--checkbox"
+                            data-bind="attr: {'id'         : 'ezdefi__select-currency-' + currency.currency_id,
+                                            'value'        : currency.currency_id,
+                                            'data-name'    : currency.name,
+                                            'data-logo'    : currency.logo,
+                                            'data-discount': currency.discount}">
+                </label>
+                <!--/ko-->
+            </div>
+            <!-- ko ifnot: isPlaceOrder -->
+            <button data-role="review-save" class="action primary ezdefi__btn-create-payment" disabled data-bind="event: {click: function() { createPayment(null)} }"> place order next </button>
+            <!--/ko-->
+            <!-- ko if: isPlaceOrder -->
+            <button data-role="review-save" class="action primary ezdefi__btn-create-payment" disabled data-bind="event: {click: function() { createPayment(null)} }"> change next </button>
+            <!--/ko-->
+        </div>
+
+        <!--ko if: isShowPaymentContent -->
+
+        <div class="ezdefi-payment-box">
+            <div class="ezdefi-payment__header">
+                <img alt="" class="ezdefi-payment__coin-logo tooltip-show-discount" data-toggle="popover" title="Discount" data-placement="top" data-content="Discount:" data-trigger="hover"
+                     data-bind="attr: {src: currencyChoosed.logo}">
+                <span class="ezdefi__coin-name tooltip-show-discount" data-toggle="popover" title="Discount" data-placement="top" data-content="Discount:" data-trigger="hover"
+                      data-bind="text: currencyChoosed.name"></span>
+                <span class="wide-space"></span>
+                <button class="ezdefi__btn-change-coin" data-bind="click: changeCurrency"> Change </button>
+            </div>
+
+            <div class="ezdefi-payment__content">
+                <label class="btn-show-payment--simple btn-choose-payment-type ezdefi__check-showed-payment" data-bind="click: createSimplePayment">
+                    Pay with any crypto wallet
+                </label>
+                <label class="btn-show-payment--ezdefi btn-choose-payment-type" data-bind="click: createEzdefiPayment">
+                    Pay with ezDeFi wallet
+                </label>
+                <div class="payment-box simple-pay-box" data-bind="style:{'display': 'block'}">
+                    <!-- ko ifnot: simplePaymentContent() -->
+                    <div class="loader--simple loader">
+                        <div class="Loader__item"></div>
+                        <div class="Loader__item"></div>
+                        <div class="Loader__item"></div>
+                    </div>
+                    <!-- /ko -->
+                    <div class="ezdefi__simple-payment-content" data-bind="html: simplePaymentContent">
+                    </div>
+                </div>
+                <div class="payment-box ezdefi-pay-box">
+                    <!-- ko ifnot: ezdefiPaymentContent() -->
+                    <div class="loader--ezdefi loader">
+                        <div class="Loader__item"></div>
+                        <div class="Loader__item"></div>
+                        <div class="Loader__item"></div>
+                    </div>
+                    <!-- /ko -->
+                    <div class="ezdefi__simple-payment-content" data-bind="html: ezdefiPaymentContent">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /ko -->
+
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
             <!-- ko template: getTemplate() --><!-- /ko -->

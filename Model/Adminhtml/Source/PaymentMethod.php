@@ -1,6 +1,6 @@
 <?php
 
-namespace Ezdefi\PaymentMethod\Model\Adminhtml\Source;
+namespace Ezdefi\Payment\Model\Adminhtml\Source;
 
 use Magento\Framework\Option\ArrayInterface;
 

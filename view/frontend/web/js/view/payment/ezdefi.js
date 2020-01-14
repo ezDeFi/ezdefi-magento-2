@@ -9,8 +9,8 @@ define([
 
         rendererList.push(
             {
-                type: 'ezdefi_paymentmethod',
-                component: 'Ezdefi_PaymentMethod/js/view/payment/method-renderer/ezdefi'
+                type: 'ezdefi_payment',
+                component: 'Ezdefi_Payment/js/view/payment/method-renderer/ezdefi'
             }
         );
 

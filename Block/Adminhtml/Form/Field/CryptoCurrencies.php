@@ -1,12 +1,12 @@
 <?php
 
-namespace Ezdefi\PaymentMethod\Block\Adminhtml\Form\Field;
+namespace Ezdefi\Payment\Block\Adminhtml\Form\Field;
 
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
 use Magento\Framework\DataObject;
 use \Magento\Backend\Block\Template\Context;
 use \Magento\Framework\Data\Form\Element\AbstractElement;
-use \Ezdefi\PaymentMethod\Model\CurrencyFactory;
+use \Ezdefi\Payment\Model\CurrencyFactory;
 
 /**
  * Class CryptoCurrencies

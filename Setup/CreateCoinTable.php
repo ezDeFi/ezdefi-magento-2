@@ -1,6 +1,6 @@
 <?php
 
-namespace Ezdefi\PaymentMethod\Setup;
+namespace Ezdefi\Payment\Setup;
 
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;

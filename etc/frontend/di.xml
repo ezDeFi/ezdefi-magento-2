@@ -2,14 +2,14 @@
   <type name="Magento\Payment\Model\CcGenericConfigProvider">
     <arguments>
       <argument name="methodCodes" xsi:type="array">
-        <item name="ezdefi_paymentmethod" xsi:type="const">Ezdefi\PaymentMethod\Model\Ezdefi::CODE</item>
+        <item name="ezdefi_payment" xsi:type="const">Ezdefi\Payment\Model\Payment\Ezdefi::CODE</item>
       </argument>
     </arguments>
   </type>
   <type name="Magento\Checkout\Model\CompositeConfigProvider">
     <arguments>
       <argument name="configProviders" xsi:type="array">
-        <item name="ezdefi_paymentmethod_config_provider" xsi:type="object">Ezdefi\PaymentMethod\Model\SampleConfigProvider</item>
+        <item name="ezdefi_payment_config_provider" xsi:type="object">Ezdefi\Payment\Model\Payment\ConfigProvider</item>
       </argument>
     </arguments>
   </type>

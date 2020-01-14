@@ -3,13 +3,13 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <payment>
-            <ezdefi_paymentmethod>
+            <ezdefi_payment>
                 <title>ezdefi</title>
                 <can_use_checkout>1</can_use_checkout>
                 <active>1</active>
-                <model>Ezdefi\PaymentMethod\Model\Ezdefi</model>
+                <model>Ezdefi\Payment\Model\Payment\Ezdefi</model>
                 <cctypes>AE</cctypes>
-            </ezdefi_paymentmethod>
+            </ezdefi_payment>
         </payment>
     </default>
 </config>

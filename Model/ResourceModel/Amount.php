@@ -2,7 +2,7 @@
 namespace Ezdefi\Payment\Model\ResourceModel;
 
 
-class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Amount extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
 
     public function __construct(
@@ -14,7 +14,7 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     protected function _construct()
     {
-        $this->_init('ezdefi_currency', 'id');
+        $this->_init('ezdefi_amount', 'id');
     }
 
 }

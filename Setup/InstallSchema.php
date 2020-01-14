@@ -1,10 +1,11 @@
 <?php
 
-namespace Ezdefi\PaymentMethod\Setup;
+namespace Ezdefi\Payment\Setup;
 
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use \Magento\Framework\DB\Ddl\Table;
 //use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
@@ -24,7 +25,7 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getTable('ezdefi_currency'))
             ->addColumn(
                 'id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                Table::TYPE_INTEGER,
                 11,
                 [
                     'identity' => true,
@@ -36,7 +37,7 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->addColumn(
                 'currency_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                Table::TYPE_TEXT,
                 50,
                 [
                     'nullable' => false,
@@ -45,59 +46,59 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->addColumn(
                 'logo',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                Table::TYPE_TEXT,
                 255,
                 ['nullable' => false],
                 'logo'
             )
             ->addColumn(
                 'symbol',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                Table::TYPE_TEXT,
                 255,
                 ['nullable' => false],
                 'symbol'
             )
             ->addColumn(
                 'name',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                Table::TYPE_TEXT,
                 255,
                 ['nullable' => false],
                 'name'
             )->addColumn(
                 'discount',
-                \Magento\Framework\DB\Ddl\Table::TYPE_FLOAT,
+                Table::TYPE_FLOAT,
                 '5,2',
                 [],
                 'discount'
             )->addColumn(
                 'payment_lifetime',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                Table::TYPE_INTEGER,
                 11,
                 [],
                 'payment lifetime'
             )
             ->addColumn(
                 'wallet_address',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                Table::TYPE_TEXT,
                 255,
                 ['nullable' => false],
                 'wallet address'
             )
             ->addColumn(
                 'block_confirmation',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                Table::TYPE_INTEGER,
                 11,
                 [],
                 'block confirmation'
             )->addColumn(
                 'decimal',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                Table::TYPE_INTEGER,
                 11,
                 ['default' => 8],
                 'decimal'
             )->addColumn(
                 'description',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                Table::TYPE_TEXT,
                 255,
                 ['default' => ''],
                 'description'
@@ -111,6 +112,66 @@ class InstallSchema implements InstallSchemaInterface
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )->setComment('Ezdefi currency Table');
         $installer->getConnection()->createTable($table);
+
+
+        $tableAmount = $installer->getConnection()->newTable(
+            $installer->getTable('ezdefi_amount'))
+            ->addColumn(
+                'id',
+                Table::TYPE_INTEGER,
+                11,
+                [
+                    'identity' => true,
+                    'nullable' => false,
+                    'primary'  => true,
+                    'unsigned' => true,
+                ],
+                'id'
+            )
+            ->addColumn(
+                'temp',
+                Table::TYPE_INTEGER,
+                11,
+                [
+                    'nullable' => false,
+                ],
+                'temp'
+            )
+            ->addColumn(
+                'amount',
+                Table::TYPE_DECIMAL,
+                '25,14',
+                ['nullable' => false],
+                'amount'
+            )
+            ->addColumn(
+                'tag_amount',
+                Table::TYPE_DECIMAL,
+                '25,14',
+                ['nullable' => false],
+                'tag_amount'
+            )
+            ->addColumn(
+                'expiration',
+                Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false],
+                'expiration'
+            )->addColumn(
+                'currency',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                50,
+                [],
+                'currency'
+            )->addColumn(
+                'decimal',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                5,
+                ['nullable' => false],
+                'decimal'
+            )->setComment('Ezdefi amount Table');
+        $installer->getConnection()->createTable($tableAmount);
+
         $installer->endSetup();
     }
 }
