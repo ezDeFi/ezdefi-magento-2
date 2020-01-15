@@ -2,40 +2,38 @@ require(
     [
         'jquery',
         'mage/translate',
-        'Ezdefi_PaymentMethod/js/select2.min'
+        'Ezdefi_Payment/js/select2.min'
     ],
     function ($) {
         var selectors = {
-            formConfig: '#ezdefi-form-config',
-            selectCoinConfig: '.ezdefi-select-coin',
-            coinConfigTable: '#ezdefi-configuration-coin-table',
-            cloneRowCoinConfig: '.coin-config-clone',
-            btnAdd: '#btn-add',
-            btnDelete: '.btn-confirm-delete',
-            btnEdit: '.btn-submit-edit',
-            btnCancel: '.btn-cancel',
-            gatewayApiUrlInput: "#gateway-api-url-input",
-            apiKeyInput: "#api-key-input",
-            orderStatusInput: "#order-status-input",
-            enableSimplePayInput: "#enable-simple-pay",
-            enableEscrowPayInput: "#enable-escrow-pay",
-            variationInput: "#variation-input",
-            decimalBox: ".decimal-input-box",
-            variationBox: ".variation-input-box",
-            coinIdInput: '.coin-config__id',
-            coinOrderInput: '.coin-config__order',
-            coinSymbolInput: '.coin-config__fullname',
-            coinNameInput: '.coin-config__name',
-            coinDiscountInput: '.coin-config__discount',
-            coinPaymentLifetimeInput: '.coin-config__payment-lifetime',
-            coinWalletAddressInput: '.coin-config__wallet-address',
-            coinSafeBlockDistantInput: '.coin-config__safe-block-distant',
-            coinDecimalInput: '.coin-config__decimal',
-            editCoinDecimalInput: '.edit-coin-config__decimal',
-            cancelSelectCoin: '.cancel-select-coin',
-            modalEditCoin: '.modal-edit-coin'
+            simplePaymentCheckbox   : '.ezdefi__simple-payment-checkbox',
+            ezdefiPaymentCheckbox   : '.ezdefi__ezdefi-payment-checkbox',
+            checkPaymentMethodInput : '.check-payment-method-input',
+            currencySymbolInput     : '.ezdefi__currency-symbol-input',
+            currencyNameInput       : '.ezdefi__currency-name-input',
+            currencyIdInput         : '.ezdefi__currency-id-input',
+            currencyDescriptionInput: '.ezdefi__currency-description-input',
+            currencyLogoInput       : '.ezdefi__currency-logo-input',
+            currencydiscountInput   : '.ezdefi__currency-discount-input',
+            currencyLifetimeInput   : '.ezdefi__payment-lifetime-input',
+            currencyDecimalInput    : '.ezdefi__currency-decimal-input',
+            blockConfirmationInput  : '.ezdefi_block-confirmation-input',
+            walletAddressInput      : '.ezdefi__wallet-address-input',
+            btnCancelAddCurrency    : '.canel-add-currency-input',
+            btnDeleteCurrency       : '.btn-delete-curency-config'
         }
         var tmp = 1;
+
+        $(document).on("change", selectors.simplePaymentCheckbox, checkPaymentMethodRequire);
+        $(document).on("change", selectors.ezdefiPaymentCheckbox, checkPaymentMethodRequire);
+
+        function checkPaymentMethodRequire() {
+            if( !$(selectors.simplePaymentCheckbox).is(':checked') && !$(selectors.ezdefiPaymentCheckbox).is(':checked')) {
+                $(selectors.checkPaymentMethodInput).val('');
+            } else {
+                $(selectors.checkPaymentMethodInput).val('1');
+            }
+        }
 
         $(document).on("click", "#ezdefi-configuration-add-coin", function () {
             tmp += 1;
@@ -44,23 +42,23 @@ require(
                     <select class="ezdefi-select-coin" style="width: 200px" data-test="1" id="select-currency-${tmp}">
                         <option value=""></option>
                     </select><br>
-                    <input type="hidden" class="ezdefi__currency-symbol">
-                    <input type="hidden" class="ezdefi__currency-name">
-                    <input type="hidden" class="ezdefi__currency-id">
-                    <input type="hidden" class="ezdefi__currency-description">
-                    <input type="hidden" class="ezdefi__currency-logo">
+                    <input type="hidden" class="${selectorToClass(selectors.currencySymbolInput)}">
+                    <input type="hidden" class="${selectorToClass(selectors.currencyNameInput)}">
+                    <input type="hidden" class="${selectorToClass(selectors.currencyIdInput)}">
+                    <input type="hidden" class="${selectorToClass(selectors.currencyDescriptionInput)}">
+                    <input type="hidden" class="${selectorToClass(selectors.currencyLogoInput)}">
                 </td>
                 <td>
-                    <input type="text" class="form-control ezdefi__discount">
+                    <input type="text" class="${selectorToClass(selectors.currencydiscountInput)}">
                 </td>
                 <td>
-                    <input type="text" class="form-control ezdefi__payment-lifetime">
+                    <input type="text" class="${selectorToClass(selectors.currencyLifetimeInput)}">
                 </td>
-                <td><input type="text" class="form-control ezdefi__wallet-address"></td>
-                <td><input type="text" class="form-control ezdefi__block-confirmation"></td>
-                <td><input type="text" class="form-control ezdefi__currency-decimal"></td>
+                <td><input type="text" class="${selectorToClass(selectors.walletAddressInput)}"></td>
+                <td><input type="text" class="${selectorToClass(selectors.blockConfirmationInput)}"></td>
+                <td><input type="text" class="${selectorToClass(selectors.currencyDecimalInput)}"></td>
                 <td>
-                    <button class="action-delete delete-curency-config cancel-add-currency" type="button"><span>Delete</span></button>
+                    <button class="action-delete delete-curency-config ${selectorToClass(selectors.btnCancelAddCurrency)}" type="button"><span>Delete</span></button>
                 </td>
             </tr>`;
             $("#ezdefi-configuration-coin-table").append(container);
@@ -69,8 +67,14 @@ require(
             $(".ezdefi-select-coin").on('select2:select', selectCoinListener);
         });
 
+        $(document).on("click", selectors.btnDeleteCurrency, function () {
+            var currencyId = $(this).data('currency-id');
+            $(".ezdefi__list-currency-delete").append('<input type="hidden" name="groups[ezdefi_payment][fields][currency][value][ids_delete][]" value="'+currencyId+'">');
+            $(this).parent().parent().remove();
+        });
+
         function initCancelAddCurrency() {
-            $('.cancel-add-currency').click(function () {
+            $(selectors.btnCancelAddCurrency).click(function () {
                 $(this).parent().parent().remove();
             });
         }
@@ -110,11 +114,11 @@ require(
             }
             return `<div class='select2-result-repository clearfix select-coin-box' id="${repo.id}">
                 <div class='select2-result-repository__meta'>
-                    <div>
+                    <div class="ezdefi__select-currency--item">
                         <span>
-                            <img src="${repo.logo}" alt="" class="select-coin__logo">
+                            <img src="${repo.logo}" alt="" class="ezdefi__select-currency--logo">
                         </span>
-                        <span class='select2-result-repository__title text-justify select-coin__name'>${repo.name}</span>
+                        <span class='select2-result-repository__title text-justify ezdefi__select-currency--name'>${repo.name}</span>
                     </div>
                 </div>
             </div>`;
@@ -123,11 +127,11 @@ require(
         function formatRepoSelection(repo) {
             return `<div class='select2-result-repository clearfix select-coin-box' id="${repo.id}">
                 <div class='select2-result-repository__meta'>
-                    <div>
+                    <div class="ezdefi__select-currency--item">
                         <span>
-                            <img src="${repo.logo}" alt="" class="select-coin__logo">
+                            <img src="${repo.logo}" alt="" class="ezdefi__select-currency--logo">
                         </span>
-                        <span class='select2-result-repository__title text-justify select-coin__name'>${repo.name}</span>
+                        <span class='select2-result-repository__title text-justify ezdefi__select-currency--name'>${repo.name}</span>
                    </div>
                 </div>
             </div>`;
@@ -137,19 +141,19 @@ require(
             let data = e.params.data;
             let rowElement = e.currentTarget.parentNode.parentNode;
 
-            let idInput             = $(rowElement).find('.ezdefi__currency-id');
-            let nameInput           = $(rowElement).find('.ezdefi__currency-name');
-            let symbolInput         = $(rowElement).find('.ezdefi__currency-symbol');
-            let descriptionInput    = $(rowElement).find('.ezdefi__currency-description');
-            let logoInput           = $(rowElement).find('.ezdefi__currency-logo');
-            let decimal             = $(rowElement).find('.ezdefi__currency-decimal');
+            let idInput          = $(rowElement).find(selectors.currencyIdInput);
+            let nameInput        = $(rowElement).find(selectors.currencyNameInput);
+            let symbolInput      = $(rowElement).find(selectors.currencySymbolInput);
+            let descriptionInput = $(rowElement).find(selectors.currencyDescriptionInput);
+            let logoInput        = $(rowElement).find(selectors.currencyLogoInput);
+            let decimal          = $(rowElement).find(selectors.currencyDecimalInput);
 
-            idInput         .attr('name', 'groups[ezdefi][fields][currency][value]['+data._id+'][id]');
-            nameInput       .attr('name', 'groups[ezdefi][fields][currency][value]['+data._id+'][name]');
-            symbolInput     .attr('name', 'groups[ezdefi][fields][currency][value]['+data._id+'][symbol]');
-            descriptionInput.attr('name', 'groups[ezdefi][fields][currency][value]['+data._id+'][description]');
-            logoInput       .attr('name', 'groups[ezdefi][fields][currency][value]['+data._id+'][logo]');
-            decimal         .attr('name', 'groups[ezdefi][fields][currency][value]['+data._id+'][decimal]');
+            idInput         .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][id]');
+            nameInput       .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][name]');
+            symbolInput     .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][symbol]');
+            descriptionInput.attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][description]');
+            logoInput       .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][logo]');
+            decimal         .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][decimal]');
 
             idInput         .val(data._id)
             nameInput       .val(data.name)
@@ -158,10 +162,14 @@ require(
             logoInput       .val(data.logo);
             decimal         .val(data.suggestedDecimal);
 
-            $(rowElement).find('.ezdefi__payment-lifetime')  .attr('name', 'groups[ezdefi][fields][currency][value]['+data._id+'][lifetime]');
-            $(rowElement).find('.ezdefi__wallet-address')    .attr('name', 'groups[ezdefi][fields][currency][value]['+data._id+'][wallet_address]');
-            $(rowElement).find('.ezdefi__block-confirmation').attr('name', 'groups[ezdefi][fields][currency][value]['+data._id+'][block_confirmation]');
-            $(rowElement).find('.ezdefi__discount')          .attr('name', 'groups[ezdefi][fields][currency][value]['+data._id+'][discount]');
+            $(rowElement).find(selectors.currencyLifetimeInput) .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][lifetime]');
+            $(rowElement).find(selectors.walletAddressInput)    .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][wallet_address]');
+            $(rowElement).find(selectors.blockConfirmationInput).attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][block_confirmation]');
+            $(rowElement).find(selectors.currencydiscountInput) .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][discount]');
+        }
+        
+        function selectorToClass(selector) {
+            return selector.slice(1);
         }
     }
 );

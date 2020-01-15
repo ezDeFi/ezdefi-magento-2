@@ -1,5 +1,5 @@
 <?php
-namespace Ezdefi\PaymentMethod\Controller\Adminhtml\Gateway;
+namespace Ezdefi\Payment\Controller\Adminhtml\Gateway;
 
 use \Magento\Framework\HTTP\Client\Curl;
 use \Magento\Framework\Controller\ResultFactory;
@@ -10,29 +10,18 @@ class ListCoin extends \Magento\Framework\App\Action\Action
 {
     protected $_pageFactory;
 
-    protected $scope;
-
 
     public function __construct(
         Context $context,
-        PageFactory $pageFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scope
+        PageFactory $pageFactory
     )
     {
         $this->_pageFactory = $pageFactory;
-        $this->scope = $scope;
         return parent::__construct($context);
     }
 
     public function execute()
     {
-
-        $methodList     = $this->scope->getValue('payment');
-
-        echo "<pre>";
-        print_r($methodList);die;
-
-
         $response = $this->resultFactory->create(ResultFactory::TYPE_JSON);
 
         $curl = new Curl();

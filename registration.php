@@ -5,6 +5,6 @@
  */
 \Magento\Framework\Component\ComponentRegistrar::register(
     \Magento\Framework\Component\ComponentRegistrar::MODULE,
-    'Ezdefi_PaymentMethod',
+    'Ezdefi_Payment',
     __DIR__
 );

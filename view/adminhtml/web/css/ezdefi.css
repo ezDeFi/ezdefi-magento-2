@@ -1,0 +1,29 @@
+.ezdefi__wallet-address-input {
+    width: 200px !important;
+}
+
+.ezdefi__currency-symbol {
+    width: 150px;
+    position: relative;
+}
+
+.ezdefi__currency-symbol >img {
+    width: 32px;
+    height: 32px;
+}
+
+.ezdefi__currency-symbol>span, .ezdefi__select-currency--name {
+    padding-left: 5px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.ezdefi__select-currency--item {
+    position:relative;
+}
+
+.ezdefi__select-currency--logo {
+    width: 36px;
+    height: 36px;
+}
