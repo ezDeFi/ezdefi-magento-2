@@ -23,8 +23,8 @@ class PaymentMethod implements ArrayInterface
     public function toOptionArray($isMultiselect = false)
     {
         return [
-            ['value' => 'simple', 'label' => 'simple'],
-            ['value' => 'ezdefi', 'label' =>'ezdefi']
+            ['value' => 'simple', 'label' => 'simple111', 'validate' => 'validate-one-required-by-name',],
+            ['value' => 'ezdefi', 'label' =>'ezdefi111', 'validate' => 'validate-one-required-by-name',]
         ];
     }
 }

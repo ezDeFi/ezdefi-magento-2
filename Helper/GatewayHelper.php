@@ -66,9 +66,23 @@ class GatewayHelper
         }
     }
 
-    public function sendCurl($api, $method, $params = []) {
+    public function checkApiKey($apiKey) {
+        $userData = $this->sendCurl('/user/show', "GET", [], $apiKey);
+
+        $userData = json_decode($userData);
+
+        if($userData && $userData->code == 1 && $userData->message == 'ok') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function sendCurl($api, $method, $params = [], $apiKey = null) {
         $apiUrl = $this->_scopeConfig->getValue('payment/ezdefi_payment/gateway_api_url');
-        $apiKey = $this->_scopeConfig->getValue('payment/ezdefi_payment/api_key');
+        if(!$apiKey) {
+            $apiKey = $this->_scopeConfig->getValue('payment/ezdefi_payment/api_key');
+        }
 
         if(!empty($params)) {
             $url =  $apiUrl.$api.'?'. http_build_query($params);
