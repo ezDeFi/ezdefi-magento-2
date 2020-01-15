@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Ezdefi_Payment::ezdefi" title="Ezdefi" module="Ezdefi_Payment" sortOrder="51" resource="Ezdefi_Payment::parent"/>
+        <add id="Ezdefi_Payment::exception" title="Ezdefi Exception" module="Ezdefi_Payment" sortOrder="10" action="adminhtml/exception/index" resource="Ezdefi_Payment::exception" parent="Ezdefi_Payment::ezdefi"/>
+    </menu>
+</config>
