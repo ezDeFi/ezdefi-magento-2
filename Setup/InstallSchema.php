@@ -172,6 +172,83 @@ class InstallSchema implements InstallSchemaInterface
             )->setComment('Ezdefi amount Table');
         $installer->getConnection()->createTable($tableAmount);
 
+        $tableException = $installer->getConnection()->newTable(
+            $installer->getTable('ezdefi_exception'))
+            ->addColumn(
+                'id',
+                Table::TYPE_INTEGER,
+                11,
+                [
+                    'identity' => true,
+                    'nullable' => false,
+                    'primary'  => true,
+                    'unsigned' => true,
+                ],
+                'id'
+            )
+            ->addColumn(
+                'payment_id',
+                Table::TYPE_TEXT,
+                50,
+                [
+                    'nullable' =>true,
+                    'default'  => null,
+                ],
+                'payment id'
+            )
+            ->addColumn(
+                'order_id',
+                Table::TYPE_INTEGER,
+                11,
+                ['nullable' => true],
+                'order id'
+            )
+            ->addColumn(
+                'amount_id',
+                Table::TYPE_DECIMAL,
+                '60,30',
+                ['nullable' => false],
+                'amount id'
+            )
+            ->addColumn(
+                'expiration',
+                Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false],
+                'expiration'
+            )->addColumn(
+                'currency',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                50,
+                [],
+                'currency'
+            )->addColumn(
+                'paid',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                4,
+                ['default' => 0],
+                'paid status'
+            )->addColumn(
+                'has_amount',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                4,
+                ['nullable' => false],
+                '1: if payment use simple method, 0 if payment use ezdefi method'
+            )->addColumn(
+                'explorer_url',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                255,
+                [
+                    'nullable' => true,
+                    'default' => null
+                ],
+                'explorer url'
+            )
+            ->setComment('Ezdefi exception Table');
+        $installer->getConnection()->createTable($tableException);
+
+
+
         $installer->endSetup();
     }
 }
