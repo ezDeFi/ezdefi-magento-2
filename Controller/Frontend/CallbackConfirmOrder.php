@@ -8,29 +8,30 @@ use \Magento\Framework\View\Result\PageFactory;
 use Magento\Customer\Model\Session;
 use Ezdefi\Payment\Helper\GatewayHelper;
 use Magento\Sales\Model\Order;
+use \Ezdefi\Payment\Model\ExceptionFactory;
 
 class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
 {
-    protected $_pageFactory;
-
-    protected $_customerSession;
-
-    protected $_cart;
-
-    protected $_scopeConfig;
-
     protected $_request;
-
     protected $_gatewayHelper;
+    protected $_exceptionFactory;
+    protected $_date;
+
+    CONST PAY_ON_TIME = 1;
+    CONST PAID_OUT_TIME = 3;
 
     public function __construct(
         Context $context,
         GatewayHelper $gatewayHelper,
+        ExceptionFactory $exceptionFactory,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Webapi\Rest\Request $request
     )
     {
         $this->_gatewayHelper = $gatewayHelper;
         $this->_request = $request;
+        $this->_exceptionFactory = $exceptionFactory;
+        $this->_date = $date;
         return parent::__construct($context);
     }
 
@@ -41,28 +42,52 @@ class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
 
         if ($paymentId) {
             $payment = $this->_gatewayHelper->checkPaymentComplete($paymentId);
-
-
             if ($payment['status'] == 'DONE') {
                 $uoid = $payment['uoid'];
                 $orderId = explode('-', $uoid)[0];
                 $hasAmountId = explode('-', $uoid)[1];
 
                 if ($hasAmountId == 1) {
-//                    $this->model_extension_payment_ezdefi->setPaidForException($payment['_id'], self::PAID_IN_TIME, $payment['explorer_url']);
+                    $exceptionCollection = $this->_exceptionFactory->create()->getCollection()->addFieldToFilter('payment_id', $payment['_id']);
+                    $exception = $exceptionCollection->getFirstItem();
+                    $exception->setData('paid', self::PAY_ON_TIME);
+                    $exception->setData('explorer_url', $payment['explorer_url']);
+                    $exception->save();
                 } else {
-//                    $this->model_extension_payment_ezdefi->deleteExceptionByOrderId($order_id);
+                    $this->_exceptionFactory->create()->getCollection()->addFieldToFilter('order_id', $orderId)->walk('delete');
                 }
                 $response->setData(['order_success' => $this->setProcessingForOrder($orderId)]);
             }
             if ($payment['status'] == 'EXPIRED_DONE') {
-//                $this->model_extension_payment_ezdefi->setPaidForException($payment['_id'], self::PAID_OUT_TIME, $payment['explorer_url']);
+                $exceptionCollection = $this->_exceptionFactory->create()->getCollection()->addFieldToFilter('payment_id', $payment['_id']);
+                $exception = $exceptionCollection->getFirstItem();
+                $exception->setData('paid', self::PAID_OUT_TIME);
+                $exception->setData('explorer_url', $payment['explorer_url']);
+                $exception->save();
             }
         } else {
-//            $transaction_id =  $this->request->get['id'];
-//            $explorer_url = $this->request->get['explorerUrl'];
-//
-//            $this->model_extension_payment_ezdefi->checkTransaction($transaction_id, $explorer_url);
+            $transactionId = $this->_request->getParam('id');
+            $explorerUrl = $this->_request->getParam('explorerUrl');
+
+            $transaction = $this->_gatewayHelper->getTransaction($transactionId, $explorerUrl);
+            $valueResponse = $transaction->value * pow(10, -$transaction->decimal);
+
+            if ($transaction->status === 'ACCEPTED') {
+                $this->addException(null, $transaction->currency, $valueResponse, null, 1, 3, $transaction->explorerUrl);
+                $exceptionModel = $this->_exceptionFactory->create();
+                $exceptionModel->addData([
+                    'payment_id' => null,
+                    'order_id' => null,
+                    'currency' => $transaction->currency,
+                    'amount_id' => $valueResponse,
+                    'expiration' => $this->_date->gmtDate(),
+                    'paid' => 3,
+                    'has_amount' => 1,
+                    'explorer_url' => $transaction->explorerUrl
+                ]);
+                $exceptionModel->save();
+            }
+
         }
         return $response;
     }
@@ -74,7 +99,5 @@ class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
         $order->setState($orderState)->setStatus(Order::STATE_PROCESSING);
         $order->save();
         return 'true';
-
-
     }
 }

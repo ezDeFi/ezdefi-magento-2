@@ -8,6 +8,8 @@ class GatewayHelper
     const PENDING = 'pending';
     const DONE = 'processing';
 
+    const DEFAULT_DECIMAL_LIST_COIN = 12;
+
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     )
@@ -22,6 +24,26 @@ class GatewayHelper
         if ($exchangeRate) {
             return json_decode($exchangeRate)->data;
         }
+    }
+
+    public function getCurrenciesWithPrice($currencies, $price, $originCurrency) {
+        $symbols = '';
+        foreach ($currencies as $currency) {
+            $symbols .= $symbols === '' ? $currency['symbol'] : ','.$currency['symbol'];
+        }
+        $exchanges_response = $this->sendCurl('/token/exchanges?amount='.$price.'&from='.$originCurrency.'&to='.$symbols, 'GET');
+
+        if($exchanges_response) {
+            $exchanges_data = json_decode($exchanges_response)->data;
+            foreach ($exchanges_data as $currency_exchange) {
+                foreach ($currencies as $key => $currency) {
+                    if ($currency['symbol'] == $currency_exchange->token) {
+                        $currencies[$key]['price'] = round($currency_exchange->amount * ((100 - $currency['discount']) / 100), self::DEFAULT_DECIMAL_LIST_COIN);
+                    }
+                }
+            }
+        }
+        return $currencies;
     }
 
     public function checkPaymentComplete($paymentId) {
@@ -64,6 +86,13 @@ class GatewayHelper
         if($payment) {
             return json_decode($payment)->data;
         }
+    }
+
+    public function getTransaction($transactionId, $explorerUrl) {
+        $transactionResponse = $this->sendCurl( '/transaction/get?id=' . $transactionId, 'GET');
+        $transactionData = json_decode($transactionResponse)->data;
+
+        return $transactionData;
     }
 
     public function checkApiKey($apiKey) {

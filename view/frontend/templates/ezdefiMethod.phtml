@@ -16,15 +16,15 @@
     <div class="qrcode-box">
         <a href="" class="ezdefi-payment__deeplink" target="_blank">
             <img src="<?php echo $block->getQrCode() ?>" alt="" class="ezdefi-payment__qr-code ezdefi-payment__qr-code--ezdefi">
-            <p>Scan QR Code or Click to pay</p>
+            <p class="margin-none">Scan QR Code or Click to pay</p>
         </a>
         <div class="timeout-notification timeout-notification--ezdefi reload-payment" data-suffixes="--ezdefi">
             <p>{{ payment_time_out }}</p>
         </div>
     </div>
     <div class="ezdefi-payment__download-link">
-        <a href="{{ link_download_app_ios }}" target="_blank"><span><i class="fa fa-apple ezdefi-icon-apple"></i></span> Download ezDeFi for IOS </a>
-        <a href="{{ link_download_app_android }}" target="_blank"><span><i class="fa fa-android ezdefi-icon-android"></i></span>  Download ezDeFi for Android </a>
+        <a href="{{ link_download_app_ios }}" target="_blank"><img src="<?php echo $this->getViewFileUrl('Ezdefi_Payment/image/ios-icon.png'); ?>" alt=""></a>
+        <a href="{{ link_download_app_ios }}" target="_blank"><img src="<?php echo $this->getViewFileUrl('Ezdefi_Payment/image/android-icon.png'); ?>" alt=""></a>
     </div>
 </div>
 <!--<div class="payment-error--ezdefi">-->
