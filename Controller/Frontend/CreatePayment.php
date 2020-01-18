@@ -95,9 +95,8 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
     private function createPaymentSimple($order, $cryptoCurrency) {
         $amountCollection  = $this->_amountFactory->create();
         $originCurrency    = $order->getStoreCurrencyCode();
-//        $this->originValue = $order->getTotalDue();
-        $this->originValue = 0.001;
-        $amount            = $this->_gatewayHelper->getExchange($originCurrency, $cryptoCurrency['symbol']) * $this->originValue;
+        $originValue = $order->getTotalDue();
+        $amount            = $this->_gatewayHelper->getExchange($originCurrency, $cryptoCurrency['symbol']) * $originValue;
 
         $amountId = (float)$amountCollection->getCollection()->createAmountId(
             $cryptoCurrency['symbol'], $amount,
@@ -112,23 +111,21 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
             'to'       => $cryptoCurrency['wallet_address'],
             'currency' => $cryptoCurrency['symbol'].':'.$cryptoCurrency['symbol'],
             'safedist' => $cryptoCurrency['block_confirmation'],
-//            'callback' => $this->_urlInterface->getUrl()
-            'callback' => 'http://9805fc85.ngrok.io/magento2/ezdefi/Frontend/CallbackConfirmOrder'
+            'duration' => $cryptoCurrency['payment_lifetime'],
+            'callback' => $this->_urlInterface->getUrl()
         ]);
         $this->addException($order, $cryptoCurrency, $payment->_id, $amountId, 1);
         return $payment;
     }
 
     private function createPaymentEzdefi($order, $cryptoCurrency) {
-
-
         $payment = $this->_gatewayHelper->createPayment([
             'uoid'     => $order->getId().'-0',
-//            'value'    => $order->getTotalDue(),
-            'value'    => 0.1,
+            'value'    => $order->getTotalDue(),
             'to'       => $cryptoCurrency['wallet_address'],
             'currency' => $order->getStoreCurrencyCode().':'.$cryptoCurrency['symbol'],
             'safedist' => $cryptoCurrency['block_confirmation'],
+            'duration' => $cryptoCurrency['payment_lifetime'],
             'callback' => $this->_urlInterface->getUrl()
         ]);
 

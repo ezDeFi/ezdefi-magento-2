@@ -6,6 +6,7 @@ use \Magento\Framework\App\Action\Context;
 use \Magento\Framework\View\Result\PageFactory;
 use \Ezdefi\Payment\Model\ExceptionFactory;
 use Magento\Framework\UrlInterface;
+use Magento\Sales\Model\Order;
 
 class ConfirmPaid extends \Magento\Framework\App\Action\Action
 {
@@ -31,6 +32,7 @@ class ConfirmPaid extends \Magento\Framework\App\Action\Action
     {
         $exceptionId = (int) $this->getRequest()->getParam('id');
         $exception = $this->_exceptionFactory->create()->load($exceptionId);
+
         $orderId = $exception->getData()['order_id'];
         $this->setProcessingForOrder($orderId);
         $this->_exceptionFactory->create()->getCollection()->addFieldToFilter('order_id', $orderId)->walk('delete');

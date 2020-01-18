@@ -27,40 +27,46 @@
         <p>you have <span class="text-red text-bold" id="ezdefi__countdown-label--simple"></span> to scan this QRcode</p>
     </div>
 
-    <div class="simple-method-with-full-qrcode">
-        <div class="qrcode-box">
-            <a href="" target="_blank" class="ezdefi-payment__deeplink ezdefi-payment__deeplink--simple">
-                <img src="<?php echo $block->getGatewayQrCode(); ?>" alt="" class="ezdefi-payment__qr-code--simple">
-                <p class="margin-none">Scan QR Code or Click to pay</p>
-            </a>
-            <div class="timeout-notification timeout-notification--simple reload-payment" data-suffixes="--simple">
-                <p>{{ payment_time_out }}</p>
-            </div>
+    <div class="qrcode-box simple-method-with-full-qrcode">
+        <a href="" target="_blank" class="ezdefi-payment__deeplink ezdefi-payment__deeplink--simple">
+            <img src="<?php echo $block->getGatewayQrCode(); ?>" alt="" class="ezdefi-payment__qr-code--simple">
+            <p class="margin-none">Scan QR Code or Click to pay</p>
+        </a>
+        <div class="timeout-notification timeout-notification--simple reload-payment" data-suffixes="--simple">
+            <p>{{ payment_time_out }}</p>
         </div>
-        <p class="margin-top-md text-red">If you get error when scanning this QR Code, please use
-            <label class="label-radio-button" for="choose-alternative-qrcode-radio"> alternative QR Code </label>
-        </p>
     </div>
-    <div class="simple-method-with-alternative-qrcode">
-        <div class="qrcode-box">
-            <a href="" target="_blank" class="ezdefi-payment__deeplink ezdefi-payment__deeplink--simple">
-                <img src="https://chart.googleapis.com/chart?cht=qr&chl=<?php echo $block->getWalletAddress(); ?>&chs=200x200&chld=L|0" alt="" class="ezdefi-payment__qr-code--simple">
-                <p class="margin-none">Scan QR Code or Click to pay</p>
-            </a>
-            <div class="timeout-notification timeout-notification--simple reload-payment" data-suffixes="--simple">
-                <p>{{ payment_time_out }}</p>
-            </div>
+    <div class="qrcode-box simple-method-with-alternative-qrcode">
+        <a href="" target="_blank" class="ezdefi-payment__deeplink ezdefi-payment__deeplink--simple">
+            <img src="https://chart.googleapis.com/chart?cht=qr&chl=<?php echo $block->getWalletAddress(); ?>&chs=200x200&chld=L|0" alt="" class="ezdefi-payment__qr-code--simple">
+            <p class="margin-none">Scan QR Code or Click to pay</p>
+        </a>
+        <div class="timeout-notification timeout-notification--simple reload-payment" data-suffixes="--simple">
+            <p>{{ payment_time_out }}</p>
         </div>
-        <p class="margin-none"><b>Address:</b> <span class="ezdefi__simple-wallet-address"><?php echo $block->getWalletAddress() ?></span>
-            <span class="btn-copy-address"><img src="<?php echo $this->getViewFileUrl('Ezdefi_Payment/image/icon-copy.png'); ?>" alt=""></span>
-        </p>
-        <p><b>Amount:</b> <span class="ezdefi__simple-amount"></span><span class="ezdefi-payment__currency--simple"><?php echo $block->getCryptoValue() ?></span>
-            <span class="btn-copy-amount"><img src="<?php echo $this->getViewFileUrl('Ezdefi_Payment/image/icon-copy.png'); ?>" alt=""></span>
-        </p>
-        <p class="margin-top-md text-red">You have to pay exact amount so that your order can be handled properly. <br>
-            If you have difficulty for sending exact amount try to use <label for="ezdefi-show-payment--ezdefi" class="link_use_ezdefi_wallet"><i>ezDeFi Wallet.</i></label></p>
-        <label class="label-radio-button" for="choose-full-qrcode-radio">Use previous QR Code</label>
     </div>
+
+    <p class="margin-none">
+        <b>Address:</b>
+        <span class="btn-copy-address">
+            <span class="ezdefi__simple-wallet-address"><?php echo $block->getWalletAddress() ?></span>
+            <span><img src="<?php echo $this->getViewFileUrl('Ezdefi_Payment/image/icon-copy.png'); ?>" alt=""></span>
+        </span>
+    </p>
+    <p>
+        <b>Amount:</b>
+        <span class="btn-copy-amount">
+            <span class="ezdefi__simple-amount"></span><span class="ezdefi-payment__currency--simple"><?php echo $block->getCryptoValue() ?></span>
+            <span class="copy-address-icon"><img src="<?php echo $this->getViewFileUrl('Ezdefi_Payment/image/icon-copy.png'); ?>" alt=""></span>
+        </span>
+    </p>
+    <p class="margin-top-md text-red simple-method-with-full-qrcode">If you get error when scanning this QR Code, please use
+        <label class="label-radio-button" for="choose-alternative-qrcode-radio"> alternative QR Code </label>
+    </p>
+
+    <p class="margin-top-md text-red simple-method-with-alternative-qrcode">You have to pay exact amount so that your order can be handled properly. <br>
+        If you have difficulty for sending exact amount try to use <label for="ezdefi-show-payment--ezdefi" class="link_use_ezdefi_wallet"><i>ezDeFi Wallet.</i></label></p>
+    <label class="label-radio-button simple-method-with-alternative-qrcode" for="choose-full-qrcode-radio">Use previous QR Code</label>
 </div>
 <div class="payment-error--simple">
     {{ error_cant_create_amount }}
