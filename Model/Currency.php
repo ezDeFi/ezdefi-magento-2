@@ -1,7 +1,7 @@
 <?php
 namespace Ezdefi\Payment\Model;
 
-class Currency extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
+class Currency extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface, \Magento\Framework\Data\OptionSourceInterface
 {
     const CACHE_TAG = 'ezdefi_currency';
 
@@ -25,4 +25,21 @@ class Currency extends \Magento\Framework\Model\AbstractModel implements \Magent
 
         return $values;
     }
+
+
+    public function getOptions()
+    {
+        $currencies = $this->getCollection()->getData();
+        $res =[];
+        foreach ($currencies as $currency) {
+            $res[] = ['value' => $currency['symbol'], 'label' => $currency['symbol']];
+        }
+        return $res;
+    }
+
+    public function toOptionArray()
+    {
+        return $this->getOptions();
+    }
+
 }

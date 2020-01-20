@@ -7,20 +7,26 @@ use Magento\Framework\DataObject;
 use \Magento\Backend\Block\Template\Context;
 use \Magento\Framework\Data\Form\Element\AbstractElement;
 use \Ezdefi\Payment\Model\CurrencyFactory;
+use Magento\Framework\UrlInterface;
 
 /**
  * Class CryptoCurrencies
  */
 class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
 {
+    CONST URL_GET_COIN    = 'admin/gateway/listcoin';
+
     protected $_currencyFactory;
+    protected $_urlBuilder;
 
     public function __construct(
         Context $context,
         CurrencyFactory $currencyFactory,
+        UrlInterface $urlBuilder,
         array $data = []
     ) {
         $this->_currencyFactory = $currencyFactory;
+        $this->_urlBuilder = $urlBuilder;
         parent::__construct($context, $data);
     }
 
@@ -45,7 +51,7 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
                             <tfoot>
                                 <tr>
                                     <td colspan="7" class="col-actions-add">
-                                        <button title="Add" type="button" id="ezdefi-configuration-add-coin">
+                                        <button title="Add" type="button" id="ezdefi-configuration-add-coin" data-url-get-coin="'.$this->_urlBuilder->getUrl(self::URL_GET_COIN).'">
                                             <span>Add Coin</span>
                                         </button>
                                     </td>

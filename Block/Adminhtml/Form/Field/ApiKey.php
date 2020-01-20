@@ -8,23 +8,29 @@ use \Magento\Backend\Block\Template\Context;
 use \Magento\Framework\Data\Form\Element\AbstractElement;
 use \Ezdefi\Payment\Model\CurrencyFactory;
 use \Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\UrlInterface;
 
 /**
  * Class CryptoCurrencies
  */
 class ApiKey extends \Magento\Config\Block\System\Config\Form\Field
 {
+    CONST URL_CHECK_API_KEY = 'admin/gateway/checkapikey';
+
     protected $_currencyFactory;
     protected $_scopeConfig;
+    protected $_urlBuilder;
 
     public function __construct(
         Context $context,
         CurrencyFactory $currencyFactory,
         ScopeConfigInterface $scopeConfig,
+        UrlInterface $urlBuilder,
         array $data = []
     ) {
         $this->_currencyFactory = $currencyFactory;
         $_scopeConfig = $scopeConfig;
+        $this->_urlBuilder = $urlBuilder;
         parent::__construct($context, $data);
     }
 
@@ -38,7 +44,7 @@ class ApiKey extends \Magento\Config\Block\System\Config\Form\Field
                     data-ui-id="text-groups-ezdefi-payment-fields-api-key-value" 
                     data-validate="{
                         required: true,
-                        remote: {url: \'http://ezdefi-magento2.lan/admin/admin/gateway/checkapikey\', type: \'get\'},
+                        remote: {url: \''.$this->_urlBuilder->getUrl(self::URL_CHECK_API_KEY).'\', type: \'get\'},
                         messages: {
                             remote:  \'This Api Key is invalid\'
                         }}"

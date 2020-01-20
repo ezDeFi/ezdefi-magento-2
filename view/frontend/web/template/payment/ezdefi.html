@@ -1,7 +1,7 @@
 <link rel="stylesheet"
       href="../../../../../../../../../pub/static/frontend/Magento/luma/en_US/Ezdefi_Payment/css/ezdefi.css">
 <script src="../../js/view/payment/method-renderer/ezdefi.js"></script>
-<link rel="stylesheet" href="../../css/ezdefi.css">
+<link rel="stylesheet" href="../../css/srouce/ezdefi.css">
 <div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
     <div class="payment-method-title field choice">
         <input type="radio"
@@ -30,6 +30,7 @@
                     <!-- ko ifnot: currency.description -->
                     <img data-bind="attr: {'src':currency.logo }" alt="" class="ezdefi__select-currency-item--logo">
                     <!--/ko-->
+                    <span class="ezdefi__select-currency-item--price" data-bind="text: currency.price"></span>
                     <span class="ezdefi__select-currency-item--symbol" data-bind="text: currency.symbol"></span>
                     <span class="ezdefi__select-currency-item--discount" data-bind="text: '-' + (currency.discount)+'%'"></span>
                     <input  type="radio" name="currency-selected-to-order" class="hidden ezdefi__select-currency--checkbox"
@@ -41,9 +42,6 @@
                 </label>
                 <!--/ko-->
             </div>
-            <!-- ko ifnot: isPlaceOrder -->
-            <button data-role="review-save" class="action primary ezdefi__btn-create-payment" disabled data-bind="event: {click: function() { createPayment(null)} }"> place order next </button>
-            <!--/ko-->
             <!-- ko if: isPlaceOrder -->
             <button data-role="review-save" class="action primary ezdefi__btn-create-payment" disabled data-bind="event: {click: function() { createPayment(null)} }"> change next </button>
             <!--/ko-->
@@ -53,12 +51,12 @@
 
         <div class="ezdefi-payment-box">
             <div class="ezdefi-payment__header">
-                <img alt="" class="ezdefi-payment__coin-logo tooltip-show-discount" data-toggle="popover" title="Discount" data-placement="top" data-content="Discount:" data-trigger="hover"
+                <img alt="" class="ezdefi-payment__currency-logo tooltip-show-discount" data-toggle="popover" title="Discount" data-placement="top" data-content="Discount:" data-trigger="hover"
                      data-bind="attr: {src: currencyChoosed.logo}">
-                <span class="ezdefi__coin-name tooltip-show-discount" data-toggle="popover" title="Discount" data-placement="top" data-content="Discount:" data-trigger="hover"
+                <span class="ezdefi__currency-name tooltip-show-discount" data-toggle="popover" title="Discount" data-placement="top" data-content="Discount:" data-trigger="hover"
                       data-bind="text: currencyChoosed.name"></span>
                 <span class="wide-space"></span>
-                <button class="ezdefi__btn-change-coin" data-bind="click: changeCurrency"> Change </button>
+                <button class="ezdefi__btn-change-currency" data-bind="click: changeCurrency"> Change </button>
             </div>
 
             <div class="ezdefi-payment__content">
@@ -100,21 +98,23 @@
             <!--/ko-->
         </div>
 
+        <!-- ko ifnot: isPlaceOrder -->
         <div class="actions-toolbar">
             <div class="primary">
                 <button data-role="review-save"
                         type="submit"
                         data-bind="
                         attr: {title: $t('Place Order')},
-                        enable: (getCode() == isChecked()),
                         click: placeOrder,
                         css: {disabled: !isPlaceOrderActionAllowed()}
                         "
-                        class="action primary checkout"
+                        class="action primary checkout ezdefi__btn-create-payment"
                         disabled>
                     <span data-bind="i18n: 'Place Order'"></span>
                 </button>
             </div>
         </div>
+        <!--/ko-->
+
     </div>
 </div>

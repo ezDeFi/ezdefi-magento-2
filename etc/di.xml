@@ -1,16 +1,19 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <virtualType name="Ezdefi\Payment\Model\ResourceModel\Exception\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">ezdefi_exception</argument>
-            <argument name="resourceModel" xsi:type="string">Ezdefi\Payment\Model\ResourceModel\Exception</argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="ezdefi_payment_exception_listing_data_source" xsi:type="string">Ezdefi\Payment\Model\ResourceModel\Exception\Collection</item>
+                <item name="ezdefi_payment_exception_listing_data_source" xsi:type="string">Ezdefi\Payment\Model\ResourceModel\Exception\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
+    <type name="Ezdefi\Payment\Model\ResourceModel\Exception\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">ezdefi_exception</argument>
+            <argument name="eventPrefix" xsi:type="string">ezdefi_payment_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">ezdefi_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Ezdefi\Payment\Model\ResourceModel\Exception</argument>
+        </arguments>
+    </type>
+
 </config>

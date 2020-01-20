@@ -40,7 +40,7 @@ class PaymentMethod extends \Magento\Config\Block\System\Config\Form\Field
                         <input id="payment_us_ezdefi_payment_payment_method_simple" 
                             type="checkbox" 
                             class="admin__control-checkbox ezdefi__simple-payment-checkbox"
-                            name="groups[ezdefi_payment][fields][payment_method][value]" 
+                            name="groups[ezdefi_payment][fields][payment_method][value][]" 
                             value="simple"
                             '.$simpleMethod.'
                             >
@@ -51,7 +51,7 @@ class PaymentMethod extends \Magento\Config\Block\System\Config\Form\Field
                         <input id="payment_us_ezdefi_payment_payment_method_ezdefi" 
                             type="checkbox" 
                             class="admin__control-checkbox ezdefi__ezdefi-payment-checkbox" 
-                            name="groups[ezdefi_payment][fields][payment_method][value]" 
+                            name="groups[ezdefi_payment][fields][payment_method][value][]" 
                             value="ezdefi"
                             '.$ezdefiMethod.'> 
                         <label for="payment_us_ezdefi_payment_payment_method_ezdefi" class="admin__field-label"><span><b>Pay with ezDeFi wallet</b></span></label>

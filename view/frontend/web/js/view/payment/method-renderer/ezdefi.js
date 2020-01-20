@@ -25,8 +25,6 @@ define([
         return Component.extend({
             redirectAfterPlaceOrder: false,
 
-            abcd: ko.observable('hidden'),
-
             simplePaymentContent: ko.observable(''),
             ezdefiPaymentContent: ko.observable(''),
             isShowPaymentContent: ko.observable(false),
@@ -143,17 +141,20 @@ define([
             },
 
             checkOrderComplete: function () {
-                let urlCheckOrderComplete = url.build('ezdefi/frontend/checkordercomplete');
-                storage.get(
-                    urlCheckOrderComplete,
-                    JSON.stringify({}),
-                    true
-                ).done(function(response) {
-                    let orderStatus = response.orderStatus;
-                    if(orderStatus === 'processing') {
-                        window.location.href = url.build('');
-                    }
-                });
+                var checkOrderCompleteInterval = setInterval(function () {
+                    let urlCheckOrderComplete = url.build('ezdefi/frontend/checkordercomplete');
+                    storage.get(
+                        urlCheckOrderComplete,
+                        JSON.stringify({}),
+                        true
+                    ).done(function(response) {
+                        let orderStatus = response.orderStatus;
+                        if(orderStatus === 'processing') {
+                            clearInterval(checkOrderCompleteInterval);
+                            window.location.href = url.build('');
+                        }
+                    });
+                }, 1000);
             },
 
             renderCurrency: function() {

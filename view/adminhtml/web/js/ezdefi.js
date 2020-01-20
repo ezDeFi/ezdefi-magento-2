@@ -39,7 +39,7 @@ require(
             tmp += 1;
             var container = `<tr>
                 <td>
-                    <select class="ezdefi-select-coin" style="width: 200px" data-test="1" id="select-currency-${tmp}">
+                    <select class="ezdefi-select-coin" style="width: 200px" id="select-currency-${tmp}">
                         <option value=""></option>
                     </select><br>
                     <input type="hidden" class="${selectorToClass(selectors.currencySymbolInput)}">
@@ -83,7 +83,7 @@ require(
             var that = this;
             $(select).select2({
                 ajax: {
-                    url: "http://ezdefi-magento2.lan/admin/admin/gateway/listcoin",
+                    url: $("#ezdefi-configuration-add-coin").data('url-get-coin'),
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {

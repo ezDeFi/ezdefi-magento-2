@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Ezdefi_Payment::css/ezdefi-exception.css"/>
+        <css src="Ezdefi_Payment::css/select2.min.css"/>
+        <link src="Ezdefi_Payment::js/ezdefi-exception.js"/>
+    </head>
     <body>
         <referenceContainer name="content">
             <!-- here we call our ui component of grid-->
