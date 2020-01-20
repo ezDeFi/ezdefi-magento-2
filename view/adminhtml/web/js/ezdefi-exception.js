@@ -4,15 +4,17 @@ require(
         'Magento_Ui/js/modal/alert',
         'domReady!',
         'Ezdefi_Payment/js/select2.min',
+        'mage/url'
     ],
-    function ($, alert) {
+    function ($, alert, url) {
 
         var selectOrderInterval = setInterval(function () {
-            console.log($('.ezdefi__select-pending-order').data('check-loaded'), $('.ezdefi__select-pending-order').data('check-loaded') == 1);
+
             if($('.ezdefi__select-pending-order').data('check-loaded') == 1) {
                 $('.ezdefi__select-pending-order').select2({
                     ajax: {
-                        url: "http://ezdefi-magento2.lan/admin/admin/exception/getorderpending",
+                        // url: url.build("/admin/exception/getorderpending"),
+                        url: $('.ezdefi__select-pending-order').data('url-get-order'),
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
@@ -90,7 +92,6 @@ require(
         };
 
         var formatRepoSelection = function (repo) {
-            console.log(repo)
             return repo.id ? 'Order: ' + repo.increment_id : 'Choose order to assign';
         };
 

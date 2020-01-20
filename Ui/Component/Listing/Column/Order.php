@@ -10,6 +10,7 @@ use Magento\Framework\UrlInterface;
 class Order extends Column
 {
     CONST URL_ASSIGN_ORDER = 'admin/exception/assignorder';
+    CONST URL_GET_ORDER    = 'admin/exception/getorderpending';
 
     protected $_urlBuilder;
 
@@ -82,13 +83,14 @@ class Order extends Column
                         </tbody>
                     </table>';
 
-                    $orderHtml .= '<select class="ezdefi__select-pending-order" style="width: 200px" data-check-loaded="1">
+                    $orderHtml .= '<select class="ezdefi__select-pending-order" style="width: 200px" data-check-loaded="1" data-url-get-order="'.$this->_urlBuilder->getUrl(self::URL_GET_ORDER).'">
                         <option value=""></option>
                     </select>
-                    <button class="ezdefi__btn-assign-order" data-url-assign="'.
-                        $this->_urlBuilder->getUrl(self::URL_ASSIGN_ORDER,                                 [
-                            'id' => $items['id']
-                        ]).'">Assign</button>';
+                    <button class="ezdefi__btn-assign-order" 
+                        data-url-assign="'.
+                            $this->_urlBuilder->getUrl(self::URL_ASSIGN_ORDER,                                 [
+                                'id' => $items['id']
+                            ]).'">Assign</button>';
                 }
 
                 $items['order_id'] = $orderHtml;

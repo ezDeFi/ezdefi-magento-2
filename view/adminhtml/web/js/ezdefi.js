@@ -83,7 +83,7 @@ require(
             var that = this;
             $(select).select2({
                 ajax: {
-                    url: "http://ezdefi-magento2.lan/admin/admin/gateway/listcoin",
+                    url: $("#ezdefi-configuration-add-coin").data('url-get-coin'),
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
