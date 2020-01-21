@@ -7,7 +7,7 @@ use \Magento\Framework\View\Result\PageFactory;
 use \Ezdefi\Payment\Model\ExceptionFactory;
 use Magento\Framework\UrlInterface;
 
-class Delete extends \Magento\Framework\App\Action\Action
+class Delete extends \Magento\Backend\App\Action
 {
     protected $_pageFactory;
 

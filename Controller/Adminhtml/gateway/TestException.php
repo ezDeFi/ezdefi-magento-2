@@ -8,7 +8,7 @@ use \Magento\Framework\View\Result\PageFactory;
 use \Ezdefi\Payment\Model\ExceptionFactory;
 use \Ezdefi\Payment\Model\CurrencyFactory;
 
-class TestException extends \Magento\Framework\App\Action\Action
+class TestException extends \Magento\Backend\App\Action
 {
     protected $_pageFactory;
 

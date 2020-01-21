@@ -7,7 +7,7 @@ use \Magento\Framework\View\Result\PageFactory;
 use Ezdefi\Payment\Helper\GatewayHelper;
 use \Magento\Framework\Webapi\Rest\Request;
 
-class CheckApiKey extends \Magento\Framework\App\Action\Action
+class CheckApiKey extends \Magento\Backend\App\Action
 {
     protected $_pageFactory;
     protected $_getawayHelper;

@@ -6,7 +6,7 @@ use \Magento\Framework\Controller\ResultFactory;
 use \Magento\Framework\App\Action\Context;
 use \Magento\Framework\View\Result\PageFactory;
 
-class ListCoin extends \Magento\Framework\App\Action\Action
+class ListCoin extends \Magento\Backend\App\Action
 {
     protected $_pageFactory;
 

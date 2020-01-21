@@ -8,7 +8,7 @@ use \Ezdefi\Payment\Model\ExceptionFactory;
 use Magento\Framework\UrlInterface;
 use Magento\Sales\Model\Order;
 
-class AssignOrder extends \Magento\Framework\App\Action\Action
+class AssignOrder extends \Magento\Backend\App\Action
 {
     protected $_pageFactory;
 

@@ -7,7 +7,7 @@ use \Magento\Framework\View\Result\PageFactory;
 use \Ezdefi\Payment\Model\ExceptionFactory;
 use Magento\Framework\UrlInterface;
 
-class GetOrderPending extends \Magento\Framework\App\Action\Action
+class GetOrderPending extends \Magento\Backend\App\Action
 {
     protected $_pageFactory;
 
