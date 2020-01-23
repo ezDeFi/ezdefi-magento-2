@@ -12,7 +12,7 @@ class ListCoin extends \Magento\Backend\App\Action
 
 
     public function __construct(
-        Context $context,
+        \Magento\Backend\App\Action\Context $context,
         PageFactory $pageFactory
     )
     {

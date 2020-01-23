@@ -16,7 +16,7 @@ class AssignOrder extends \Magento\Backend\App\Action
     protected $_urlBuilder;
 
     public function __construct(
-        Context $context,
+        \Magento\Backend\App\Action\Context $context,
         PageFactory $pageFactory,
         ExceptionFactory $exceptionFactory,
         UrlInterface $urlBuilder

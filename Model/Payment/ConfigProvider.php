@@ -38,11 +38,11 @@ class ConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
-//        $orderId = $this->_cart->getLastOrderId();
-        $order = $this->_orderRepo->get(29);
+        $totalPrice = $this->_cart->getQuote()->getGrandTotal();
+        $storeCurrency= $this->_cart->getQuote()->getStoreCurrencyCode();
 
         $currencies = $this->_currencyFactory->create()->getCollection()->getData();
-        $currenciesWithPrice = $this->_gatewayHelper->getCurrenciesWithPrice($currencies, $order->getTotalDue(), $order->getStoreCurrencyCode());
+        $currenciesWithPrice = $this->_gatewayHelper->getCurrenciesWithPrice($currencies, $totalPrice , $storeCurrency);
 
         return [
             'currencies' => $currenciesWithPrice,

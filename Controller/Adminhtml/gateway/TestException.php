@@ -17,7 +17,7 @@ class TestException extends \Magento\Backend\App\Action
     protected $_currencyFactory;
 
     public function __construct(
-        Context $context,
+        \Magento\Backend\App\Action\Context $context,
         PageFactory $pageFactory,
         ExceptionFactory $exceptionFactory,
         CurrencyFactory $currencyFactory,

@@ -14,7 +14,7 @@ class CheckApiKey extends \Magento\Backend\App\Action
     protected $_request;
 
     public function __construct(
-        Context $context,
+        \Magento\Backend\App\Action\Context $context,
         PageFactory $pageFactory,
         GatewayHelper $getawayHelper,
         Request $request
