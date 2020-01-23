@@ -44,7 +44,7 @@ class ApiKey extends \Magento\Config\Block\System\Config\Form\Field
                     data-ui-id="text-groups-ezdefi-payment-fields-api-key-value" 
                     data-validate="{
                         required: true,
-                        remote: {url: \''.$this->_urlBuilder->getUrl(self::URL_CHECK_API_KEY).'\', type: \'get\'},
+                        remote: {url: \'/rest/V1/ezdefi/gateway/checkapikey\', type: \'get\'},
                         messages: {
                             remote:  \'This Api Key is invalid\'
                         }}"

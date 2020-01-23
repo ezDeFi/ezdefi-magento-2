@@ -17,6 +17,10 @@ class GatewayHelper
         $this->_scopeConfig = $scopeConfig;
     }
 
+    public function getListToken() {
+        return $this->sendCurl('/token/list', 'GET');
+
+    }
 
     public function getExchange($originCurrency, $currency) {
         $exchangeRate = $this->sendCurl("/token/exchange/".$originCurrency."%3A".$currency, 'GET');

@@ -1,10 +1,11 @@
 require(
     [
         'jquery',
+        'mage/url',
         'mage/translate',
         'Ezdefi_Payment/js/select2.min'
     ],
-    function ($) {
+    function ($, url) {
         var selectors = {
             simplePaymentCheckbox   : '.ezdefi__simple-payment-checkbox',
             ezdefiPaymentCheckbox   : '.ezdefi__ezdefi-payment-checkbox',
@@ -83,19 +84,21 @@ require(
             var that = this;
             $(select).select2({
                 ajax: {
-                    url: $("#ezdefi-configuration-add-coin").data('url-get-coin'),
+                    url: url.build('/rest/V1/ezdefi/gateway/getcoins'),
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
                         return {
                             keyword: params.term, // search term
-                            page: params.page
+                            page: params.page,
+                            form_key: window.FORM_KEY
                         };
                     },
                     processResults: function (data, params) {
+                        let response = JSON.parse(data);
                         params.page = params.page || 1;
                         return {
-                            results: data.data
+                            results: response.data
                         };
                     },
                     cache: true
@@ -155,8 +158,8 @@ require(
             logoInput       .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][logo]');
             decimal         .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][decimal]');
 
-            idInput         .val(data._id)
-            nameInput       .val(data.name)
+            idInput         .val(data._id);
+            nameInput       .val(data.name);
             symbolInput     .val(data.symbol);
             descriptionInput.val(data.description);
             logoInput       .val(data.logo);
@@ -167,7 +170,7 @@ require(
             $(rowElement).find(selectors.blockConfirmationInput).attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][block_confirmation]');
             $(rowElement).find(selectors.currencydiscountInput) .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][discount]');
         }
-        
+
         function selectorToClass(selector) {
             return selector.slice(1);
         }
