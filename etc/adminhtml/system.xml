@@ -19,17 +19,17 @@
                        translate="label" type="text">
                     <frontend_model>Ezdefi\Payment\Block\Adminhtml\Form\Field\ApiKey</frontend_model>
                     <label>API KEY</label>
+                    <comment><![CDATA[<a href="https://merchant.ezdefi.com/register" target="_blank"> Resgister to get API Key </a>]]></comment>
                 </field>
                 <field id="payment_method" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30"
                        translate="label" type="checkboxes">
                     <label>PaymentMethod</label>
                     <frontend_model>Ezdefi\Payment\Block\Adminhtml\Form\Field\PaymentMethod</frontend_model>
                 </field>
-
-                <field id="variation" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="50"
+                <field id="accepted_currency" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="50"
                        translate="label" type="text">
-                    <label>ACCEPTABLE PRICE AVAILABLE</label>
-                    <validate>validate-greater-than-zero</validate>
+                    <label>Accepted Currency</label>
+                    <frontend_model>Ezdefi\Payment\Block\Adminhtml\Form\Field\AcceptedCurrency</frontend_model>
                     <comment>Allowable amount variation</comment>
                 </field>
                 <field id="currency" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="60" translate="label" type="text">

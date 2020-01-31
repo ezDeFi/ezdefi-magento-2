@@ -2,10 +2,11 @@ require(
     [
         'jquery',
         'mage/url',
+        'Magento_Ui/js/modal/alert',
         'mage/translate',
         'Ezdefi_Payment/js/select2.min'
     ],
-    function ($, url) {
+    function ($, url, alert) {
         var selectors = {
             simplePaymentCheckbox   : '.ezdefi__simple-payment-checkbox',
             ezdefiPaymentCheckbox   : '.ezdefi__ezdefi-payment-checkbox',
@@ -25,8 +26,23 @@ require(
         }
         var tmp = 1;
 
-        $(document).on("change", selectors.simplePaymentCheckbox, checkPaymentMethodRequire);
+
+        $(document).on("change", '.ezdefi__api-key', function () {
+            $('#config-edit-form').valid();
+        });
         $(document).on("change", selectors.ezdefiPaymentCheckbox, checkPaymentMethodRequire);
+        $(document).on("change", selectors.simplePaymentCheckbox, function () {
+            checkPaymentMethodRequire();
+            showAcceptedCurrency();
+        });
+        showAcceptedCurrency();
+        function showAcceptedCurrency() {
+            if($(selectors.simplePaymentCheckbox).is(':checked')) {
+                $('#row_payment_us_ezdefi_payment_accepted_currency').show('slow')
+            } else {
+                $('#row_payment_us_ezdefi_payment_accepted_currency').hide('slow')
+            }
+        }
 
         function checkPaymentMethodRequire() {
             if( !$(selectors.simplePaymentCheckbox).is(':checked') && !$(selectors.ezdefiPaymentCheckbox).is(':checked')) {
@@ -39,7 +55,7 @@ require(
         $(document).on("click", "#ezdefi-configuration-add-coin", function () {
             tmp += 1;
             var container = `<tr>
-                <td>
+                <td class="ezdefi__currency-td">
                     <select class="ezdefi-select-coin" style="width: 200px" id="select-currency-${tmp}">
                         <option value=""></option>
                     </select><br>
@@ -50,7 +66,7 @@ require(
                     <input type="hidden" class="${selectorToClass(selectors.currencyLogoInput)}">
                 </td>
                 <td>
-                    <input type="text" class="${selectorToClass(selectors.currencydiscountInput)}">
+                    <input type="text" class="${selectorToClass(selectors.currencydiscountInput)}"> <span>%</span>
                 </td>
                 <td>
                     <input type="text" class="${selectorToClass(selectors.currencyLifetimeInput)}">
@@ -69,14 +85,58 @@ require(
         });
 
         $(document).on("click", selectors.btnDeleteCurrency, function () {
-            var currencyId = $(this).data('currency-id');
-            $(".ezdefi__list-currency-delete").append('<input type="hidden" name="groups[ezdefi_payment][fields][currency][value][ids_delete][]" value="'+currencyId+'">');
-            $(this).parent().parent().remove();
+            var currencyConfigElement = $(this).parent().parent();
+            var that = $(this);
+            alert({
+                title: $.mage.__('remove coin'),
+                content: $.mage.__('Do you want to remove coin/token?'),
+                actions: {
+                    always: function(){}
+                },
+                buttons: [{
+                    text: $.mage.__('Close'),
+                    class: 'action',
+                    click: function () {
+                        this.closeModal(true);
+                    }
+                }, {
+                    text: $.mage.__('Yes'),
+                    class: 'action primary accept',
+                    click: function () {
+                        var currencyId = that.data('currency-id');
+                        $(".ezdefi__list-currency-delete").append('<input type="hidden" name="groups[ezdefi_payment][fields][currency][value][ids_delete][]" value="'+currencyId+'">');
+                        currencyConfigElement.remove();
+                        this.closeModal(true);
+                    }
+                }]
+            });
+
         });
 
         function initCancelAddCurrency() {
             $(selectors.btnCancelAddCurrency).click(function () {
-                $(this).parent().parent().remove();
+                var currencyConfigElement = $(this).parent().parent();
+                alert({
+                    title: $.mage.__('Cancel add coin'),
+                    content: $.mage.__('Do you want to cancel add this coin'),
+                    actions: {
+                        always: function(){}
+                    },
+                    buttons: [{
+                        text: $.mage.__('Close'),
+                        class: 'action',
+                        click: function () {
+                            this.closeModal(true);
+                        }
+                    }, {
+                        text: $.mage.__('Yes'),
+                        class: 'action primary accept',
+                        click: function () {
+                            currencyConfigElement.remove();
+                            this.closeModal(true);
+                        }
+                    }]
+                });
             });
         }
 
@@ -106,7 +166,7 @@ require(
                 escapeMarkup: function (markup) { return markup; },
                 minimumInputLength: 1,
                 templateResult: formatRepo,
-                templateSelection: formatRepoSelection,
+                // templateSelection: formatRepoSelection,
                 placeholder: "Enter name"
             });
         }
@@ -144,31 +204,41 @@ require(
             let data = e.params.data;
             let rowElement = e.currentTarget.parentNode.parentNode;
 
-            let idInput          = $(rowElement).find(selectors.currencyIdInput);
-            let nameInput        = $(rowElement).find(selectors.currencyNameInput);
-            let symbolInput      = $(rowElement).find(selectors.currencySymbolInput);
-            let descriptionInput = $(rowElement).find(selectors.currencyDescriptionInput);
-            let logoInput        = $(rowElement).find(selectors.currencyLogoInput);
-            let decimal          = $(rowElement).find(selectors.currencyDecimalInput);
+            $(rowElement).find('.ezdefi__currency-td').append('<p class="ezdefi__currency-symbol"><img src="'+data.logo+'"/></p>');
+            $(rowElement).find('.ezdefi-select-coin').remove();
+            $(rowElement).find('.select2').remove();
 
-            idInput         .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][id]');
-            nameInput       .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][name]');
-            symbolInput     .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][symbol]');
-            descriptionInput.attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][description]');
-            logoInput       .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][logo]');
-            decimal         .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][decimal]');
+            let idInput           = $(rowElement).find(selectors.currencyIdInput);
+            let nameInput         = $(rowElement).find(selectors.currencyNameInput);
+            let symbolInput       = $(rowElement).find(selectors.currencySymbolInput);
+            let descriptionInput  = $(rowElement).find(selectors.currencyDescriptionInput);
+            let logoInput         = $(rowElement).find(selectors.currencyLogoInput);
+            let decimal           = $(rowElement).find(selectors.currencyDecimalInput);
+            let discount          = $(rowElement).find(selectors.currencydiscountInput);
+            let paymentLifetime   = $(rowElement).find(selectors.currencyLifetimeInput);
+            let blockConfirmation = $(rowElement).find(selectors.blockConfirmationInput);
 
-            idInput         .val(data._id);
-            nameInput       .val(data.name);
-            symbolInput     .val(data.symbol);
-            descriptionInput.val(data.description);
-            logoInput       .val(data.logo);
-            decimal         .val(data.suggestedDecimal);
-
-            $(rowElement).find(selectors.currencyLifetimeInput) .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][lifetime]');
+            idInput          .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][id]');
+            nameInput        .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][name]');
+            symbolInput      .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][symbol]');
+            descriptionInput .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][description]');
+            logoInput        .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][logo]');
+            decimal          .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][decimal]');
+            paymentLifetime  .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][lifetime]');
+            blockConfirmation.attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][block_confirmation]');
+            discount         .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][discount]');
             $(rowElement).find(selectors.walletAddressInput)    .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][wallet_address]');
-            $(rowElement).find(selectors.blockConfirmationInput).attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][block_confirmation]');
-            $(rowElement).find(selectors.currencydiscountInput) .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][discount]');
+
+            idInput          .val(data._id);
+            nameInput        .val(data.name);
+            symbolInput      .val(data.symbol);
+            descriptionInput .val(data.description);
+            logoInput        .val(data.logo);
+            decimal          .val(data.suggestedDecimal);
+            discount         .val(0);
+            paymentLifetime  .val(15);
+            blockConfirmation.val(1);
+
         }
 
         function selectorToClass(selector) {

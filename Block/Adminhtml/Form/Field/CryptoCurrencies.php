@@ -39,11 +39,11 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
                         <table class="admin__control-table">
                             <thead>
                             <tr>
-                                <th class="ezdefi__table-head--currency">Currency</th>
+                                <th class="ezdefi__table-head--currency">Select coin</th>
                                 <th>Discount</th>
-                                <th>Payment Lifetime</th>
+                                <th>Expiration (minutes)</th>
                                 <th class="ezdefi__table-head--wallet-address">Wallet Address</th>
-                                <th>Safe Block Distant</th>
+                                <th>Block Confirmation</th>
                                 <th class="coin-decimal">Decimal</th>
                                 <th class="col-actions" colspan="1">Action</th>
                             </tr>
@@ -68,6 +68,7 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
 
     private function oldCurrencyConfig() {
         $currenciesData = $this->_currencyFactory->create()->getCollection()->getData();
+        //<span>' . $currencyData['symbol'] . '/' . $currencyData['name'] . '</span>
 
         $html = '';
         foreach ($currenciesData as $currencyData) {
@@ -75,14 +76,15 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
                 <td>
                     <p class="ezdefi__currency-symbol">
                         <img src="'.$currencyData['logo'].'" alt="">
-                        <span>' . $currencyData['symbol'] . '/' . $currencyData['name'] . '</span>
                     </p>
                 </td>
                 <td><input type="text" 
                     name="groups[ezdefi_payment][fields][currency][value][edit]['.$currencyData['currency_id'].'][discount]" 
                     class="ezdefi__currency-discount-input validate-not-negative-number"
                     data-validate="{max: 100}"
-                    value="'.$currencyData['discount'].'"></td>
+                    value="'.$currencyData['discount'].'">
+                    <span>%</span>
+                </td>
                 <td><input type="text" 
                     name="groups[ezdefi_payment][fields][currency][value][edit]['.$currencyData['currency_id'].'][lifetime]"
                     class="ezdefi__payment-lifetime-input validate-not-negative-number validate-digits"
