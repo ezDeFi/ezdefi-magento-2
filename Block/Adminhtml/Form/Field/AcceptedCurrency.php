@@ -13,7 +13,7 @@ use Magento\Framework\UrlInterface;
 /**
  * Class CryptoCurrencies
  */
-class ApiKey extends \Magento\Config\Block\System\Config\Form\Field
+class AcceptedCurrency extends \Magento\Config\Block\System\Config\Form\Field
 {
     CONST URL_CHECK_API_KEY = 'admin/gateway/checkapikey';
 
@@ -29,28 +29,24 @@ class ApiKey extends \Magento\Config\Block\System\Config\Form\Field
         array $data = []
     ) {
         $this->_currencyFactory = $currencyFactory;
+        $_scopeConfig = $scopeConfig;
         $this->_urlBuilder = $urlBuilder;
-        $this->_scopeConfig = $scopeConfig;
         parent::__construct($context, $data);
     }
 
     protected function _getElementHtml(AbstractElement $element) {
-        $apiKey = $this->_scopeConfig->getValue('payment/ezdefi_payment/api_key');
+        $variation= $this->_scopeConfig->getValue('payment/ezdefi_payment/variation');
 
         $html = '<input id="payment_us_ezdefi_payment_api_key" 
-                    name="groups[ezdefi_payment][fields][api_key][value]" 
-                    value="'.$apiKey.'"
-                    class="required-entry input-text admin__control-text valid ezdefi__api-key"
-                    data-ui-id="text-groups-ezdefi-payment-fields-api-key-value" 
+                    name="groups[ezdefi_payment][fields][variation][value]" 
+                    value="'.$variation.'"
+                    class="required-entry input-text admin__control-text valid"
+                    data-ui-id="text-groups-ezdefi-payment-fields-variation-value" 
                     data-validate="{
-                        required: true,
-                        remote: {url: \'/rest/V1/ezdefi/gateway/checkapikey\', type: \'get\'},
-                        messages: {
-                            remote:  \'This Api Key is invalid\'
-                        }}"
-                    type="text"
-                    onChange=""
-                    >';
+                        min: 0, 
+                        max: 100
+                    }"
+                    type="text">';
         return $html;
     }
 }

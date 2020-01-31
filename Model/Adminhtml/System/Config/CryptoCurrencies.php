@@ -101,9 +101,8 @@ class CryptoCurrencies extends \Magento\Framework\App\Config\Value
     }
 
     private function saveCurrency($currenciesData) {
-        $model = $this->_currencyFactory->create();
-
         foreach ($currenciesData as $currencyData) {
+            $model = $this->_currencyFactory->create();
             $model->addData([
                 'currency_id'        => $currencyData['id'],
                 'logo'               => $currencyData['logo'],

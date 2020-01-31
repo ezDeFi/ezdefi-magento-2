@@ -1,9 +1,8 @@
 .ezdefi__wallet-address-input {
-    width: 200px !important;
+    width: 60px !important;
 }
 
 .ezdefi__currency-symbol {
-    width: 150px;
     position: relative;
 }
 
@@ -26,4 +25,16 @@
 .ezdefi__select-currency--logo {
     width: 36px;
     height: 36px;
+}
+
+#row_payment_us_ezdefi_payment_currency input {
+    padding: 6px 4px !important;
+}
+
+#row_payment_us_ezdefi_payment_currency td {
+    padding-right: 1rem !important;
+}
+
+.ezdefi__currency-discount-input {
+    width: 40px !important;
 }
