@@ -36,7 +36,7 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
         $html = '<div class="design_theme_ua_regexp">
                     <div class="admin__control-table-wrapper">
                         <div class="ezdefi__list-currency-delete"></div>
-                        <table class="admin__control-table">
+                        <table class="admin__control-table ezdefi__coin-config-table">
                             <thead>
                             <tr>
                                 <th class="ezdefi__table-head--currency">Select coin</th>
@@ -69,7 +69,6 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
     private function oldCurrencyConfig() {
         $currenciesData = $this->_currencyFactory->create()->getCollection()->getData();
         //<span>' . $currencyData['symbol'] . '/' . $currencyData['name'] . '</span>
-
         $html = '';
         foreach ($currenciesData as $currencyData) {
             $html .= '<tr>
@@ -78,6 +77,7 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
                         <img src="'.$currencyData['logo'].'" alt="">
                         <span style="text-transform: uppercase">'.$currencyData['symbol'].'</span>
                     </p>
+                    <input type="hidden" class="ezdefi__currency-id-input" value="'.$currencyData['currency_id'].'">
                 </td>
                 <td><input type="text" 
                     name="groups[ezdefi_payment][fields][currency][value][edit]['.$currencyData['currency_id'].'][discount]" 

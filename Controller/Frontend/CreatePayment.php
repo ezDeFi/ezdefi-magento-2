@@ -57,14 +57,6 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
-//        $response = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-//        $orderId = $this->_cart->getLastOrderId();
-//        $payment = $this->_gatewayHelper->createPayment(['uoid' => $orderId, 'value' => '111', 'to' => '0x356215E788b06E5d14D182cad28d3ec05d2753D7', 'currency'=>'USD:ETH']);
-//        $response->setData(json_decode($payment));
-//        $response->setData(['test' => $this->_request->getParam("type")]);
-//        return $response;
-//        $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
-
         $orderId = $this->_cart->getLastOrderId();
         $currencyId = json_decode($this->_request->getContent())->currency_id;
         $cryptoCurrency    = $this->_currencyFactory->create()->getCollection()->addFieldToFilter('currency_id', $currencyId)->getData()[0];
@@ -77,7 +69,7 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
         if($paymentType === 'simple') {
             $payment = $this->createPaymentSimple($order, $cryptoCurrency);
             $block = $resultPage->getLayout()
-                ->createBlock('Ezdefi\Payment\Block\Frontend\SimpleMethod', 'render simple method block', ['data' => ['payment' => $payment, 'originValue' => $order->getTotalDue()]])
+                ->createBlock('Ezdefi\Payment\Block\Frontend\SimpleMethod', 'render simple method block', ['data' => ['payment' => $payment, 'originValue' => $order->getTotalDue(), 'originCurrency' => $order->getOrderCurrencyCode()]])
                 ->setTemplate('Ezdefi_Payment::simpleMethod.phtml')
                 ->toHtml();
         } else if ($paymentType === 'ezdefi') {
@@ -85,7 +77,7 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
 
             $block = $resultPage->getLayout()
                 ->createBlock('Ezdefi\Payment\Block\Frontend\EzdefiMethod', 'render simple method block', ['data' => ['payment' => $payment, 'originValue' => $order->getTotalDue()]])
-                ->setTemplate('Ezdefi_Payment::EzdefiMethod.phtml')
+                ->setTemplate('Ezdefi_Payment::ezdefiMethod.phtml')
                 ->toHtml();
         }
 
@@ -112,7 +104,7 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
             'currency' => $cryptoCurrency['symbol'].':'.$cryptoCurrency['symbol'],
             'safedist' => $cryptoCurrency['block_confirmation'],
             'duration' => $cryptoCurrency['payment_lifetime'],
-            'callback' => $this->_urlInterface->getUrl()
+            'callback' => $this->_urlInterface->getUrl('ezdefi/frontend/callbackconfirmorder')
         ]);
         $this->addException($order, $cryptoCurrency, $payment->_id, $amountId, 1);
         return $payment;
@@ -126,7 +118,7 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
             'currency' => $order->getStoreCurrencyCode().':'.$cryptoCurrency['symbol'],
             'safedist' => $cryptoCurrency['block_confirmation'],
             'duration' => $cryptoCurrency['payment_lifetime'],
-            'callback' => $this->_urlInterface->getUrl()
+            'callback' => $this->_urlInterface->getUrl('ezdefi/frontend/callbackconfirmorder')
         ]);
 
         $exchangeRate = $this->_gatewayHelper->getExchange($order->getStoreCurrencyCode(), $cryptoCurrency['symbol']);

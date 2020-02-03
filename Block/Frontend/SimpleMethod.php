@@ -23,7 +23,7 @@ class SimpleMethod extends \Magento\Framework\View\Element\Template
 
     public function getOriginCurrency()
     {
-        return __($this->_data['payment']->originCurrency);
+        return __($this->_data['originCurrency']);
     }
 
     public function getOriginValue()
