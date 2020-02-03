@@ -4,6 +4,7 @@
 
 .ezdefi__currency-symbol {
     position: relative;
+    width: 80px;
 }
 
 .ezdefi__currency-symbol >img {

@@ -76,29 +76,30 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
                 <td>
                     <p class="ezdefi__currency-symbol">
                         <img src="'.$currencyData['logo'].'" alt="">
+                        <span style="text-transform: uppercase">'.$currencyData['symbol'].'</span>
                     </p>
                 </td>
                 <td><input type="text" 
                     name="groups[ezdefi_payment][fields][currency][value][edit]['.$currencyData['currency_id'].'][discount]" 
-                    class="ezdefi__currency-discount-input validate-not-negative-number"
+                    class="ezdefi__currency-discount-input validate-not-negative-number only-positive-integer"
                     data-validate="{max: 100}"
                     value="'.$currencyData['discount'].'">
                     <span>%</span>
                 </td>
                 <td><input type="text" 
                     name="groups[ezdefi_payment][fields][currency][value][edit]['.$currencyData['currency_id'].'][lifetime]"
-                    class="ezdefi__payment-lifetime-input validate-not-negative-number validate-digits"
-                    value="'.$currencyData['payment_lifetime'].'"></td>
+                    class="ezdefi__payment-lifetime-input validate-not-negative-number validate-digits only-positive-integer"
+                    value="'.($currencyData['payment_lifetime']/60).'"></td>
                 <td><input type="text" 
                     class="ezdefi__wallet-address-input required-entry"
                     name="groups[ezdefi_payment][fields][currency][value][edit]['.$currencyData['currency_id'].'][wallet_address]" 
                     value="'.$currencyData['wallet_address'].'"></td>
                 <td><input type="text"
-                    class="ezdefi_block-confirmation-input validate-not-negative-number validate-digits"
+                    class="ezdefi_block-confirmation-input validate-not-negative-number validate-digits only-positive-integer"
                     name="groups[ezdefi_payment][fields][currency][value][edit]['.$currencyData['currency_id'].'][block_confirmation]" 
                     value="'.$currencyData['block_confirmation'].'"></td>
                 <td><input type="text"
-                    class="ezdefi__currency-decimal-input validate-not-negative-number validate-digits"
+                    class="ezdefi__currency-decimal-input validate-not-negative-number validate-digits only-positive-integer"
                     data-validate="{min:2}"
                     name="groups[ezdefi_payment][fields][currency][value][edit]['.$currencyData['currency_id'].'][decimal]"
                     value="'.$currencyData['decimal'].'"></td>

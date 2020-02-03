@@ -17,9 +17,8 @@ class GatewayHelper
         $this->_scopeConfig = $scopeConfig;
     }
 
-    public function getListToken() {
-        return $this->sendCurl('/token/list', 'GET');
-
+    public function getListToken($keyword, $baseUrl) {
+        return $this->sendCurl('/token/list', 'GET', ['keyword' => $keyword, 'domain' => $baseUrl, 'platform' => 'magento 2']);
     }
 
     public function getExchange($originCurrency, $currency) {

@@ -38,6 +38,10 @@ class CryptoCurrencies extends \Magento\Framework\App\Config\Value
     {
         $request = $this->getValue();
 
+        if (isset($request['ids_delete'])) {
+            $this->deleteCurrency($request['ids_delete']);
+        }
+
         if (isset($request['add'])) {
             $this->validateAddCurrency($request['add'], 'add');
             $this->saveCurrency($request['add']);
@@ -46,10 +50,6 @@ class CryptoCurrencies extends \Magento\Framework\App\Config\Value
         if (isset($request['edit'])) {
             $this->validateAddCurrency($request['edit'], 'edit');
             $this->updateCurrency($request['edit']);
-        }
-
-        if (isset($request['ids_delete'])) {
-            $this->deleteCurrency($request['ids_delete']);
         }
 
         $this->setValue(intval($this->getValue()));
@@ -109,7 +109,7 @@ class CryptoCurrencies extends \Magento\Framework\App\Config\Value
                 'symbol'             => $currencyData['symbol'],
                 'name'               => $currencyData['name'],
                 'discount'           => $currencyData['discount'],
-                'payment_lifetime'   => $currencyData['lifetime'],
+                'payment_lifetime'   => $currencyData['lifetime'] * 60,
                 'wallet_address'     => $currencyData['wallet_address'],
                 'block_confirmation' => $currencyData['block_confirmation'],
                 'decimal'            => $currencyData['decimal'],
@@ -125,7 +125,7 @@ class CryptoCurrencies extends \Magento\Framework\App\Config\Value
             $currency = $collection->getFirstItem();
 
             $currency->setData('discount', $currencyData['discount']);
-            $currency->setData('payment_lifetime', $currencyData['lifetime']);
+            $currency->setData('payment_lifetime', $currencyData['lifetime'] * 60);
             $currency->setData('wallet_address', $currencyData['wallet_address']);
             $currency->setData('block_confirmation', $currencyData['block_confirmation']);
             $currency->setData('decimal', $currencyData['decimal']);

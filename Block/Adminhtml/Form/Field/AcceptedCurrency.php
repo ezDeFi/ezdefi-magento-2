@@ -40,7 +40,7 @@ class AcceptedCurrency extends \Magento\Config\Block\System\Config\Form\Field
         $html = '<input id="payment_us_ezdefi_payment_api_key" 
                     name="groups[ezdefi_payment][fields][variation][value]" 
                     value="'.$variation.'"
-                    class="required-entry input-text admin__control-text valid"
+                    class="required-entry input-text admin__control-text valid only-float"
                     data-ui-id="text-groups-ezdefi-payment-fields-variation-value" 
                     data-validate="{
                         min: 0, 
