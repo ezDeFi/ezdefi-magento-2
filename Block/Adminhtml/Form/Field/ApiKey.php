@@ -15,8 +15,6 @@ use Magento\Framework\UrlInterface;
  */
 class ApiKey extends \Magento\Config\Block\System\Config\Form\Field
 {
-    CONST URL_CHECK_API_KEY = 'admin/gateway/checkapikey';
-
     protected $_currencyFactory;
     protected $_scopeConfig;
     protected $_urlBuilder;

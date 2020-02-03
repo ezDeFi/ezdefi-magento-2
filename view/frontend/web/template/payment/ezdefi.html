@@ -1,3 +1,4 @@
+<script src="../../../../../../../../../pub/static/frontend/Magento/luma/en_US/Ezdefi_Payment/js/view/payment/method-renderer/ezdefi.js"></script>
 <link rel="stylesheet"
       href="../../../../../../../../../pub/static/frontend/Magento/luma/en_US/Ezdefi_Payment/css/ezdefi.css">
 <script src="../../js/view/payment/method-renderer/ezdefi.js"></script>
@@ -43,7 +44,7 @@
                 <!--/ko-->
             </div>
             <!-- ko if: isPlaceOrder -->
-            <button data-role="review-save" class="action primary ezdefi__btn-create-payment" disabled data-bind="event: {click: function() { createPayment(null)} }"> change next </button>
+            <button data-role="review-save" class="action primary ezdefi__btn-create-payment" data-bind="event: {click: function() { createPayment(null)} }"> change </button>
             <!--/ko-->
         </div>
 

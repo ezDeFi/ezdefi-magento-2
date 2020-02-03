@@ -13,7 +13,8 @@
                 <field id="gateway_api_url" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20"
                        translate="label" type="text">
                     <label>GATEWAY API URL</label>
-                    <validate>validate-url required-entry</validate>
+                    <frontend_model>Ezdefi\Payment\Block\Adminhtml\Form\Field\GatewayUrl</frontend_model>
+
                 </field>
                 <field id="api_key" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30"
                        translate="label" type="text">
@@ -23,17 +24,17 @@
                 </field>
                 <field id="payment_method" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30"
                        translate="label" type="checkboxes">
-                    <label>PaymentMethod</label>
+                    <label>PAYMENT METHOD</label>
                     <frontend_model>Ezdefi\Payment\Block\Adminhtml\Form\Field\PaymentMethod</frontend_model>
                 </field>
-                <field id="accepted_currency" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="50"
+                <field id="variation" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="50"
                        translate="label" type="text">
-                    <label>Accepted Currency</label>
-                    <frontend_model>Ezdefi\Payment\Block\Adminhtml\Form\Field\AcceptedCurrency</frontend_model>
+                    <label>ACCEPTABLE PRICE AVAILABLE</label>
+                    <frontend_model>Ezdefi\Payment\Block\Adminhtml\Form\Field\AcceptablePriceVariable</frontend_model>
                     <comment>Allowable amount variation</comment>
                 </field>
                 <field id="currency" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="60" translate="label" type="text">
-                    <label>Coins</label>
+                    <label>ACCEPTED CURRENCY</label>
                     <frontend_model>Ezdefi\Payment\Block\Adminhtml\Form\Field\CryptoCurrencies</frontend_model>
                     <backend_model>Ezdefi\Payment\Model\Adminhtml\System\Config\CryptoCurrencies</backend_model>
                 </field>
