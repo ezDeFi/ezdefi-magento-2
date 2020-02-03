@@ -27,6 +27,9 @@ require(
         }
         var tmp = 1;
 
+        //-------------init------------------
+        initCancelAddCurrency('.canel-add-currency');
+
         // -----------------validate----------------------
         $(document).on('keypress', '.only-float', function(eve) {
             if ((eve.which != 46 || $(this).val().indexOf('.') != -1) && (eve.which < 48 || eve.which > 57) || (eve.which == 46 && $(this).caret().start == 0) ) {
@@ -72,7 +75,6 @@ require(
 
         //----------------------------sortable-------------------------
 
-
         // ------------------------coin config---------------------------
         $(document).on("click", "#ezdefi-configuration-add-coin", function () {
             tmp += 1;
@@ -88,16 +90,16 @@ require(
                     <input type="hidden" class="${selectorToClass(selectors.currencyLogoInput)}">
                 </td>
                 <td>
-                    <input type="text" class="${selectorToClass(selectors.currencydiscountInput)} validate-not-negative-number" 
+                    <input type="text" class="${selectorToClass(selectors.currencydiscountInput)} validate-not-negative-number only-float" 
                         data-validate="{max: 100}"> 
                     <span>%</span>
                 </td>
                 <td>
-                    <input type="text" class="${selectorToClass(selectors.currencyLifetimeInput)} validate-not-negative-number validate-digits">
+                    <input type="text" class="${selectorToClass(selectors.currencyLifetimeInput)} validate-not-negative-number validate-digits only-positive-integer">
                 </td>
                 <td><input type="text" class="${selectorToClass(selectors.walletAddressInput)} required-entry"></td>
-                <td><input type="text" class="${selectorToClass(selectors.blockConfirmationInput)} validate-not-negative-number validate-digits"></td>
-                <td><input type="text" class="${selectorToClass(selectors.currencyDecimalInput)} validate-not-negative-number validate-digits"
+                <td><input type="text" class="${selectorToClass(selectors.blockConfirmationInput)} validate-not-negative-number validate-digits only-positive-integer"></td>
+                <td><input type="text" class="${selectorToClass(selectors.currencyDecimalInput)} validate-not-negative-number validate-digits only-positive-integer"
                     data-validate="{min:2}">
                 </td>
                 <td>
@@ -139,7 +141,7 @@ require(
         });
 
         function initCancelAddCurrency(btnCancel) {
-            $(btnCancel).click(function () {
+            $(document).on("click", btnCancel, function () {
                 var currencyConfigElement = $(this).parent().parent();
                 alert({
                     title: $.mage.__('Cancel add coin'),
