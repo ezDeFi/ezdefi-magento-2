@@ -98,7 +98,6 @@ define([
                 if(!this.simplePaymentContent()) {
                     this.createPayment('simple');
                 }
-                // this.checkOrderComplete();
             },
 
             createEzdefiPayment: function() {
