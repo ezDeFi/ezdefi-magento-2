@@ -26,6 +26,21 @@ require(
         }
         var tmp = 1;
 
+        $(document).on('keypress', '.only-float', function(eve) {
+            if ((eve.which != 46 || $(this).val().indexOf('.') != -1) && (eve.which < 48 || eve.which > 57) || (eve.which == 46 && $(this).caret().start == 0) ) {
+                eve.preventDefault();
+            }
+            $(document).on('keyup', '.only-float', function(eve) {
+                if($(this).val().indexOf('.') == 0) {
+                    $(this).val($(this).val().substring(1));
+                }
+            });
+        });
+        $(document).on('keypress', '.only-positive-integer', function (eve) {
+            if (eve.which < 48 || eve.which > 57) {
+                eve.preventDefault();
+            }
+        });
 
         $(document).on("change", '.ezdefi__api-key', function () {
             $('#config-edit-form').valid();
@@ -56,9 +71,9 @@ require(
             tmp += 1;
             var container = `<tr>
                 <td class="ezdefi__currency-td">
-                    <select class="ezdefi-select-coin" style="width: 200px" id="select-currency-${tmp}">
+                    <select class="ezdefi-select-coin" style="width: 130px" id="select-currency-${tmp}">
                         <option value=""></option>
-                    </select><br>
+                    </select>
                     <input type="hidden" class="${selectorToClass(selectors.currencySymbolInput)}">
                     <input type="hidden" class="${selectorToClass(selectors.currencyNameInput)}">
                     <input type="hidden" class="${selectorToClass(selectors.currencyIdInput)}">
@@ -66,20 +81,24 @@ require(
                     <input type="hidden" class="${selectorToClass(selectors.currencyLogoInput)}">
                 </td>
                 <td>
-                    <input type="text" class="${selectorToClass(selectors.currencydiscountInput)}"> <span>%</span>
+                    <input type="text" class="${selectorToClass(selectors.currencydiscountInput)} validate-not-negative-number" 
+                        data-validate="{max: 100}"> 
+                    <span>%</span>
                 </td>
                 <td>
-                    <input type="text" class="${selectorToClass(selectors.currencyLifetimeInput)}">
+                    <input type="text" class="${selectorToClass(selectors.currencyLifetimeInput)} validate-not-negative-number validate-digits">
                 </td>
-                <td><input type="text" class="${selectorToClass(selectors.walletAddressInput)}"></td>
-                <td><input type="text" class="${selectorToClass(selectors.blockConfirmationInput)}"></td>
-                <td><input type="text" class="${selectorToClass(selectors.currencyDecimalInput)}"></td>
+                <td><input type="text" class="${selectorToClass(selectors.walletAddressInput)} required-entry"></td>
+                <td><input type="text" class="${selectorToClass(selectors.blockConfirmationInput)} validate-not-negative-number validate-digits"></td>
+                <td><input type="text" class="${selectorToClass(selectors.currencyDecimalInput)} validate-not-negative-number validate-digits"
+                    data-validate="{min:2}">
+                </td>
                 <td>
-                    <button class="action-delete delete-curency-config ${selectorToClass(selectors.btnCancelAddCurrency)}" type="button"><span>Delete</span></button>
+                    <button class="action-delete delete-curency-config ${selectorToClass(selectors.btnCancelAddCurrency)}" type="button" id="btn-cancel-${tmp}"><span>Delete</span></button>
                 </td>
             </tr>`;
             $("#ezdefi-configuration-coin-table").append(container);
-            initCancelAddCurrency();
+            initCancelAddCurrency("#btn-cancel-"+tmp);
             initSelectCoinConfig("#select-currency-"+tmp);
             $(".ezdefi-select-coin").on('select2:select', selectCoinListener);
         });
@@ -110,11 +129,10 @@ require(
                     }
                 }]
             });
-
         });
 
-        function initCancelAddCurrency() {
-            $(selectors.btnCancelAddCurrency).click(function () {
+        function initCancelAddCurrency(btnCancel) {
+            $(btnCancel).click(function () {
                 var currencyConfigElement = $(this).parent().parent();
                 alert({
                     title: $.mage.__('Cancel add coin'),
@@ -181,7 +199,7 @@ require(
                         <span>
                             <img src="${repo.logo}" alt="" class="ezdefi__select-currency--logo">
                         </span>
-                        <span class='select2-result-repository__title text-justify ezdefi__select-currency--name'>${repo.name}</span>
+                        <span class='select2-result-repository__title text-justify ezdefi__select-currency--name' style="text-transform: uppercase">${repo.symbol}</span>
                     </div>
                 </div>
             </div>`;
@@ -194,7 +212,7 @@ require(
                         <span>
                             <img src="${repo.logo}" alt="" class="ezdefi__select-currency--logo">
                         </span>
-                        <span class='select2-result-repository__title text-justify ezdefi__select-currency--name'>${repo.name}</span>
+                        <span class='select2-result-repository__title text-justify ezdefi__select-currency--name'>${repo.symbol}</span>
                    </div>
                 </div>
             </div>`;
@@ -204,7 +222,7 @@ require(
             let data = e.params.data;
             let rowElement = e.currentTarget.parentNode.parentNode;
 
-            $(rowElement).find('.ezdefi__currency-td').append('<p class="ezdefi__currency-symbol"><img src="'+data.logo+'"/></p>');
+            $(rowElement).find('.ezdefi__currency-td').append('<p class="ezdefi__currency-symbol"><img src="'+data.logo+'"/><span>'+data.symbol+'</span></p>');
             $(rowElement).find('.ezdefi-select-coin').remove();
             $(rowElement).find('.select2').remove();
 
