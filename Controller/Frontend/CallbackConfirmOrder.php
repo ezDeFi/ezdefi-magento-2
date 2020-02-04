@@ -16,6 +16,7 @@ class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
     protected $_gatewayHelper;
     protected $_exceptionFactory;
     protected $_date;
+    protected $_logger;
 
     CONST PAY_ON_TIME = 1;
     CONST PAID_OUT_TIME = 3;
@@ -25,18 +26,21 @@ class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
         GatewayHelper $gatewayHelper,
         ExceptionFactory $exceptionFactory,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\Webapi\Rest\Request $request
+        \Magento\Framework\Webapi\Rest\Request $request,
+        \Psr\Log\LoggerInterface $logger
     )
     {
         $this->_gatewayHelper = $gatewayHelper;
         $this->_request = $request;
         $this->_exceptionFactory = $exceptionFactory;
         $this->_date = $date;
+        $this->_logger = $logger;
         return parent::__construct($context);
     }
 
     public function execute()
     {
+        $this->_logger->debug('have callback');
         $response = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $paymentId = $this->_request->getParam('paymentid');
 

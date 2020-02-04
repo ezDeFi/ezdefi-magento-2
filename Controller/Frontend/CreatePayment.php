@@ -88,7 +88,7 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
         $amountCollection  = $this->_amountFactory->create();
         $originCurrency    = $order->getStoreCurrencyCode();
         $originValue = $order->getTotalDue();
-        $amount            = $this->_gatewayHelper->getExchange($originCurrency, $cryptoCurrency['symbol']) * $originValue;
+        $amount            = $this->_gatewayHelper->getExchange($originCurrency, $cryptoCurrency['symbol']) * $originValue * (100 - $cryptoCurrency['discount'])/100;
 
         $amountId = (float)$amountCollection->getCollection()->createAmountId(
             $cryptoCurrency['symbol'], $amount,
@@ -113,7 +113,7 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
     private function createPaymentEzdefi($order, $cryptoCurrency) {
         $payment = $this->_gatewayHelper->createPayment([
             'uoid'     => $order->getId().'-0',
-            'value'    => $order->getTotalDue(),
+            'value'    => $order->getTotalDue() * (100 - $cryptoCurrency['discount'])/100,
             'to'       => $cryptoCurrency['wallet_address'],
             'currency' => $order->getStoreCurrencyCode().':'.$cryptoCurrency['symbol'],
             'safedist' => $cryptoCurrency['block_confirmation'],
