@@ -42,7 +42,17 @@ class InstallSchema implements InstallSchemaInterface
                 [
                     'nullable' => false,
                 ],
-                'currency_id'
+                'currency\'s id'
+            )
+            ->addColumn(
+                'order',
+                Table::TYPE_INTEGER,
+                11,
+                [
+                    'nullable' => false,
+                    'default'  => 0
+                ],
+                'order factor, the factor to sort currency'
             )
             ->addColumn(
                 'logo',

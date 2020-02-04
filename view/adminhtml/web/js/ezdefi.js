@@ -12,6 +12,7 @@ require(
             ezdefiPaymentCheckbox   : '.ezdefi__ezdefi-payment-checkbox',
             checkPaymentMethodInput : '.check-payment-method-input',
             currencySymbolInput     : '.ezdefi__currency-symbol-input',
+            currencyOrderByInput    : '.ezdefi__currency-orderby-input',
             currencyNameInput       : '.ezdefi__currency-name-input',
             currencyIdInput         : '.ezdefi__currency-id-input',
             currencyDescriptionInput: '.ezdefi__currency-description-input',
@@ -89,6 +90,7 @@ require(
                     <input type="hidden" class="${selectorToClass(selectors.currencyDescriptionInput)}">
                     <input type="hidden" class="${selectorToClass(selectors.currencyLogoInput)}">
                     <input type="hidden" class="${selectorToClass(selectors.currencyMaxDecimalInput)}">
+                    <input type="hidden" class="${selectorToClass(selectors.currencyOrderByInput)}">
                 </td>
                 <td>
                     <input type="text" class="${selectorToClass(selectors.currencydiscountInput)} validate-not-negative-number only-float" 
@@ -256,6 +258,7 @@ require(
                 let paymentLifetime   = $(rowElement).find(selectors.currencyLifetimeInput);
                 let blockConfirmation = $(rowElement).find(selectors.blockConfirmationInput);
                 let maxDecimal        = $(rowElement).find(selectors.currencyMaxDecimalInput);
+                let orderBy           = $(rowElement).find(selectors.currencyOrderByInput);
 
                 decimal.attr('data-validate', '{min:2, max:'+data.decimal+'}')
 
@@ -268,7 +271,8 @@ require(
                 paymentLifetime  .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][lifetime]');
                 blockConfirmation.attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][block_confirmation]');
                 discount         .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][discount]');
-                maxDecimal        .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][max_decimal]');
+                maxDecimal       .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][max_decimal]');
+                orderBy          .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][order]');
                 $(rowElement).find(selectors.walletAddressInput)    .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][wallet_address]');
 
                 idInput          .val(data._id);
@@ -281,6 +285,10 @@ require(
                 paymentLifetime  .val(15);
                 blockConfirmation.val(1);
                 maxDecimal       .val(data.decimal);
+                $(selectors.currencyOrderByInput).each(function(order) {
+                    $(this).val(order);
+                })
+
             }
         }
 
