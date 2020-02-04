@@ -115,7 +115,8 @@ class CryptoCurrencies extends \Magento\Framework\App\Config\Value
                 'block_confirmation' => $currencyData['block_confirmation'] == '' ? 0 : $currencyData['block_confirmation'],
                 'decimal'            => $currencyData['decimal'] == '' ? $currencyData['max_decimal'] : $currencyData['decimal'],
                 'description'        => $currencyData['description'],
-                'currency_decimal'   => $currencyData['max_decimal']
+                'currency_decimal'   => $currencyData['max_decimal'],
+                'order'              => $currencyData['order']
             ]);
             $model->save();
         }
@@ -131,6 +132,7 @@ class CryptoCurrencies extends \Magento\Framework\App\Config\Value
             $currency->setData('wallet_address', $currencyData['wallet_address']);
             $currency->setData('block_confirmation', $currencyData['block_confirmation'] == '' ? 0 : $currencyData['block_confirmation']);
             $currency->setData('decimal', $currencyData['decimal'] == '' ? $currencyData['max_decimal'] : $currencyData['decimal']);
+            $currency->setData('order', $currencyData['order']);
 
             $currency->save();
         }

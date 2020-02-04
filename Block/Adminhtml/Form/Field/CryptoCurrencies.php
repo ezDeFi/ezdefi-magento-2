@@ -72,7 +72,7 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
                         \'use strict\';
                         $(\'#ezdefi-configuration-coin-table\').sortable({
                             stop: function() {
-                                $(\'.ezdefi__currency-order-input\').each(function(order) {
+                                $(\'.ezdefi__currency-orderby-input\').each(function(order) {
                                     $(this).val(order);
                                 })
                             }
@@ -85,7 +85,7 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     private function oldCurrencyConfig() {
-        $currenciesData = $this->_currencyFactory->create()->getCollection()->getData();
+        $currenciesData = $this->_currencyFactory->create()->getCollection()->setOrder('`order`', 'ASC');
         if(empty($currenciesData)) {
             return $this->defaultCurrencyConfig();
         }
@@ -135,6 +135,10 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
                         <span style="text-transform: uppercase">' . $currencyData['symbol'] . '</span>
                     </p>
                     <input type="hidden" class="ezdefi__currency-id-input" value="' . $currencyData['currency_id'] . '">
+                     <input type="hidden" 
+                        class="ezdefi__currency-orderby-input" 
+                        name="groups[ezdefi_payment][fields][currency][value][edit]['.$currencyData['currency_id'].'][order]" 
+                        value="'.$currencyData['order'].'">
                     <input type="hidden" 
                         class="ezdefi__currency-logo-input" 
                         name="groups[ezdefi_payment][fields][currency][value][edit]['.$currencyData['currency_id'].'][max_decimal]" 
@@ -174,7 +178,7 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
 
     private function renderDefaultCurrency($currenciesData) {
         $html = '';
-        foreach ($currenciesData as $currencyData) {
+        foreach ($currenciesData as $key => $currencyData) {
             $html .= '<tr>
                 <td class="ezdefi__currency-td">
                     <input type="hidden" class="ezdefi__currency-symbol-input" name="groups[ezdefi_payment][fields][currency][value][add]['.$currencyData['currency_id'].'][symbol]" value="'.$currencyData['symbol'].'">
@@ -182,7 +186,8 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
                     <input type="hidden" class="ezdefi__currency-id-input" name="groups[ezdefi_payment][fields][currency][value][add]['.$currencyData['currency_id'].'][id]" value="'.$currencyData['currency_id'].'">
                     <input type="hidden" class="ezdefi__currency-description-input" name="groups[ezdefi_payment][fields][currency][value][add]['.$currencyData['currency_id'].'][description]" value="'.$currencyData['description'].'">
                     <input type="hidden" class="ezdefi__currency-logo-input" name="groups[ezdefi_payment][fields][currency][value][add]['.$currencyData['currency_id'].'][logo]" value="'.$currencyData['logo'].'">
-                    <input type="hidden" class="ezdefi__currency-logo-input" name="groups[ezdefi_payment][fields][currency][value][add]['.$currencyData['currency_id'].'][max_decimal]" value="'.$currencyData['currency_decimal'].'">
+                    <input type="hidden" class="ezdefi__currency-max-decimal-input" name="groups[ezdefi_payment][fields][currency][value][add]['.$currencyData['currency_id'].'][max_decimal]" value="'.$currencyData['currency_decimal'].'">
+                    <input type="hidden" class="ezdefi__currency-orderby-input" name="groups[ezdefi_payment][fields][currency][value][add]['.$currencyData['currency_id'].'][order]" value="'.$key.'">
                 <p class="ezdefi__currency-symbol"><img src="'.$currencyData['logo'].'"><span>btc</span></p></td>
                 <td>
                     <input type="text" class="ezdefi__currency-discount-input validate-not-negative-number only-float" data-validate="{max: 100}" name="groups[ezdefi_payment][fields][currency][value][add]['.$currencyData['currency_id'].'][discount]" value="0"> 
