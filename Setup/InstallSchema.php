@@ -94,8 +94,14 @@ class InstallSchema implements InstallSchemaInterface
                 'decimal',
                 Table::TYPE_INTEGER,
                 11,
-                ['default' => 8],
-                'decimal'
+                [],
+                'decimal, to create amount id'
+            )->addColumn(
+                'currency_decimal',
+                Table::TYPE_INTEGER,
+                11,
+                [],
+                'currency decimal'
             )->addColumn(
                 'description',
                 Table::TYPE_TEXT,
@@ -140,14 +146,14 @@ class InstallSchema implements InstallSchemaInterface
             ->addColumn(
                 'amount',
                 Table::TYPE_DECIMAL,
-                '25,14',
+                '60,30',
                 ['nullable' => false],
                 'amount'
             )
             ->addColumn(
                 'tag_amount',
                 Table::TYPE_DECIMAL,
-                '25,14',
+                '60,30',
                 ['nullable' => false],
                 'tag_amount'
             )

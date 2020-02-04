@@ -3,7 +3,6 @@ require(
         'jquery',
         'mage/url',
         'Magento_Ui/js/modal/alert',
-        'mage/translate',
         'Ezdefi_Payment/js/select2.min'
     ],
     function ($, url, alert) {
@@ -20,6 +19,7 @@ require(
             currencydiscountInput   : '.ezdefi__currency-discount-input',
             currencyLifetimeInput   : '.ezdefi__payment-lifetime-input',
             currencyDecimalInput    : '.ezdefi__currency-decimal-input',
+            currencyMaxDecimalInput : '.ezdefi__currency-max-decimal-input',
             blockConfirmationInput  : '.ezdefi_block-confirmation-input',
             walletAddressInput      : '.ezdefi__wallet-address-input',
             btnCancelAddCurrency    : '.canel-add-currency-input',
@@ -88,6 +88,7 @@ require(
                     <input type="hidden" class="${selectorToClass(selectors.currencyIdInput)}">
                     <input type="hidden" class="${selectorToClass(selectors.currencyDescriptionInput)}">
                     <input type="hidden" class="${selectorToClass(selectors.currencyLogoInput)}">
+                    <input type="hidden" class="${selectorToClass(selectors.currencyMaxDecimalInput)}">
                 </td>
                 <td>
                     <input type="text" class="${selectorToClass(selectors.currencydiscountInput)} validate-not-negative-number only-float" 
@@ -254,6 +255,9 @@ require(
                 let discount          = $(rowElement).find(selectors.currencydiscountInput);
                 let paymentLifetime   = $(rowElement).find(selectors.currencyLifetimeInput);
                 let blockConfirmation = $(rowElement).find(selectors.blockConfirmationInput);
+                let maxDecimal        = $(rowElement).find(selectors.currencyMaxDecimalInput);
+
+                decimal.attr('data-validate', '{min:2, max:'+data.decimal+'}')
 
                 idInput          .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][id]');
                 nameInput        .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][name]');
@@ -264,6 +268,7 @@ require(
                 paymentLifetime  .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][lifetime]');
                 blockConfirmation.attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][block_confirmation]');
                 discount         .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][discount]');
+                maxDecimal        .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][max_decimal]');
                 $(rowElement).find(selectors.walletAddressInput)    .attr('name', 'groups[ezdefi_payment][fields][currency][value][add]['+data._id+'][wallet_address]');
 
                 idInput          .val(data._id);
@@ -275,6 +280,7 @@ require(
                 discount         .val(0);
                 paymentLifetime  .val(15);
                 blockConfirmation.val(1);
+                maxDecimal       .val(data.decimal);
             }
         }
 

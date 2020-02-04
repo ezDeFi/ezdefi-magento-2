@@ -65,15 +65,16 @@ class CryptoCurrencies extends \Magento\Framework\App\Config\Value
 
     private function validateAddCurrency($currenciesData, $type) {
         foreach($currenciesData as $currencyData) {
-            $id                 = isset($currencyData['id']) ? $currencyData['id'] : '';
-            $symbol             = isset($currencyData['symbol']) ? $currencyData['symbol'] : '';
-            $name               = isset($currencyData['name']) ? $currencyData['name'] : '';
-            $logo               = isset($currencyData['logo']) ? $currencyData['logo'] : '';
-            $discount           = isset($currencyData['discount']) ? $currencyData['discount'] : '';
-            $lifetime           = isset($currencyData['lifetime']) ? $currencyData['lifetime'] : '';
-            $walletAddress      = isset($currencyData['wallet_address']) ? $currencyData['wallet_address'] : '';
+            $id                 = isset($currencyData['id'])                 ? $currencyData['id'] : '';
+            $symbol             = isset($currencyData['symbol'])             ? $currencyData['symbol'] : '';
+            $name               = isset($currencyData['name'])               ? $currencyData['name'] : '';
+            $logo               = isset($currencyData['logo'])               ? $currencyData['logo'] : '';
+            $discount           = isset($currencyData['discount'])           ? $currencyData['discount'] : '';
+            $lifetime           = isset($currencyData['lifetime'])           ? $currencyData['lifetime'] : '';
+            $walletAddress      = isset($currencyData['wallet_address'])     ? $currencyData['wallet_address'] : '';
             $blockConfirmation  = isset($currencyData['block_confirmation']) ? $currencyData['block_confirmation'] : '';
-            $decimal            = isset($currencyData['decimal']) ? $currencyData['decimal'] : '';
+            $decimal            = isset($currencyData['decimal'])            ? $currencyData['decimal'] : '';
+            $maxDecimal         = isset($currencyData['max_decimal'])        ? $currencyData['max_decimal'] : '';
 
             if($type === 'add') {
                 if ($symbol == '') {
@@ -86,16 +87,16 @@ class CryptoCurrencies extends \Magento\Framework\App\Config\Value
                     throw new ValidatorException(__('Currency logo is required.'));
                 }
             }
-            if(filter_var($discount,FILTER_VALIDATE_FLOAT) === false || (float)$discount > 100 || (float)$discount < 0){
+            if($discount && (filter_var($discount,FILTER_VALIDATE_FLOAT) === false || (float)$discount > 100 || (float)$discount < 0)) {
                 throw new ValidatorException(__('Discount should be float and less than 100.'));
-            } else if (filter_var($lifetime,FILTER_VALIDATE_INT) === false || (int)$lifetime < 0) {
+            } else if ($lifetime && (filter_var($lifetime,FILTER_VALIDATE_INT) === false || (int)$lifetime < 0)) {
                 throw new ValidatorException(__('Payment life time is not a positive number.'));
             } else if ($walletAddress == '') {
                 throw new ValidatorException(__('Wallet address is required.'));
-            } else if(filter_var($blockConfirmation, FILTER_VALIDATE_INT) === false || (int)$blockConfirmation < 0) {
+            } else if($blockConfirmation && (filter_var($blockConfirmation, FILTER_VALIDATE_INT) === false || (int)$blockConfirmation < 0)) {
                 throw new ValidatorException(__('Block confirmation is not a positive number.'));
-            } else if(filter_var($decimal, FILTER_VALIDATE_INT) === false || $decimal <2 || $decimal > 14) {
-                throw new ValidatorException(__('Decimal should be number and more than 2, less than 14.'));
+            } else if($decimal && (filter_var($decimal, FILTER_VALIDATE_INT) === false || $decimal < 2 || $decimal > $maxDecimal)) {
+                throw new ValidatorException(__('Decimal is invalid'));
             }
         }
     }
@@ -108,12 +109,13 @@ class CryptoCurrencies extends \Magento\Framework\App\Config\Value
                 'logo'               => $currencyData['logo'],
                 'symbol'             => $currencyData['symbol'],
                 'name'               => $currencyData['name'],
-                'discount'           => $currencyData['discount'],
-                'payment_lifetime'   => $currencyData['lifetime'] * 60,
+                'discount'           => $currencyData['discount'] == '' ? 0 : $currencyData['discount'],
+                'payment_lifetime'   => $currencyData['lifetime'] == '' ? 0: $currencyData['lifetime'] * 60,
                 'wallet_address'     => $currencyData['wallet_address'],
-                'block_confirmation' => $currencyData['block_confirmation'],
-                'decimal'            => $currencyData['decimal'],
-                'description'        => $currencyData['description']
+                'block_confirmation' => $currencyData['block_confirmation'] == '' ? 0 : $currencyData['block_confirmation'],
+                'decimal'            => $currencyData['decimal'] == '' ? $currencyData['max_decimal'] : $currencyData['decimal'],
+                'description'        => $currencyData['description'],
+                'currency_decimal'   => $currencyData['max_decimal']
             ]);
             $model->save();
         }
@@ -124,11 +126,11 @@ class CryptoCurrencies extends \Magento\Framework\App\Config\Value
             $collection = $this->_currencyFactory->create()->getCollection()->addFieldToFilter('currency_id', $currencyId);
             $currency = $collection->getFirstItem();
 
-            $currency->setData('discount', $currencyData['discount']);
-            $currency->setData('payment_lifetime', $currencyData['lifetime'] * 60);
+            $currency->setData('discount', $currencyData['discount'] == '' ? 0 : $currencyData['discount']);
+            $currency->setData('payment_lifetime', $currencyData['lifetime'] == '' ? 0: $currencyData['lifetime'] * 60);
             $currency->setData('wallet_address', $currencyData['wallet_address']);
-            $currency->setData('block_confirmation', $currencyData['block_confirmation']);
-            $currency->setData('decimal', $currencyData['decimal']);
+            $currency->setData('block_confirmation', $currencyData['block_confirmation'] == '' ? 0 : $currencyData['block_confirmation']);
+            $currency->setData('decimal', $currencyData['decimal'] == '' ? $currencyData['max_decimal'] : $currencyData['decimal']);
 
             $currency->save();
         }
