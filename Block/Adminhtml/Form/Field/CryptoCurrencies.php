@@ -39,20 +39,20 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
                         <table class="admin__control-table ezdefi__coin-config-table">
                             <thead>
                             <tr>
-                                <th class="ezdefi__table-head--currency">Select coin</th>
-                                <th>Discount</th>
-                                <th>Expiration (minutes)</th>
-                                <th class="ezdefi__table-head--wallet-address">Wallet Address</th>
-                                <th>Block Confirmation</th>
-                                <th class="coin-decimal">Decimal</th>
-                                <th class="col-actions" colspan="1">Action</th>
+                                <th class="ezdefi__table-head--currency">'.__('Name').'</th>
+                                <th>'.__('Discount').'</th>
+                                <th>'.__('Expiration (minutes)').'</th>
+                                <th class="ezdefi__table-head--wallet-address">'.__('Wallet Address').'</th>
+                                <th>'.__('Block Confirmation').'</th>
+                                <th class="coin-decimal">'.__('Decimal').'</th>
+                                <th class="col-actions" colspan="1">'.__('Action').'</th>
                             </tr>
                             </thead>
                             <tfoot>
                                 <tr>
                                     <td colspan="7" class="col-actions-add">
                                         <button title="Add" type="button" id="ezdefi-configuration-add-coin" data-url-get-coin="'.$this->_urlBuilder->getUrl(self::URL_GET_COIN).'">
-                                            <span>Add Coin</span>
+                                            <span>'.__('Add Coin').'</span>
                                         </button>
                                     </td>
                                 </tr>

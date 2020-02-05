@@ -3,6 +3,8 @@
  * @var \Mageplaza\HelloWorld\Block\Display $block
  */
 ?>
+
+<?php if(!$block->isError()): ?>
 <div class="payment-content--simple" data-bind="style:{'display': 'none'}">
     <input type="radio" name="choose-simple-method-qrcode-input" class="hidden" id="choose-full-qrcode-radio" checked>
     <input type="radio" name="choose-simple-method-qrcode-input" class="hidden" id="choose-alternative-qrcode-radio">
@@ -54,7 +56,7 @@
     <p>
         <b>Amount:</b>
         <span class="btn-copy-amount">
-            <span class="ezdefi__simple-amount"></span><span class="ezdefi-payment__currency--simple"><?php echo $block->getCryptoValue() ?></span>
+            <span class="ezdefi__simple-amount"><?php echo $block->getCryptoValue() ?></span>
             <span class="copy-address-icon"><img src="<?php echo $this->getViewFileUrl('Ezdefi_Payment/image/icon-copy.png'); ?>" alt=""></span>
         </span>
     </p>
@@ -62,13 +64,21 @@
         <label class="label-radio-button" for="choose-alternative-qrcode-radio"> alternative QR Code </label>
     </p>
 
-    <p class="margin-top-md text-red simple-method-with-alternative-qrcode">You have to pay exact amount so that your order can be handled properly. <br>
-        If you have difficulty for sending exact amount try to use <label for="ezdefi-show-payment--ezdefi" class="link_use_ezdefi_wallet"><i>ezDeFi Wallet.</i></label></p>
+    <p class="margin-top-md text-red simple-method-with-alternative-qrcode">
+        You have to pay exact amount so that your order can be handled properly. <br>
+        If you have difficulty for sending exact amount try to use
+        <label class="link_use_ezdefi_wallet" for="choose-simple-ezdefi-radio">
+            <i>ezDeFi Wallet.</i>
+        </label>
+    </p>
     <label class="label-radio-button simple-method-with-alternative-qrcode" for="choose-full-qrcode-radio">Use previous QR Code</label>
 </div>
+<?php endif; ?>
+<?php if($this->isError()): ?>
 <div class="payment-error--simple">
-    {{ error_cant_create_amount }}
+    Can not generate amountID
 </div>
+<?php endif; ?>
 
 <script>
     require([

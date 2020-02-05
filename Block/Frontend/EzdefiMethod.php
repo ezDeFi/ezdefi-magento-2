@@ -34,7 +34,7 @@ class EzdefiMethod extends \Magento\Framework\View\Element\Template
 
     public function getCryptoValue()
     {
-        return __($this->_data['payment']->value);
+        return __($this->_data['payment']->value * pow(10, - $this->_data['payment']->decimal));
     }
 
     public function getQrCode() {

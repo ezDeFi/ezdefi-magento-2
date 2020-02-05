@@ -17,6 +17,10 @@ class SimpleMethod extends \Magento\Framework\View\Element\Template
     }
 
 
+    public function isError() {
+        return !$this->_data['payment'];
+    }
+
     public function getPaymentId(){
         return __($this->_data['payment']->_id);
     }

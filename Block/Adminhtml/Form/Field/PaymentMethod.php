@@ -24,7 +24,7 @@ class PaymentMethod extends \Magento\Config\Block\System\Config\Form\Field
         array $data = []
     ) {
         $this->_currencyFactory = $currencyFactory;
-        $_scopeConfig = $scopeConfig;
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($context, $data);
     }
 
