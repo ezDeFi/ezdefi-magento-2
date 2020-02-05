@@ -34,7 +34,7 @@ class GatewayUrl extends \Magento\Config\Block\System\Config\Form\Field
                     name="groups[ezdefi_payment][fields][gateway_api_url][value]" 
                     data-ui-id="text-groups-ezdefi-payment-fields-gateway-api-url-value" 
                     value="'.$gatewayUrl.'" 
-                    class=" validate-url required-entry input-text admin__control-text" 
+                    class="ezdefi__gateway-url validate-url required-entry input-text admin__control-text" 
                     placeholder="http://merchant-api.ezdefi.com/api"
                     type="text">';
         return $html;

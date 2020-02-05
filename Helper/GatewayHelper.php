@@ -98,8 +98,8 @@ class GatewayHelper
         return $transactionData;
     }
 
-    public function checkApiKey($apiKey) {
-        $userData = $this->sendCurl('/user/show', "GET", [], $apiKey);
+    public function checkApiKey($apiKey, $apiUrl) {
+        $userData = $this->sendCurl('/user/show', "GET", [], $apiKey, $apiUrl);
 
         $userData = json_decode($userData);
 
@@ -110,8 +110,11 @@ class GatewayHelper
         }
     }
 
-    public function sendCurl($api, $method, $params = [], $apiKey = null) {
-        $apiUrl = $this->_scopeConfig->getValue('payment/ezdefi_payment/gateway_api_url');
+    public function sendCurl($api, $method, $params = [], $apiKey = null, $apiUrl = null) {
+        if(!$apiUrl) {
+            $apiUrl = $this->_scopeConfig->getValue('payment/ezdefi_payment/gateway_api_url');
+        }
+
         if(!$apiKey) {
             $apiKey = $this->_scopeConfig->getValue('payment/ezdefi_payment/api_key');
         }

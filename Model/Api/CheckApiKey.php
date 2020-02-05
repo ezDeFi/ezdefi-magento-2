@@ -22,7 +22,8 @@ class CheckApiKey implements CheckApiKeyInterface
     public function checkApiKey() {
         $request = $this->_request->getParams();
         $apikey= $request['groups']['ezdefi_payment']['fields']['api_key']['value'];
+        $gatewayUrl = $request['gateway_url'];
 
-        return $this->_gatewayHelper->checkApiKey($apikey);
+        return $this->_gatewayHelper->checkApiKey($apikey, $gatewayUrl);
     }
 }

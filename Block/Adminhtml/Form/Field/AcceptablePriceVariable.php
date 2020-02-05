@@ -38,7 +38,18 @@ class AcceptablePriceVariable extends \Magento\Config\Block\System\Config\Form\F
                         min: 0, 
                         max: 100
                     }"
-                    type="text">';
+                    type="text">
+                    <script>
+                    require([
+                        \'jquery\',
+                    ], function ($) {
+                        if($(\'.ezdefi__simple-payment-checkbox\').is(\':checked\')) {
+                            $(\'#row_payment_us_ezdefi_payment_variation\').css(\'display\', \'table-row\');
+                        } else {
+                            $(\'#row_payment_us_ezdefi_payment_variation\').css(\'display\', \'none\');
+                        }
+                    });
+                    </script>';
         return $html;
     }
 }
