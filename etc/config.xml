@@ -4,7 +4,7 @@
     <default>
         <payment>
             <ezdefi_payment>
-                <title>ezdefi</title>
+                <title>Pay with cryptocurrencies</title>
                 <can_use_checkout>1</can_use_checkout>
                 <active>1</active>
                 <model>Ezdefi\Payment\Model\Payment\Ezdefi</model>

@@ -58,6 +58,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $amountId = $connection->fetchOne("select tag_amount from `ezdefi_amount` where `id` = LAST_INSERT_ID()");
             $connection->query("COMMIT;");
 
+
             $variationValue = abs($amountId - $amount);
             if ($variationValue > ($amount * (float)$variation) / 100 ) {
                 return false;

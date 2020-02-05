@@ -86,6 +86,7 @@ class GatewayHelper
 
     public function createPayment($param) {
         $payment = $this->sendCurl('/payment/create', 'POST', $param);
+
         if($payment) {
             return json_decode($payment)->data;
         }
