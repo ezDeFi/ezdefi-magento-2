@@ -110,9 +110,9 @@ class CryptoCurrencies extends \Magento\Framework\App\Config\Value
                 'symbol'             => $currencyData['symbol'],
                 'name'               => $currencyData['name'],
                 'discount'           => $currencyData['discount'] == '' ? 0 : $currencyData['discount'],
-                'payment_lifetime'   => $currencyData['lifetime'] == '' ? 0: $currencyData['lifetime'] * 60,
+                'payment_lifetime'   => $currencyData['lifetime'] == '' ? 900: $currencyData['lifetime'] * 60,
                 'wallet_address'     => $currencyData['wallet_address'],
-                'block_confirmation' => $currencyData['block_confirmation'] == '' ? 0 : $currencyData['block_confirmation'],
+                'block_confirmation' => $currencyData['block_confirmation'] == '' ? 1 : $currencyData['block_confirmation'],
                 'decimal'            => $currencyData['decimal'] == '' ? $currencyData['max_decimal'] : $currencyData['decimal'],
                 'description'        => $currencyData['description'],
                 'currency_decimal'   => $currencyData['max_decimal'],
@@ -128,9 +128,9 @@ class CryptoCurrencies extends \Magento\Framework\App\Config\Value
             $currency = $collection->getFirstItem();
 
             $currency->setData('discount', $currencyData['discount'] == '' ? 0 : $currencyData['discount']);
-            $currency->setData('payment_lifetime', $currencyData['lifetime'] == '' ? 0: $currencyData['lifetime'] * 60);
+            $currency->setData('payment_lifetime', $currencyData['lifetime'] == '' ? 900 : $currencyData['lifetime'] * 60);
             $currency->setData('wallet_address', $currencyData['wallet_address']);
-            $currency->setData('block_confirmation', $currencyData['block_confirmation'] == '' ? 0 : $currencyData['block_confirmation']);
+            $currency->setData('block_confirmation', $currencyData['block_confirmation'] == '' ? 1 : $currencyData['block_confirmation']);
             $currency->setData('decimal', $currencyData['decimal'] == '' ? $currencyData['max_decimal'] : $currencyData['decimal']);
             $currency->setData('order', $currencyData['order']);
 

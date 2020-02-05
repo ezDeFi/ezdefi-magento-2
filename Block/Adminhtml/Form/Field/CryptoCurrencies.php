@@ -148,7 +148,7 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
                     name="groups[ezdefi_payment][fields][currency][value][edit][' . $currencyData['currency_id'] . '][discount]" 
                     class="ezdefi__currency-discount-input validate-not-negative-number only-float"
                     data-validate="{max: 100}"
-                    value="' . $currencyData['discount'] . '">
+                    value="' . (float)$currencyData['discount'] . '">
                     <span>%</span>
                 </td>
                 <td><input type="text" 
@@ -164,10 +164,12 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
                     name="groups[ezdefi_payment][fields][currency][value][edit][' . $currencyData['currency_id'] . '][block_confirmation]" 
                     value="' . $currencyData['block_confirmation'] . '"></td>
                 <td><input type="text"
-                    class="ezdefi__currency-decimal-input validate-not-negative-number validate-digits only-positive-integer"
+                    class="ezdefi__currency-decimal-input validate-not-negative-number validate-digits required-entry only-positive-integer"
                     data-validate="{min:2, max:'.$currencyData['currency_decimal'].'}"
                     name="groups[ezdefi_payment][fields][currency][value][edit][' . $currencyData['currency_id'] . '][decimal]"
-                    value="' . $currencyData['decimal'] . '"></td>
+                    value="' . $currencyData['decimal'] . '">
+                    <span class="ezdefi__warning_edit_decimal" style="font-size: 12px;color: red; display:none"><b>Changing Decimal can cause to payment interruption</b></span>
+                    </td>
                 <td class="col-actions" colspan="1">
                     <button class="action-delete btn-delete-curency-config" type="button" data-currency-id="' . $currencyData['currency_id'] . '"><span>Delete</span></button>
                 </td>
@@ -199,7 +201,7 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
                 <td><input type="text" class="ezdefi__wallet-address-input required-entry" name="groups[ezdefi_payment][fields][currency][value][add]['.$currencyData['currency_id'].'][wallet_address]"></td>
                 <td><input type="text" class="ezdefi_block-confirmation-input validate-not-negative-number validate-digits only-positive-integer" name="groups[ezdefi_payment][fields][currency][value][add]['.$currencyData['currency_id'].'][block_confirmation]" value="1"></td>
                 <td><input type="text" 
-                    class="ezdefi__currency-decimal-input validate-not-negative-number validate-digits only-positive-integer" 
+                    class="ezdefi__currency-decimal-input validate-not-negative-number required-entry validate-digits only-positive-integer" 
                     data-validate="{min:2, max:'.$currencyData['currency_decimal'].'}" 
                     name="groups[ezdefi_payment][fields][currency][value][add]['.$currencyData['currency_id'].'][decimal]" 
                     value="'.$currencyData['decimal'].'">

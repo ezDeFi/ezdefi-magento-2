@@ -31,6 +31,13 @@ require(
         //-------------init------------------
         initCancelAddCurrency('.canel-add-currency');
 
+        $(document).on('focus', '.ezdefi__currency-decimal-input', function () {
+            $(this).parent().find('.ezdefi__warning_edit_decimal').css('display', 'block');
+        })
+        $(document).on('focusout', '.ezdefi__currency-decimal-input', function () {
+            $(this).parent().find('.ezdefi__warning_edit_decimal').css('display', 'none');
+        })
+
         // -----------------validate----------------------
         $(document).on('keypress', '.only-float', function(eve) {
             if ((eve.which != 46 || $(this).val().indexOf('.') != -1) && (eve.which < 48 || eve.which > 57) || (eve.which == 46 && $(this).caret().start == 0) ) {
@@ -48,17 +55,24 @@ require(
             }
         });
 
-        $(document).on("change", '.ezdefi__api-key', function () {
-            $('#config-edit-form').valid();
+        $(document).on("change", '.ezdefi__gateway-url', function () {
+            var a = $('.ezdefi__api-key').val();
+            $('.ezdefi__api-key').val('x');
+            $('.ezdefi__api-key').valid();
+            $('.ezdefi__api-key').val(a);
+            $('.ezdefi__api-key').valid();
         });
+
+        $(document).on("change", '.ezdefi__api-key', function () {
+            $('.ezdefi__api-key').valid();
+        });
+
         $(document).on("change", selectors.ezdefiPaymentCheckbox, checkPaymentMethodRequire);
         $(document).on("change", selectors.simplePaymentCheckbox, function () {
             checkPaymentMethodRequire();
             showAcceptedCurrency();
         });
-        showAcceptedCurrency();
         function showAcceptedCurrency() {
-            console.log($(selectors.simplePaymentCheckbox).is(':checked'));
             if($(selectors.simplePaymentCheckbox).is(':checked')) {
                 $('#row_payment_us_ezdefi_payment_variation').css('display', 'table-row');
             } else {
@@ -102,7 +116,7 @@ require(
                 </td>
                 <td><input type="text" class="${selectorToClass(selectors.walletAddressInput)} required-entry"></td>
                 <td><input type="text" class="${selectorToClass(selectors.blockConfirmationInput)} validate-not-negative-number validate-digits only-positive-integer"></td>
-                <td><input type="text" class="${selectorToClass(selectors.currencyDecimalInput)} validate-not-negative-number validate-digits only-positive-integer"
+                <td><input type="text" class="${selectorToClass(selectors.currencyDecimalInput)} validate-not-negative-number required-entry validate-digits only-positive-integer"
                     data-validate="{min:2}">
                 </td>
                 <td>
