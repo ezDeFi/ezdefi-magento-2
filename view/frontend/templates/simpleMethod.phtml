@@ -18,7 +18,7 @@
     <div class="ezdefi-payment__value">
         <span class="ezdefi-payment__origin-value--simple"><?php echo $block->getOriginValue(); ?></span>
         <span data-bind="text: simplePayment.originCurrency"><?php echo $block->getOriginCurrency(); ?></span>
-        <span class="ezdefi-payment__icon-convert"><i class="fa fa-retweet" aria-hidden="true"></i></span>
+        <span><img src="<?php echo $this->getViewFileUrl('Ezdefi_Payment/image/swap-icon.png'); ?>" alt="" class="ezdefi-payment__icon-convert"></span>
         <span class="ezdefi-payment__currency-value--simple" data-bind="text: simplePayment.value"><?php echo $block->getCryptoValue(); ?></span>
         <span class="ezdefi-payment__currency--simple" data-bind="text: simplePayment.currency"><?php echo $block->getCryptoCurrency(); ?></span>
     </div>
@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    <p class="margin-none">
+    <p class="margin-bottom-sm">
         <b>Address:</b>
         <span class="btn-copy-address">
             <span class="ezdefi__simple-wallet-address"><?php echo $block->getWalletAddress() ?></span>

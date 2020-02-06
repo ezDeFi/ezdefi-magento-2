@@ -32,7 +32,7 @@
                     <!--/ko-->
                     <span class="ezdefi__select-currency-item--price" data-bind="text: currency.price"></span>
                     <span class="ezdefi__select-currency-item--symbol" data-bind="text: currency.symbol"></span>
-                    <span class="ezdefi__select-currency-item--discount" data-bind="text: '-' + (currency.discount)+'%'"></span>
+                    <span class="ezdefi__select-currency-item--discount" data-bind="text: '-' + (parseFloat(currency.discount))+'%'"></span>
                     <input  type="radio" name="currency-selected-to-order" class="hidden ezdefi__select-currency--checkbox"
                             data-bind="attr: {'id'         : 'ezdefi__select-currency-' + currency.currency_id,
                                             'value'        : currency.currency_id,

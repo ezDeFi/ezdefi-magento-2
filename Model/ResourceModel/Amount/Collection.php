@@ -37,9 +37,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                                                 AND ( `decimal` = ".(int)$decimal." OR `temp` = 0 )
                                             ORDER BY `temp`
                                             LIMIT 1;");
+
         if (isset($oldAmount[0])) {
             $connection->query("UPDATE `".$table."` SET `expiration`= DATE_ADD(NOW(), INTERVAL " . $expiration . " SECOND)  WHERE `id`=" . $oldAmount[0]['id']);
             return $oldAmount[0]['tag_amount'];
+
         } else {
             $connection->query("START TRANSACTION;");
             $sql = "INSERT INTO ".$table." (`temp`, `amount`, `tag_amount`, `expiration`, `currency`, `decimal`)
@@ -57,7 +59,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $connection->query($sql);
             $amountId = $connection->fetchOne("select tag_amount from `ezdefi_amount` where `id` = LAST_INSERT_ID()");
             $connection->query("COMMIT;");
-
 
             $variationValue = abs($amountId - $amount);
             if ($variationValue > ($amount * (float)$variation) / 100 ) {

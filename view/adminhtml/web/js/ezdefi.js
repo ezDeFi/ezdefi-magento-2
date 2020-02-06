@@ -133,7 +133,7 @@ require(
             var currencyConfigElement = $(this).parent().parent();
             var that = $(this);
             alert({
-                title: $.mage.__('remove coin'),
+                title: $.mage.__('Remove coin?'),
                 content: $.mage.__('Do you want to remove coin/token?'),
                 actions: {
                     always: function(){}
@@ -161,8 +161,8 @@ require(
             $(document).on("click", btnCancel, function () {
                 var currencyConfigElement = $(this).parent().parent();
                 alert({
-                    title: $.mage.__('Cancel add coin'),
-                    content: $.mage.__('Do you want to cancel add this coin'),
+                    title: $.mage.__('Cancel add coin?'),
+                    content: $.mage.__('Do you want to cancel add this coin?'),
                     actions: {
                         always: function(){}
                     },
