@@ -83,7 +83,7 @@ class Order extends Column
                         </tbody>
                     </table>';
 
-                    $orderHtml .= '<select class="ezdefi__select-pending-order" style="width: 200px" data-check-loaded="1" data-url-get-order="'.$this->_urlBuilder->getUrl(self::URL_GET_ORDER).'">
+                    $orderHtml .= '<select class="ezdefi__select-pending-order" style="width: 300px" data-check-loaded="1" data-url-get-order="'.$this->_urlBuilder->getUrl(self::URL_GET_ORDER).'">
                         <option value=""></option>
                     </select>
                     <button class="ezdefi__btn-assign-order" 

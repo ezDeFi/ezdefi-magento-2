@@ -44,8 +44,8 @@ class TestException extends \Magento\Backend\App\Action
 //        foreach ($currencies as $currency) {
 //            $ref[$currency['symbol']] = $currency['symbol'];
 //        }
-
-        $response->setData($currencies);
+        $date = $this->_date->gmtDate('Y-m-d H:i:s', strtotime('+1 month'));
+        $response->setData($date);
 
         return $response;
     }

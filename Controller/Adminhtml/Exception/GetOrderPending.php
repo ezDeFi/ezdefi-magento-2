@@ -36,6 +36,9 @@ class GetOrderPending extends \Magento\Backend\App\Action
     {
         $response = $this->resultFactory->create(ResultFactory::TYPE_JSON);
 
+        $request = $this->_request->getParams();
+        $keyword = $request['keyword'];
+
         $orders = $this->_orderCollectionFactory->create()->addAttributeToSelect('customer_email')
             ->addFieldToSelect(['id'=>'entity_id'])
             ->addAttributeToSelect('customer_firstname')
@@ -44,7 +47,19 @@ class GetOrderPending extends \Magento\Backend\App\Action
             ->addAttributeToSelect('created_at')
             ->addAttributeToSelect('total_due')
             ->addAttributeToSelect('order_currency_code')
-            ->addFieldToFilter('status', 'pending')->getData();
+            ->addFieldToFilter('status', 'pending')
+            ->addFieldToFilter([
+                'customer_email',
+                'increment_id',
+                'customer_lastname',
+                'customer_firstname'
+            ], [
+                ['like' => '%'.$keyword.'%'],
+                ['like' => '%'.$keyword.'%'],
+                ['like' => '%'.$keyword.'%'],
+                ['like' => '%'.$keyword.'%']
+            ])
+            ->getData();
 
         $response->setData(['data' => $orders, 'status' => 'success']);
 

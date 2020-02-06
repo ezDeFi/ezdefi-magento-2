@@ -81,18 +81,42 @@ require(
             return `<div class='select2-result-repository clearfix' id="order-pending-${repo.id}" style="border-bottom: 1px solid #999">
                     <div class='select2-result-repository__meta'>
                         <div class='select2-result-repository__title text-justify'>
-                            <p><span class="exception-order-label-2">orderId:</span>${repo.increment_id}</p>
-                            <p><span class="exception-order-label-2">email:</span>${repo.customer_email}</p>
-                            <p><span class="exception-order-label-2">customer:</span>${repo.customer_firstname + ' ' + repo.customer_lastname}</p>
-                            <p><span class="exception-order-label-2">price:</span>${repo.total_due +' ' + repo.order_currency_code}</p>
-                            <p><span class="exception-order-label-2">createAt:</span>${repo.created_at}</p>
+                            <table class="exception__list-order-pending--table">
+                                <tbody>
+                                    <tr>
+                                        <td>Order id</td>
+                                        <td class="padding-left-md">:</td>
+                                        <td class="exception__order-pending--data">${parseInt(repo.increment_id)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="exception-order-label-2">Email</td>
+                                        <td class="padding-left-md">:</td>
+                                        <td class="exception__order-pending--data">${repo.customer_email}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="exception-order-label-2">Customer</td>
+                                        <td class="padding-left-md">:</td>
+                                        <td class="exception__order-pending--data">${repo.customer_firstname + ' ' + repo.customer_lastname}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="exception-order-label-2">Price</td>
+                                        <td class="padding-left-md">:</td>
+                                        <td class="exception__order-pending--data">${repo.total_due +' ' + repo.order_currency_code}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="exception-order-label-2">Create at</td>
+                                        <td class="padding-left-md">:</td>
+                                        <td class="exception__order-pending--data">${repo.created_at}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>`;
         };
 
         var formatRepoSelection = function (repo) {
-            return repo.id ? 'Order: ' + repo.increment_id : 'Choose order to assign';
+            return repo.id ? 'Order: ' + parseInt(repo.increment_id) : 'Choose order to assign';
         };
 
     })
