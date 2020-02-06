@@ -5,3 +5,16 @@
 .ezdefi__btn-assign-order {
     display: none;
 }
+
+.exception__order-pending--table {
+    width:100%;
+}
+
+.exception__order-pending--data {
+    padding: 5px 5px 5px 10px;
+}
+
+/*generate*/
+.padding-left-md {
+    padding-left: 10px;
+}

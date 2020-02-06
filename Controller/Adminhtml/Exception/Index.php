@@ -18,7 +18,7 @@ class Index extends \Magento\Backend\App\Action
     public function execute()
     {
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getConfig()->getTitle()->prepend((__('Exception Management')));
+        $resultPage->getConfig()->getTitle()->prepend((__('ezDeFi Exception Management')));
 
         return $resultPage;
     }

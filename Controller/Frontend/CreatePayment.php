@@ -13,6 +13,7 @@ use \Magento\Framework\Webapi\Rest\Request;
 use \Magento\Framework\App\Config\ScopeConfigInterface;
 use \Magento\Framework\UrlInterface;
 use \Ezdefi\Payment\Model\ExceptionFactory;
+use \Magento\Framework\Stdlib\DateTime\DateTime;
 
 class CreatePayment extends \Magento\Framework\App\Action\Action
 {
@@ -27,6 +28,7 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
     protected $_urlInterface;
     protected $originValue;
     protected $_exceptionFactory;
+    protected $_date;
 
     public function __construct(
         Context $context,
@@ -39,7 +41,8 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
         ScopeConfigInterface $scopeConfig,
         GatewayHelper $gatewayHelper,
         UrlInterface $urlInterface,
-        ExceptionFactory $exceptionFactory
+        ExceptionFactory $exceptionFactory,
+        DateTime $date
     )
     {
         $this->_pageFactory = $pageFactory;
@@ -52,6 +55,7 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
         $this->_currencyFactory = $currencyFactory;
         $this->_urlInterface = $urlInterface;
         $this->_exceptionFactory = $exceptionFactory;
+        $this->_date = $date;
         return parent::__construct($context);
     }
 
@@ -131,13 +135,14 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
     }
 
     private function addException($order, $cryptoCurrency, $paymentId, $amountId, $hasAmount) {
+        $expiration = $this->_date->gmtDate('Y-m-d H:i:s', strtotime('+'.$cryptoCurrency['payment_lifetime'].' second'));
         $exceptionModel = $this->_exceptionFactory->create();
         $exceptionModel->addData([
             'payment_id' => $paymentId,
             'order_id' => $order->getId(),
             'currency' => $cryptoCurrency['symbol'],
             'amount_id' => $amountId,
-            'expiration' => $cryptoCurrency['payment_lifetime'],
+            'expiration' => $expiration,
             'paid' => 0,
             'has_amount' => $hasAmount,
         ]);

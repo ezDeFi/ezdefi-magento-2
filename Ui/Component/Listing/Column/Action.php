@@ -61,7 +61,7 @@ class Action extends Column
                                     'id' => $item['id']
                                 ]
                             ),
-                            'label' => __('Edit')
+                            'label' => __('Confirm')
                         ],
                         'delete' => [
                             'href' => $this->_urlBuilder->getUrl(
