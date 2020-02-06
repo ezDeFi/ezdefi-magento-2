@@ -260,6 +260,7 @@ div.ezdefi-pay-box, div.simple-pay-box {
 
 .qrcode-box {
     margin-bottom: 10px;
+    position: relative;
 }
 
 .timeout-notification {
@@ -277,6 +278,11 @@ div.ezdefi-pay-box, div.simple-pay-box {
 
 .reload-payment {
     cursor: pointer;
+}
+
+.ezdefi-payment__icon-convert {
+    width: 16px;
+    height: 16px;
 }
 
 .timeout-notification >p {
@@ -308,6 +314,10 @@ div.ezdefi-pay-box, div.simple-pay-box {
     cursor: pointer;
 }
 
+.ezdefi__currency-name {
+    padding-left: 5px;
+}
+
 /* General */
 .hidden {
     display: none;
@@ -315,6 +325,10 @@ div.ezdefi-pay-box, div.simple-pay-box {
 
 .margin-none {
     margin: 0;
+}
+
+.margin-bottom-sm {
+    margin-bottom: 3px;
 }
 
 .margin-top-md {

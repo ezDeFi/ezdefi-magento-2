@@ -6,7 +6,7 @@
 <div class="payment-content--ezdefi">
     <div class="ezdefi-payment__value">
         <span class="ezdefi-payment__origin-value--ezdefi"><?php echo $block->getOriginValue(); ?></span> <span> <?php echo $block->getOriginCurrency(); ?> </span>
-        <span class="ezdefi-payment__icon-convert"><i class="fa fa-retweet" aria-hidden="true"></i></span>
+        <span><img src="<?php echo $this->getViewFileUrl('Ezdefi_Payment/image/swap-icon.png'); ?>" alt="" class="ezdefi-payment__icon-convert"></span>
         <span class="ezdefi-payment__currency-value--ezdefi"><?php echo $block->getCryptoValue()?></span> <span class="ezdefi-payment__currency--ezdefi"><?php echo $block->getCryptoCurrency(); ?></span>
     </div>
     <div class="ezdefi-payment__countdown-box">

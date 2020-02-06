@@ -142,7 +142,6 @@ define([
                 var that = this;
                 var expiredTime = $("#ezdefi__payment-expiration--" + type).val();
                 this.countDownInterval[type] = setInterval(function () {
-                    console.log("111");
                     var timestampCountdown = new Date(expiredTime) - new Date();
                     var secondToCountdown = Math.floor(timestampCountdown / 1000);
                     if (secondToCountdown >= 0) {
@@ -158,8 +157,26 @@ define([
                     } else {
                         $("#ezdefi__countdown-label--" + type).html('0:0');
                         clearInterval(that.countDownInterval[type]);
+                        that.showTimeoutMesage(type);
                     }
                 }, 1000);
+            },
+
+            showTimeoutMesage: function(type) {
+                var that = this;
+                var timeoutNotify = $('.timeout-notification--' + type);
+                var qrcodeImage = $('.ezdefi-payment__qr-code--' + type);
+                timeoutNotify.css('display', 'block');
+                qrcodeImage.css('filter', 'blur(4px)');
+
+                timeoutNotify.click(function () {
+                    if (type == 'simple') {
+                        that.simplePaymentContent('');
+                    } else {
+                        that.ezdefiPaymentContent('');
+                    }
+                    that.createPayment(type);
+                });
             },
 
             afterPlaceOrder: function() {
