@@ -9,7 +9,7 @@
                class="radio"
                data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()" />
         <label data-bind="attr: {'for': getCode()}" class="label">
-            <span data-bind="text: getTitle()"></span>
+            <span data-bind="html: getPaymentTitle()"></span>
         </label>
     </div>
 
@@ -42,8 +42,11 @@
                 </label>
                 <!--/ko-->
             </div>
+
+            <button data-role="review-save" class="action primary ezdefi__btn-create-payment" data-bind="event: {click: function() { checkCreatePaymentAfterCheckType()} }"> change </button>
+
             <!-- ko if: isPlaceOrder -->
-            <button data-role="review-save" class="action primary ezdefi__btn-create-payment" data-bind="event: {click: function() { createPayment(null)} }"> change </button>
+            <button data-role="review-save" class="action primary ezdefi__btn-create-payment" data-bind="event: {click: function() { checkCreatePaymentAfterCheckType()} }"> change </button>
             <!--/ko-->
         </div>
 
@@ -60,12 +63,33 @@
             </div>
 
             <div class="ezdefi-payment__content">
-                <label class="btn-show-payment--simple btn-choose-payment-type ezdefi__check-showed-payment" data-bind="click: createSimplePayment">
+                <!-- ko if: checkEnableSimpleMethod()-->
+                <input type="radio"
+                       id="choose-simple-method-radio"
+                       name="choose-method-radio"
+                       data-bind="event: {change: function() { testCheck() }}"
+                       data-method="simple">
+                <label class="btn-show-payment--simple btn-choose-payment-type ezdefi__check-showed-payment"
+                       for="choose-simple-method-radio">
                     Pay with any crypto wallet
                 </label>
-                <label class="btn-show-payment--ezdefi btn-choose-payment-type" data-bind="click: createEzdefiPayment">
+                <!-- /ko -->
+                <!-- ko if: checkEnableEzdefiMethod()-->
+                <input type="radio"
+                       id="choose-simple-ezdefi-radio"
+                       name="choose-method-radio"
+                       data-bind="event: {change: function() { testCheck() }}"
+                       data-method="ezdefi">
+                <label class="btn-show-payment--ezdefi btn-choose-payment-type"
+                       for="choose-simple-ezdefi-radio">
                     Pay with ezDeFi wallet
                 </label>
+                <!-- /ko -->
+                <!-- ko if: isHasOneMethod()-->
+                <label class="btn-choose-payment-type">
+                </label>
+                <!-- /ko -->
+
                 <div class="payment-box simple-pay-box" data-bind="style:{'display': 'block'}">
                     <!-- ko ifnot: simplePaymentContent() -->
                     <div class="loader--simple loader">

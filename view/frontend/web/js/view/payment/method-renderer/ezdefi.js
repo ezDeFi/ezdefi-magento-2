@@ -54,11 +54,41 @@ define([
             },
 
             getCurrencies : function () {
-                console.log(window.checkoutConfig);
                 return window.checkoutConfig.currencies;
             },
 
-            createPayment: function (paymentType = null, callback) {
+            getPaymentTitle() {
+                var element = ' Pay with cryptocurrencies';
+                var currenies = this.getCurrencies();
+                for(let i = 0; i<3; i++) {
+                    if (currenies[i]) {
+                        element += '<img src="'+currenies[i].logo+'" style="width: 20px; height: 20px">'
+                    }
+                }
+                if(currenies.length > 3) {
+                    element += '<span>...</span>'
+                }
+                return element;
+            },
+
+            checkEnableSimpleMethod: function () {
+                return window.checkoutConfig.simpleMethod === 'enable';
+            },
+
+            checkEnableEzdefiMethod: function () {
+                return window.checkoutConfig.ezdefiMethod === 'enable';
+            },
+
+            isHasOneMethod: function () {
+                if(this.checkEnableEzdefiMethod() && !this.checkEnableSimpleMethod()) {
+                    return true;
+                } else if(this.checkEnableEzdefiMethod() && !this.checkEnableSimpleMethod()) {
+                    return true;
+                }
+                return false;
+            },
+
+            createPayment: function (paymentType = null) {
                 this.renderCurrency();
                 this.isPlaceOrder(true);
                 this.isShowPaymentContent(true);
@@ -67,10 +97,6 @@ define([
                 var that = this;
                 let urlCreatePayment = url.build('ezdefi/frontend/createpayment');
                 let currencyId = $(".ezdefi__select-currency--checkbox:checked").val();
-
-                if(paymentType == null) {
-                    paymentType = 'simple'
-                }
 
                 storage.post(
                     urlCreatePayment,
@@ -101,6 +127,7 @@ define([
             },
 
             createEzdefiPayment: function() {
+                console.log('ezdefi payment');
                 this.showingSimplePayment(true);
                 $(".btn-choose-payment-type").removeClass('ezdefi__check-showed-payment');
                 $(".btn-show-payment--ezdefi").addClass('ezdefi__check-showed-payment');
@@ -115,6 +142,7 @@ define([
                 var that = this;
                 var expiredTime = $("#ezdefi__payment-expiration--" + type).val();
                 this.countDownInterval[type] = setInterval(function () {
+                    console.log("111");
                     var timestampCountdown = new Date(expiredTime) - new Date();
                     var secondToCountdown = Math.floor(timestampCountdown / 1000);
                     if (secondToCountdown >= 0) {
@@ -136,7 +164,19 @@ define([
 
             afterPlaceOrder: function() {
                 this.checkOrderComplete();
-                this.createPayment();
+                this.checkCreatePaymentAfterCheckType();
+            },
+
+            checkCreatePaymentAfterCheckType: function() {
+                if(this.checkEnableSimpleMethod()) {
+                    this.createSimplePayment()
+                } else {
+                    this.createEzdefiPayment();
+                    $(".btn-choose-payment-type").removeClass('ezdefi__check-showed-payment');
+                    $(".btn-show-payment--ezdefi").addClass('ezdefi__check-showed-payment');
+                    $(".payment-box").css('display', 'none');
+                    $(".ezdefi-pay-box").css('display', 'block');
+                }
             },
 
             checkOrderComplete: function () {
@@ -172,6 +212,16 @@ define([
                 this.simplePaymentContent('');
                 this.ezdefiPaymentContent('');
             },
+
+            testCheck: function () {
+                var method = $('input[name="choose-method-radio"]:checked').data('method');
+                if(method === 'ezdefi') {
+                    this.createEzdefiPayment()
+                } else if (method === 'simple') {
+                    this.createSimplePayment();
+                }
+
+            }
         });
     }
 );

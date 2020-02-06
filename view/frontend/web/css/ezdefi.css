@@ -174,7 +174,6 @@
 }
 
 .payment-error--ezdefi, .payment-error--simple {
-    display: none;
     text-align: center;
     font-size: 18px;
     padding: 40px;
