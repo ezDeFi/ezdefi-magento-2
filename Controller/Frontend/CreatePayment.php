@@ -73,7 +73,11 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
         if($paymentType === 'simple') {
             $payment = $this->createPaymentSimple($order, $cryptoCurrency);
             $block = $resultPage->getLayout()
-                ->createBlock('Ezdefi\Payment\Block\Frontend\SimpleMethod', 'render simple method block', ['data' => ['payment' => $payment, 'originValue' => $order->getTotalDue(), 'originCurrency' => $order->getOrderCurrencyCode()]])
+                ->createBlock('Ezdefi\Payment\Block\Frontend\SimpleMethod', 'render simple method block', [
+                        'data' => [
+                            'payment'        => $payment,
+                            'originValue'    => $order->getTotalDue() * (100 - $cryptoCurrency['discount']) / 100,
+                            'originCurrency' => $order->getOrderCurrencyCode()]])
                 ->setTemplate('Ezdefi_Payment::simpleMethod.phtml')
                 ->toHtml();
         } else if ($paymentType === 'ezdefi') {

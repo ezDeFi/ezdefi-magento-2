@@ -16,11 +16,15 @@
         <strong>Success</strong> Address was copied to the clipboard.
     </div>
     <div class="ezdefi-payment__value">
-        <span class="ezdefi-payment__origin-value--simple"><?php echo $block->getOriginValue(); ?></span>
-        <span data-bind="text: simplePayment.originCurrency"><?php echo $block->getOriginCurrency(); ?></span>
+        <span class="ezdefi__payment--origin-value">
+            <span><?php echo $block->getOriginValue(); ?></span>
+            <span class="text-uppercase"><?php echo $block->getOriginCurrency(); ?></span>
+        </span>
         <span><img src="<?php echo $this->getViewFileUrl('Ezdefi_Payment/image/swap-icon.png'); ?>" alt="" class="ezdefi-payment__icon-convert"></span>
-        <span class="ezdefi-payment__currency-value--simple" data-bind="text: simplePayment.value"><?php echo $block->getCryptoValue(); ?></span>
-        <span class="ezdefi-payment__currency--simple" data-bind="text: simplePayment.currency"><?php echo $block->getCryptoCurrency(); ?></span>
+        <span class="ezdefi__payment--crypto-value">
+            <span><?php echo $block->getCryptoValue(); ?></span>
+            <span class="text-uppercase"><?php echo $block->getCryptoCurrency(); ?></span>
+        </span>
     </div>
     <div class="ezdefi-payment__countdown-box">
         <input type="hidden" id="ezdefi__payment-expiration--simple" value="<?php echo $block->getExpiration() ?>">
@@ -33,7 +37,7 @@
             <p class="margin-none">Scan QR Code or Click to pay</p>
         </a>
         <div class="timeout-notification timeout-notification--simple reload-payment" data-suffixes="--simple">
-            <p>{{ payment_time_out }}</p>
+            <p>Time out <br> Click to recreate payment</p>
         </div>
     </div>
     <div class="qrcode-box simple-method-with-alternative-qrcode">
@@ -42,7 +46,7 @@
             <p class="margin-none">Scan QR Code or Click to pay</p>
         </a>
         <div class="timeout-notification timeout-notification--simple reload-payment" data-suffixes="--simple">
-            <p>{{ payment_time_out }}</p>
+            <p>Time out <br> Click to recreate payment</p>
         </div>
     </div>
 

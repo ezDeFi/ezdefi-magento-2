@@ -29,10 +29,10 @@ class Currency extends \Magento\Framework\Model\AbstractModel implements \Magent
 
     public function getOptions()
     {
-        $currencies = $this->getCollection()->getData();
+        $currencies = $this->getCollection()->setOrder('`order`', 'ASC');
         $res =[];
         foreach ($currencies as $currency) {
-            $res[] = ['value' => $currency['symbol'], 'label' => $currency['symbol']];
+            $res[] = ['value' => $currency['symbol'], 'label' => strtoupper($currency['symbol'])];
         }
         return $res;
     }

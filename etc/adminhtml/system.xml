@@ -31,7 +31,7 @@
                        translate="label" type="text">
                     <label>ACCEPTABLE PRICE AVAILABLE</label>
                     <frontend_model>Ezdefi\Payment\Block\Adminhtml\Form\Field\AcceptablePriceVariable</frontend_model>
-                    <comment>Allowable amount variation</comment>
+                    <comment>Allowable amount variation (%)</comment>
                 </field>
                 <field id="currency" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="60" translate="label" type="text">
                     <label>ACCEPTED CURRENCY</label>
