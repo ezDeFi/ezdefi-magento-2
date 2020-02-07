@@ -78,7 +78,7 @@ require(
             if (repo.loading) {
                 return repo.text;
             }
-            return `<div class='select2-result-repository clearfix' id="order-pending-${repo.id}" style="border-bottom: 1px solid #999">
+            return `<div class='select2-result-repository clearfix' id="order-pending-${repo.id}" style="padding-bottom: 12px;">
                     <div class='select2-result-repository__meta'>
                         <div class='select2-result-repository__title text-justify'>
                             <table class="exception__list-order-pending--table">

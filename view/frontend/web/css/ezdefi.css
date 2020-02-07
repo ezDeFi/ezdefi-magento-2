@@ -319,6 +319,20 @@ div.ezdefi-pay-box, div.simple-pay-box {
 }
 
 /* General */
+.text-uppercase {
+    text-transform: uppercase;
+}
+
+.ezdefi__payment--origin-value, .ezdefi__payment--crypto-value {
+    width: 45%;
+    display: inline-block;
+    box-sizing:border-box;
+}
+
+.ezdefi__payment--origin-value {
+    text-align: right;
+}
+
 .hidden {
     display: none;
 }
