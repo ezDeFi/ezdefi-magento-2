@@ -43,7 +43,7 @@ class ConfigProvider implements ConfigProviderInterface
         $totalPrice = $this->_cart->getQuote()->getGrandTotal();
         $storeCurrency= $this->_cart->getQuote()->getStoreCurrencyCode();
 
-        $currencies = $this->_currencyFactory->create()->getCollection()->getData();
+        $currencies = $this->_currencyFactory->create()->getCollection()->setOrder('`order`', 'ASC')->getData();
         $currenciesWithPrice = $this->_gatewayHelper->getCurrenciesWithPrice($currencies, $totalPrice , $storeCurrency);
 
         $paymentMethod = $this->_scopeConfig->getValue('payment/ezdefi_payment/payment_method');

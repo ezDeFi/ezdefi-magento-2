@@ -28,6 +28,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             ['order_table' => $this->getTable('sales_order')],
             'main_table.order_id = order_table.entity_id',
             []
-        )->order(array('id DESC'));
+        );
     }
 }

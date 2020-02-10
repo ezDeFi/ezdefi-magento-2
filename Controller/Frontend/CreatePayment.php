@@ -133,8 +133,8 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
             'callback' => $this->_urlInterface->getUrl('ezdefi/frontend/callbackconfirmorder')
         ]);
 
-        $exchangeRate = $this->_gatewayHelper->getExchange($order->getStoreCurrencyCode(), $cryptoCurrency['symbol']);
-        $this->addException($order, $cryptoCurrency, $payment->_id, $exchangeRate * $order->getTotalDue(), 0);
+        $cryptoValue = $payment->value * pow(10, - $payment->decimal);
+        $this->addException($order, $cryptoCurrency, $payment->_id, $cryptoValue, 0);
         return $payment;
     }
 

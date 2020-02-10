@@ -4,13 +4,17 @@ namespace Ezdefi\Payment\Model\ResourceModel\Exception\Grid;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\AggregationInterface;
 use Ezdefi\Payment\Model\ResourceModel\Exception\Collection as EntityCollection;
+use \Magento\Framework\Webapi\Rest\Request;
 
 class Collection extends EntityCollection implements SearchResultInterface
 {
+    public static $table = 'ezdefi_exception';
 
     protected $aggregations;
+    protected $_request;
 
     public function __construct(
+        Request $request,
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
@@ -32,6 +36,7 @@ class Collection extends EntityCollection implements SearchResultInterface
             $connection,
             $resource
         );
+        $this->_request = $request;
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
         $this->_init($model, $resourceModel);
@@ -109,5 +114,29 @@ class Collection extends EntityCollection implements SearchResultInterface
     public function setItems(array $items = null)
     {
         return $this;
+    }
+
+    public function afterSearch($intercepter, $collection)
+    {
+        if ($collection->getMainTable() === $collection->getConnection()->getTableName(self::$table)) {
+
+            $collection->getSelect()->addFieldToFilter('currency', 'eth');
+
+            $where = $collection->getSelect()->getPart(\Magento\Framework\DB\Select::WHERE);
+            echo $collection->getSelect()->__toString();die;
+        }
+        return $collection;
+    }
+
+    protected function _renderFiltersBefore()
+    {
+        $request = $this->_request->getParams();
+        if(isset($request['filters']['amount_id'])) {
+            $amount = $request['filters']['amount_id'];
+            $this->addFieldToFilter('amount_id', ['like' => $amount.'%'])->setOrder('`amount_id`', 'ASC');
+        } else {
+            $this->setOrder('`id`', 'DESC');
+        }
+        parent::_renderFiltersBefore();
     }
 }

@@ -21,7 +21,22 @@ class Amount extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$items) {
-                $amountHtml = '<p>'.(float)$items['amount_id'].'</p>';
+                // cut '0' in last of amount
+                $lengthToCut = 0;
+                for($i = strlen($items['amount_id']) - 1; $i > 0; $i--) {
+                    if($items['amount_id'][$i] === '0') {
+                        $lengthToCut++;
+                    } else {
+                        break;
+                    }
+                }
+                $amount = substr($items['amount_id'], 0, strlen($items['amount_id']) - $lengthToCut);
+
+                if($amount[strlen($amount) - 1] === '.') {
+                    $amount = substr($amount,0, -1);
+                }
+
+                $amountHtml = '<p>'.$amount.'</p>';
                 if (!$items['order_id']) {
                     $amountHtml .= '<a href="" target="_blank">'.substr($items['explorer_url'],0,50).'</a>';
                 }
