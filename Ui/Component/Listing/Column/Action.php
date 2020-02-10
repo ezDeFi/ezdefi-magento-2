@@ -73,7 +73,7 @@ class Action extends Column
                             'label' => __('Delete'),
                             'confirm' => [
                                 'title' => __('Delete Exception'),
-                                'message' => __('Are you sure you wan\'t to delete this exception record?')
+                                'message' => __('Are you sure you want to delete this record?')
                             ]
                         ]
                     ];;

@@ -329,6 +329,10 @@ div.ezdefi-pay-box, div.simple-pay-box {
     box-sizing:border-box;
 }
 
+.ezdefi__payment--crypto-value {
+    text-align: left;
+}
+
 .ezdefi__payment--origin-value {
     text-align: right;
 }

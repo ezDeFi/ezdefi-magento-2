@@ -8,8 +8,8 @@
         <span class="ezdefi-payment__origin-value--ezdefi"><?php echo $block->getOriginValue(); ?></span>
         <span class="text-uppercase"> <?php echo $block->getOriginCurrency(); ?> </span>
         <span><img src="<?php echo $this->getViewFileUrl('Ezdefi_Payment/image/swap-icon.png'); ?>" alt="" class="ezdefi-payment__icon-convert"></span>
-        <span class="ezdefi-payment__currency-value--ezdefi"><?php echo $block->getCryptoValue()?></span>
-        <span class="ezdefi-payment__currency--ezdefi text-uppercase"><?php echo $block->getCryptoCurrency(); ?></span>
+        <span class="ezdefi-payment__currency-value--ezdefi"><?php echo $block->getCryptoValue(); ?></span>
+        <span class="text-uppercase"><?php echo $block->getCryptoCurrency(); ?></span>
     </div>
     <div class="ezdefi-payment__countdown-box">
         <input type="hidden" id="ezdefi__payment-expiration--ezdefi" value="<?php echo $block->getExpiration() ?>">

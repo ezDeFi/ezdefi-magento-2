@@ -27,29 +27,14 @@ class Order extends Column
 
     public function prepareDataSource(array $dataSource)
     {
-        $html = '<button id="ezdefi_test_click">
-            <script>
-                require([
-                    \'jquery\',
-                    \'accordion\'  // the alias for "mage/accordion"
-                ], function ($) {
-                    $(function () { // to ensure that code evaluates on page load
-                        $(document).on("click", "#ezdefi_test_click", function () {
-                            
-                        });
-
-                    });
-                });
-            </script>';
-
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$items) {
                 $orderHtml = '';
                 if($items['order_id']) {
                     $payStatus= 'No';
-                    if($items['paid'] === 1) {
+                    if($items['paid'] == 1) {
                         $payStatus = 'Paid on time';
-                    } else if ($items['paid'] === 2) {
+                    } else if ($items['paid'] == 2) {
                         $payStatus = 'Paid on expiration';
                     }
                     $explorerUrlRow = isset($items['explorer_url']) ? '<tr>
@@ -77,7 +62,7 @@ class Order extends Column
                             <tr>
                                 <td class="border-none">Pay by ezdefi wallet</td>
                                 <td class="border-none">:</td>
-                                <td class="border-none">'.($items['has_amount'] ? 'no' : 'yes').'</td>
+                                <td class="border-none">'.($items['has_amount'] ? 'No' : 'Yes').'</td>
                             </tr>
                             '.$explorerUrlRow.'
                         </tbody>
