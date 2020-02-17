@@ -44,7 +44,7 @@
             </div>
 
             <!-- ko if: isPlaceOrder -->
-            <button data-role="review-save" class="action primary ezdefi__btn-create-payment" data-bind="event: {click: function() { checkCreatePaymentAfterCheckType()} }"> change </button>
+            <button data-role="review-save" class="action primary ezdefi__btn-create-payment" data-bind="event: {click: function() { checkCreatePaymentAfterCheckType()} }"> Change </button>
             <!--/ko-->
         </div>
 
@@ -80,7 +80,9 @@
                        data-method="ezdefi">
                 <label class="btn-show-payment--ezdefi btn-choose-payment-type"
                        for="choose-simple-ezdefi-radio">
-                    Pay with ezDeFi wallet
+                    <span><img alt="" data-bind="attr: {src: getEzdefiLogo()}"></span>
+                    <span class="pay-with-ezdefi-label">Pay with ezDeFi wallet</span>
+
                 </label>
                 <!-- /ko -->
                 <!-- ko if: isHasOneMethod()-->

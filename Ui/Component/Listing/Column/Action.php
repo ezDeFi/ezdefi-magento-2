@@ -10,9 +10,10 @@ use Magento\Framework\UrlInterface;
 class Action extends Column
 {
     /** Url path */
-    const URL_DELETE_EXCEPTION = 'admin/exception/delete';
-    const URL_CONFIRM_PAID = 'admin/exception/confirmpaid';
-    const URL_ASSIGN_ORDER = 'admin/exception/assignorder';
+    const URL_DELETE_EXCEPTION = 'adminhtml/exception/delete';
+    const URL_CONFIRM_PAID     = 'adminhtml/exception/confirmpaid';
+    const URL_ASSIGN_ORDER     = 'adminhtml/exception/assignorder';
+    const URL_REVERT_ORDER     = 'adminhtml/exception/revertorder';
     /** @var UrlInterface */
     protected $_urlBuilder;
 
@@ -22,12 +23,12 @@ class Action extends Column
     private $_editUrl;
 
     /**
-     * @param ContextInterface   $context
+     * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param UrlInterface       $urlBuilder
-     * @param array              $components
-     * @param array              $data
-     * @param string             $editUrl
+     * @param UrlInterface $urlBuilder
+     * @param array $components
+     * @param array $data
+     * @param string $editUrl
      */
     public function __construct(
         ContextInterface $context,
@@ -35,7 +36,8 @@ class Action extends Column
         UrlInterface $urlBuilder,
         array $components = [],
         array $data = []
-    ) {
+    )
+    {
         $this->_urlBuilder = $urlBuilder;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
@@ -53,30 +55,52 @@ class Action extends Column
             foreach ($dataSource['data']['items'] as &$item) {
                 $name = $this->getData('name');
                 if (isset($item['id'])) {
-                    $item[$name] = [
+                    $payStatus = $item['paid'];
+
+
+                    $item[$name]['delete'] = [
+                        'href'    => $this->_urlBuilder->getUrl(
+                            self::URL_DELETE_EXCEPTION,
+                            [
+                                'id' => $item['id']
+                            ]
+                        ),
+                        'label'   => __('Delete'),
                         'confirm' => [
-                            'href' => $this->_urlBuilder->getUrl(
+                            'title'   => __('Delete Exception'),
+                            'message' => __('Are you sure you want to delete this record?')
+                        ]
+                    ];
+
+                    if($payStatus == 1) {
+                        $item[$name]['revert'] = [
+                            'href'    => $this->_urlBuilder->getUrl(
+                                self::URL_REVERT_ORDER,
+                                [
+                                    'id' => $item['id']
+                                ]
+                            ),
+                            'label'   => __('Revert'),
+                            'confirm' => [
+                                'title'   => __('Revert Exception'),
+                                'message' => __('Are you sure you want to revert this order?')
+                            ]
+                        ];
+                    } else if ($payStatus == 0) {
+                        $item[$name]['confirm'] = [
+                            'href'    => $this->_urlBuilder->getUrl(
                                 self::URL_CONFIRM_PAID,
                                 [
                                     'id' => $item['id']
                                 ]
                             ),
-                            'label' => __('Confirm')
-                        ],
-                        'delete' => [
-                            'href' => $this->_urlBuilder->getUrl(
-                                self::URL_DELETE_EXCEPTION,
-                                [
-                                    'id' => $item['id']
-                                ]
-                            ),
-                            'label' => __('Delete'),
+                            'label'   => __('Confirm'),
                             'confirm' => [
-                                'title' => __('Delete Exception'),
-                                'message' => __('Are you sure you want to delete this record?')
+                                'title'   => __('Confirm Exception'),
+                                'message' => __('Are you sure you want to confirm this order?')
                             ]
-                        ]
-                    ];;
+                        ];
+                    }
                 }
             }
         }

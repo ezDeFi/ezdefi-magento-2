@@ -7,7 +7,7 @@ use \Magento\Framework\View\Result\PageFactory;
 use \Ezdefi\Payment\Model\ExceptionFactory;
 use Magento\Framework\UrlInterface;
 
-class Delete extends \Magento\Backend\App\Action
+class RevertOrder extends \Magento\Backend\App\Action
 {
     protected $_pageFactory;
 
@@ -35,8 +35,26 @@ class Delete extends \Magento\Backend\App\Action
     public function execute()
     {
         $exceptionId = (int) $this->getRequest()->getParam('id');
-        $this->_exceptionFactory->create()->load($exceptionId)->delete();
+
+        $exception   = $this->_exceptionFactory->create()->load($exceptionId);
+
+        // set order status to pendding
+        $orderId = $exception->getOrderId();
+        $this->setPendingForOrder($orderId);
+
+        // set exception to unknown transaction
+        $exception->setOrderId(null);
+        $exception->setPaid(3);
+        $exception->save();
 
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('*/*/index');
+    }
+
+    private function setPendingForOrder($orderId) {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $order = $objectManager->create('\Magento\Sales\Model\Order')->load($orderId);
+        $orderState = 'new';
+        $order->setState($orderState)->setStatus('pending');
+        $order->save();
     }
 }
