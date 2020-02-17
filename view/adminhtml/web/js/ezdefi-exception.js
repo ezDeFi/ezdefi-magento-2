@@ -8,52 +8,75 @@ require(
     ],
     function ($, alert, url) {
 
-        var selectOrderInterval = setInterval(function () {
-
-            if($('.ezdefi__select-pending-order').data('check-loaded') == 1) {
-                $('.ezdefi__select-pending-order').select2({
-                    ajax: {
-                        // url: url.build("/admin/exception/getorderpending"),
-                        url: $('.ezdefi__select-pending-order').data('url-get-order'),
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                keyword: params.term, // search term
-                                page: params.page
-                            };
-                        },
-                        processResults: function (data, params) {
-                            params.page = params.page || 1;
-                            return {
-                                results: data.data
-                            };
-                        },
-                        cache: true
+        function addSelectOrderListener(exceptionId) {
+            if($('#ezdefi__select-pending-order-' + exceptionId).data('check-created') == '1') return;
+            $('#ezdefi__select-pending-order-' + exceptionId).data('check-created', '1');
+            $('#ezdefi__select-pending-order-' + exceptionId).select2({
+                ajax: {
+                    url: $('#ezdefi__select-pending-order-' + exceptionId).data('url-get-order'),
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            keyword: params.term, // search term
+                            page: params.page
+                        };
                     },
-                    escapeMarkup: function (markup) { return markup; },
-                    minimumInputLength: 1,
-                    templateResult: formatRepo,
-                    templateSelection: formatRepoSelection,
-                    placeholder: "Enter order"
-                });
-                $(".ezdefi__select-pending-order").on('select2:select', selectOrderPendingListener);
-                clearInterval(selectOrderInterval);
-            }
-        }, 500);
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.data
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) {
+                    return markup;
+                },
+                minimumInputLength: 1,
+                templateResult: formatRepo,
+                templateSelection: formatRepoSelection,
+                placeholder: "Enter order"
+            });
+            $("#ezdefi__select-pending-order-"+exceptionId).on('select2:select', selectOrderPendingListener);
+        }
 
+        $(document).on('click', '.ezdefi__btn-show-list-order-pending', function () {
+            let exceptionId = $(this).data('exception-id');
+
+            $(this).parent().find('.select2-container').css('display', 'inline-block');
+            $('#ezdefi__select-pending-order-' + exceptionId).css('display', 'block');
+            $('#ezdefi__btn-cancel-assign-' + exceptionId).css('display', 'inline-block');
+            $('#ezdefi__btn-assign-order-' + exceptionId).css('display', 'inline-block');
+            $(this).css('display', 'none');
+            addSelectOrderListener(exceptionId);
+        });
+
+
+        $(document).on('click', '.ezdefi__btn-cancel-assign', function () {
+            let exceptionId = $(this).data('exception-id');
+
+            $('#ezdefi__btn-show-list-order-pending-' + exceptionId).css('display', 'block');
+            $('#ezdefi__btn-cancel-assign-' + exceptionId).css('display', 'none');
+            $('#ezdefi__select-pending-order-' + exceptionId).css('display', 'none');
+            $(this).parent().find('.select2-container').css('display', 'none');
+            console.log($(this).parent().find('.select2-container'));
+            $('#ezdefi__btn-assign-order-' + exceptionId).css('display', 'none');
+            $(this).css('display', 'none');
+        });
 
         var selectOrderPendingListener = function (e) {
             var data = e.params.data;
             var buttonAssign = $(this).parent().find('.ezdefi__btn-assign-order');
-            buttonAssign.css('display', 'block');
+            buttonAssign.css('display', 'inline-block');
 
-            $(buttonAssign).click( function () {
+            $(buttonAssign).click(function () {
                 alert({
                     title: $.mage.__('Some title'),
                     content: $.mage.__('Some content'),
                     actions: {
-                        always: function(){}
+                        always: function () {
+                        }
                     },
                     buttons: [{
                         text: $.mage.__('Close'),
@@ -74,7 +97,7 @@ require(
 
         };
 
-        var formatRepo = function(repo) {
+        var formatRepo = function (repo) {
             if (repo.loading) {
                 return repo.text;
             }
@@ -101,7 +124,7 @@ require(
                                     <tr>
                                         <td class="exception-order-label-2">Price</td>
                                         <td class="padding-left-md">:</td>
-                                        <td class="exception__order-pending--data">${repo.total_due +' ' + repo.order_currency_code}</td>
+                                        <td class="exception__order-pending--data">${repo.total_due + ' ' + repo.order_currency_code}</td>
                                     </tr>
                                     <tr>
                                         <td class="exception-order-label-2">Create at</td>

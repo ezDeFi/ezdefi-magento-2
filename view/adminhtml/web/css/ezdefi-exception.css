@@ -2,7 +2,8 @@
     border: none !important;
 }
 
-.ezdefi__btn-assign-order {
+.ezdefi__select-pending-order, .ezdefi__btn-cancel-assign, .ezdefi__btn-assign-order
+{
     display: none;
 }
 

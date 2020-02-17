@@ -9,8 +9,8 @@ use Magento\Framework\UrlInterface;
 
 class Order extends Column
 {
-    CONST URL_ASSIGN_ORDER = 'admin/exception/assignorder';
-    CONST URL_GET_ORDER    = 'admin/exception/getorderpending';
+    CONST URL_ASSIGN_ORDER = 'adminhtml/exception/assignorder';
+    CONST URL_GET_ORDER    = 'adminhtml/exception/getorderpending';
 
     protected $_urlBuilder;
 
@@ -31,11 +31,11 @@ class Order extends Column
             foreach ($dataSource['data']['items'] as &$items) {
                 $orderHtml = '';
                 if($items['order_id']) {
-                    $payStatus= 'No';
+                    $payStatus= 'Not paid';
                     if($items['paid'] == 1) {
                         $payStatus = 'Paid on time';
                     } else if ($items['paid'] == 2) {
-                        $payStatus = 'Paid on expiration';
+                        $payStatus = 'Paid after expired';
                     }
                     $explorerUrlRow = isset($items['explorer_url']) ? '<tr>
                                 <td class="border-none">Explorer url</td>
@@ -67,16 +67,22 @@ class Order extends Column
                             '.$explorerUrlRow.'
                         </tbody>
                     </table>';
-
-                    $orderHtml .= '<select class="ezdefi__select-pending-order" style="width: 300px" data-check-loaded="1" data-url-get-order="'.$this->_urlBuilder->getUrl(self::URL_GET_ORDER).'">
+                }
+                $orderHtml .= '<select class="ezdefi__select-pending-order" id="ezdefi__select-pending-order-'.$items['id'].'" style="width: 300px" data-check-loaded="1" data-url-get-order="'.$this->_urlBuilder->getUrl(self::URL_GET_ORDER).'">
                         <option value=""></option>
                     </select>
-                    <button class="ezdefi__btn-assign-order" 
+                    <button class="ezdefi__btn-show-list-order-pending" id="ezdefi__btn-show-list-order-pending-'.$items['id'].'" data-exception-id="'.$items['id'].'">
+                        Assign other order
+                    </button>
+                    <br>
+                    <button class="ezdefi__btn-cancel-assign" id="ezdefi__btn-cancel-assign-'.$items['id'].'" data-exception-id="'.$items['id'].'"">
+                        Cancel
+                    </button>
+                    <button class="ezdefi__btn-assign-order" id="ezdefi__btn-assign-order-'.$items['id'].'"
                         data-url-assign="'.
-                            $this->_urlBuilder->getUrl(self::URL_ASSIGN_ORDER,                                 [
-                                'id' => $items['id']
-                            ]).'">Assign</button>';
-                }
+                    $this->_urlBuilder->getUrl(self::URL_ASSIGN_ORDER,                                 [
+                        'id' => $items['id']
+                    ]).'">Assign</button>';
 
                 $items['order_id'] = $orderHtml;
             }

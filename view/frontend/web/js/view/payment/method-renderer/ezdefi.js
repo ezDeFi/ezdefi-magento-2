@@ -57,12 +57,16 @@ define([
                 return window.checkoutConfig.currencies;
             },
 
+            getEzdefiLogo: function () {
+                return window.checkoutConfig.ezdefiLogo;
+            },
+
             getPaymentTitle() {
                 var element = ' Pay with cryptocurrencies';
                 var currenies = this.getCurrencies();
                 for(let i = 0; i<3; i++) {
                     if (currenies[i]) {
-                        element += '<img src="'+currenies[i].logo+'" style="width: 20px; height: 20px">'
+                        element += '<span><img src="'+currenies[i].logo+'" style="width: 20px; height: 20px; margin-left: 4px"></span>'
                     }
                 }
                 if(currenies.length > 3) {
@@ -82,7 +86,7 @@ define([
             isHasOneMethod: function () {
                 if(this.checkEnableEzdefiMethod() && !this.checkEnableSimpleMethod()) {
                     return true;
-                } else if(this.checkEnableEzdefiMethod() && !this.checkEnableSimpleMethod()) {
+                } else if(!this.checkEnableEzdefiMethod() && this.checkEnableSimpleMethod()) {
                     return true;
                 }
                 return false;
