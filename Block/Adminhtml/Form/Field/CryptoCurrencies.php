@@ -156,6 +156,7 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
                     class="ezdefi__payment-lifetime-input validate-not-negative-number validate-digits only-positive-integer"
                     value="' . ($currencyData['payment_lifetime'] / 60) . '"></td>
                 <td><input type="text" 
+                    placeholder="Wallet address"
                     class="ezdefi__wallet-address-input required-entry"
                     name="groups[ezdefi_payment][fields][currency][value][edit][' . $currencyData['currency_id'] . '][wallet_address]" 
                     value="' . $currencyData['wallet_address'] . '"></td>
@@ -198,7 +199,7 @@ class CryptoCurrencies extends \Magento\Config\Block\System\Config\Form\Field
                 <td>
                     <input type="text" class="ezdefi__payment-lifetime-input validate-not-negative-number validate-digits only-positive-integer" name="groups[ezdefi_payment][fields][currency][value][add]['.$currencyData['currency_id'].'][lifetime]" value="15">
                 </td>
-                <td><input type="text" class="ezdefi__wallet-address-input required-entry" name="groups[ezdefi_payment][fields][currency][value][add]['.$currencyData['currency_id'].'][wallet_address]"></td>
+                <td><input type="text" placeholder="Wallet address" class="ezdefi__wallet-address-input required-entry" name="groups[ezdefi_payment][fields][currency][value][add]['.$currencyData['currency_id'].'][wallet_address]"></td>
                 <td><input type="text" class="ezdefi_block-confirmation-input validate-not-negative-number validate-digits only-positive-integer" name="groups[ezdefi_payment][fields][currency][value][add]['.$currencyData['currency_id'].'][block_confirmation]" value="1"></td>
                 <td><input type="text" 
                     class="ezdefi__currency-decimal-input validate-not-negative-number required-entry validate-digits only-positive-integer" 
