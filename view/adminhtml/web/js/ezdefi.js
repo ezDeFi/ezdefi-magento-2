@@ -114,7 +114,7 @@ require(
                 <td>
                     <input type="text" class="${selectorToClass(selectors.currencyLifetimeInput)} validate-not-negative-number validate-digits only-positive-integer">
                 </td>
-                <td><input type="text" class="${selectorToClass(selectors.walletAddressInput)} required-entry"></td>
+                <td><input type="text" placeholder="Wallet address" class="${selectorToClass(selectors.walletAddressInput)} required-entry"></td>
                 <td><input type="text" class="${selectorToClass(selectors.blockConfirmationInput)} validate-not-negative-number validate-digits only-positive-integer"></td>
                 <td><input type="text" class="${selectorToClass(selectors.currencyDecimalInput)} validate-not-negative-number required-entry validate-digits only-positive-integer"
                     data-validate="{min:2}">
