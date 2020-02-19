@@ -49,8 +49,8 @@ class GetOrderPending extends \Magento\Backend\App\Action
             ->addAttributeToSelect('order_currency_code')
             ->addFieldToFilter('status', 'pending')
             ->addFieldToFilter([
-                'customer_email',
                 'increment_id',
+                'customer_email',
                 'customer_lastname',
                 'customer_firstname'
             ], [
