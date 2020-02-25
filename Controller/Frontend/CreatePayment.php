@@ -1,11 +1,11 @@
 <?php
+
 namespace Ezdefi\Payment\Controller\Frontend;
 
 use \Magento\Framework\Controller\ResultFactory;
 use \Magento\Framework\App\Action\Context;
 use \Magento\Framework\View\Result\PageFactory;
 use Ezdefi\Payment\Helper\GatewayHelper;
-use \Ezdefi\Payment\Model\AmountFactory;
 use \Ezdefi\Payment\Model\CurrencyFactory;
 use \Magento\Sales\Api\OrderRepositoryInterface;
 use \Magento\Checkout\Model\Session;
@@ -22,7 +22,6 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
     protected $_scopeConfig;
     protected $_gatewayHelper;
     protected $_request;
-    protected $_amountFactory;
     protected $_currencyFactory;
     protected $_orderRepo;
     protected $_urlInterface;
@@ -33,8 +32,6 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
     public function __construct(
         Context $context,
         PageFactory $pageFactory,
-        AmountFactory $amountFactory,
-        CurrencyFactory $currencyFactory,
         OrderRepositoryInterface $orderRepo,
         Session $cart,
         Request $request,
@@ -45,39 +42,41 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
         DateTime $date
     )
     {
-        $this->_pageFactory = $pageFactory;
-        $this->_cart = $cart;
-        $this->_scopeConfig = $scopeConfig;
-        $this->_gatewayHelper = $gatewayHelper;
-        $this->_request = $request;
-        $this->_orderRepo = $orderRepo;
-        $this->_amountFactory = $amountFactory;
-        $this->_currencyFactory = $currencyFactory;
-        $this->_urlInterface = $urlInterface;
+        $this->_pageFactory      = $pageFactory;
+        $this->_cart             = $cart;
+        $this->_scopeConfig      = $scopeConfig;
+        $this->_gatewayHelper    = $gatewayHelper;
+        $this->_request          = $request;
+        $this->_orderRepo        = $orderRepo;
+        $this->_urlInterface     = $urlInterface;
         $this->_exceptionFactory = $exceptionFactory;
-        $this->_date = $date;
+        $this->_date             = $date;
         return parent::__construct($context);
     }
 
     public function execute()
     {
         $orderId = $this->_cart->getLastOrderId();
-        $currencyId = json_decode($this->_request->getContent())->currency_id;
-        $cryptoCurrency    = $this->_currencyFactory->create()->getCollection()->addFieldToFilter('currency_id', $currencyId)->getData()[0];
-        $order             = $this->_orderRepo->get($orderId);
+        $coinId  = json_decode($this->_request->getContent())->coin_id;
+//        $cryptoCurrency    = $this->_currencyFactory->create()->getCollection()->addFieldToFilter('currency_id', $currencyId)->getData()[0];
+        $cryptoCurrency = $this->_gatewayHelper->getCurrency($coinId);
+
+        $order = $this->_orderRepo->get($orderId);
 
         $resultPage = $this->_pageFactory->create();
         $resultPage->getConfig()->getTitle()->prepend(__(' heading '));
         $paymentType = json_decode($this->_request->getContent())->type;
 
-        if($paymentType === 'simple') {
-            $payment = $this->createPaymentSimple($order, $cryptoCurrency);
-            $block = $resultPage->getLayout()
+        if ($paymentType === 'simple') {
+            $payment = $this->createPaymentSimple($order, $coinId, $cryptoCurrency);
+            $block   = $resultPage->getLayout()
                 ->createBlock('Ezdefi\Payment\Block\Frontend\SimpleMethod', 'render simple method block', [
-                        'data' => [
-                            'payment'        => $payment,
-                            'originValue'    => $order->getTotalDue() * (100 - $cryptoCurrency['discount']) / 100,
-                            'originCurrency' => $order->getOrderCurrencyCode()]])
+                    'data' => [
+                        'payment'        => $payment,
+                        'originValue'    => $order->getTotalDue() * (100 - $cryptoCurrency['discount']) / 100,
+                        'originCurrency' => $order->getOrderCurrencyCode()
+                    ]
+                ])
                 ->setTemplate('Ezdefi_Payment::simpleMethod.phtml')
                 ->toHtml();
         } else if ($paymentType === 'ezdefi') {
@@ -92,62 +91,57 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
         $this->getResponse()->setBody($block);
     }
 
-    private function createPaymentSimple($order, $cryptoCurrency) {
-        $amountCollection  = $this->_amountFactory->create();
-        $originCurrency    = $order->getStoreCurrencyCode();
-        $originValue = $order->getTotalDue();
-        $amount            = round($this->_gatewayHelper->getExchange($originCurrency, $cryptoCurrency['symbol']) * $originValue * (100 - $cryptoCurrency['discount'])/100, $cryptoCurrency['decimal']);
-
-        $amountId = (float)$amountCollection->getCollection()->createAmountId(
-            $cryptoCurrency['symbol'], (float)$amount,
-            $cryptoCurrency['payment_lifetime'],
-            $cryptoCurrency['decimal'],
-            $this->_scopeConfig->getValue('payment/ezdefi_payment/variation'));
-
-        if(!$amountId) {
-            return false;
-        }
+    private function createPaymentSimple($order, $coinId, $cryptoCurrency)
+    {
+        $originCurrency = $order->getStoreCurrencyCode();
+        $originValue    = $order->getTotalDue();
+        $amount         = round($this->_gatewayHelper->getExchange($originCurrency, $cryptoCurrency['token']['symbol']) * $originValue * (100 - $cryptoCurrency['discount']) / 100, $cryptoCurrency['decimal']);
 
         $payment = $this->_gatewayHelper->createPayment([
-            'uoid'     => $order->getId().'-1',
+            'uoid'     => $order->getId() . '-1',
             'amountId' => true,
-            'value'    => $amountId,
-            'to'       => $cryptoCurrency['wallet_address'],
-            'currency' => $cryptoCurrency['symbol'].':'.$cryptoCurrency['symbol'],
-            'safedist' => $cryptoCurrency['block_confirmation'],
-            'duration' => $cryptoCurrency['payment_lifetime'],
+            'coinId'   => $coinId,
+            'value'    => $amount,
+            'to'       => $cryptoCurrency['walletAddress'],
+            'currency' => $cryptoCurrency['token']['symbol'] . ':' . $cryptoCurrency['token']['symbol'],
+            'safedist' => $cryptoCurrency['blockConfirmation'],
+            'duration' => $cryptoCurrency['expiration'] * 60,
             'callback' => $this->_urlInterface->getUrl('ezdefi/frontend/callbackconfirmorder')
         ]);
-        $this->addException($order, $cryptoCurrency, $payment->_id, $amountId, 1);
+        $this->addException($order, $cryptoCurrency, $payment->_id, $payment->value * pow(10, -$payment->decimal), 1);
+
         return $payment;
     }
 
-    private function createPaymentEzdefi($order, $cryptoCurrency) {
+    private function createPaymentEzdefi($order, $cryptoCurrency)
+    {
         $payment = $this->_gatewayHelper->createPayment([
-            'uoid'     => $order->getId().'-0',
-            'value'    => $order->getTotalDue() * (100 - $cryptoCurrency['discount'])/100,
-            'to'       => $cryptoCurrency['wallet_address'],
-            'currency' => $order->getStoreCurrencyCode().':'.$cryptoCurrency['symbol'],
-            'safedist' => $cryptoCurrency['block_confirmation'],
-            'duration' => $cryptoCurrency['payment_lifetime'],
+            'uoid'     => $order->getId() . '-0',
+            'amountId' => false,
+            'value'    => $order['grand_total'] * (100 - $cryptoCurrency['discount']) / 100,
+            'to'       => $cryptoCurrency['walletAddress'],
+            'currency' => $order['base_currency_code'] . ':' . $cryptoCurrency['token']['symbol'],
+            'safedist' => $cryptoCurrency['blockConfirmation'],
+            'duration' => $cryptoCurrency['expiration'] * 60,
             'callback' => $this->_urlInterface->getUrl('ezdefi/frontend/callbackconfirmorder')
         ]);
 
-        $cryptoValue = $payment->value * pow(10, - $payment->decimal);
+        $cryptoValue = $payment->value * pow(10, -$payment->decimal);
         $this->addException($order, $cryptoCurrency, $payment->_id, $cryptoValue, 0);
         return $payment;
     }
 
-    private function addException($order, $cryptoCurrency, $paymentId, $amountId, $hasAmount) {
-        $expiration = $this->_date->gmtDate('Y-m-d H:i:s', strtotime('+'.$cryptoCurrency['payment_lifetime'].' second'));
+    private function addException($order, $cryptoCurrency, $paymentId, $amountId, $hasAmount)
+    {
+        $expiration     = $this->_date->gmtDate('Y-m-d H:i:s', strtotime('+' . ($cryptoCurrency['expiration'] * 60) . ' second'));
         $exceptionModel = $this->_exceptionFactory->create();
         $exceptionModel->addData([
             'payment_id' => $paymentId,
-            'order_id' => $order->getId(),
-            'currency' => $cryptoCurrency['symbol'],
-            'amount_id' => $amountId,
+            'order_id'   => $order->getId(),
+            'currency'   => $cryptoCurrency['token']['symbol'],
+            'amount_id'  => $amountId,
             'expiration' => $expiration,
-            'paid' => 0,
+            'paid'       => 0,
             'has_amount' => $hasAmount,
         ]);
         $exceptionModel->save();

@@ -16,6 +16,10 @@ class EzdefiMethod extends \Magento\Framework\View\Element\Template
         parent::__construct($context);
     }
 
+    public function getPaymentId()
+    {
+        return __($this->_data['payment']->_id);
+    }
 
     public function getOriginCurrency()
     {

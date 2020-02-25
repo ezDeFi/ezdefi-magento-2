@@ -20,7 +20,7 @@
                        translate="label" type="text">
                     <frontend_model>Ezdefi\Payment\Block\Adminhtml\Form\Field\ApiKey</frontend_model>
                     <label>API Key</label>
-                    <comment><![CDATA[<a href="https://merchant.ezdefi.com/register" target="_blank"> Resgister to get API Key </a>]]></comment>
+                    <comment><![CDATA[<a href="https://merchant.ezdefi.com/register" target="_blank"> Register to get API Key </a>]]></comment>
                 </field>
                 <field id="public_key" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30"
                        translate="label" type="text">
