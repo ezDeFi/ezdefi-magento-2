@@ -22,10 +22,8 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
     protected $_scopeConfig;
     protected $_gatewayHelper;
     protected $_request;
-    protected $_currencyFactory;
     protected $_orderRepo;
     protected $_urlInterface;
-    protected $originValue;
     protected $_exceptionFactory;
     protected $_date;
 

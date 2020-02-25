@@ -77,11 +77,11 @@ define([
             },
 
             checkEnableSimpleMethod: function () {
-                return window.checkoutConfig.simpleMethod === 'enable';
+                return window.checkoutConfig.simpleMethod === true;
             },
 
             checkEnableEzdefiMethod: function () {
-                return window.checkoutConfig.ezdefiMethod === 'enable';
+                return window.checkoutConfig.ezdefiMethod === true;
             },
 
             isHasOneMethod: function () {
