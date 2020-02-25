@@ -1,40 +1,33 @@
 <?php
+
 namespace Ezdefi\Payment\Model;
 
-class Currency extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface, \Magento\Framework\Data\OptionSourceInterface
+use Ezdefi\Payment\Helper\GatewayHelper;
+
+class Currency implements \Magento\Framework\Data\OptionSourceInterface
 {
-    const CACHE_TAG = 'ezdefi_currency';
+    protected $_gatewayHelper;
 
-    protected $_cacheTag = 'ezdefi_currency';
 
-    protected $_eventPrefix = 'ezdefi_currency';
-
-    protected function _construct()
+    public function __construct(
+        GatewayHelper $gatewayHelper
+    )
     {
-        $this->_init('Ezdefi\Payment\Model\ResourceModel\Currency');
+        $this->_gatewayHelper = $gatewayHelper;
     }
-
-    public function getIdentities()
-    {
-        return [self::CACHE_TAG . '_' . $this->getId()];
-    }
-
-    public function getDefaultValues()
-    {
-        $values = [];
-
-        return $values;
-    }
-
 
     public function getOptions()
     {
-        $currencies = $this->getCollection()->setOrder('`order`', 'ASC');
-        $res =[];
+        $result     = [];
+        $currencies = $this->_gatewayHelper->getCurrencies();
+
         foreach ($currencies as $currency) {
-            $res[] = ['value' => $currency['symbol'], 'label' => strtoupper($currency['symbol'])];
+            $result[] = [
+                'value' => $currency['token']['symbol'],
+                'label' => strtoupper($currency['token']['symbol'])
+            ];
         }
-        return $res;
+        return $result;
     }
 
     public function toOptionArray()
