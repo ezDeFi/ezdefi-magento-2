@@ -111,6 +111,19 @@ class GatewayHelper
         }
     }
 
+    public function checkPublicKey($publicKey, $apiKey, $apiUrl) {
+        $websiteData = $this->sendCurl('/website/' . $publicKey, "GET", [], $apiKey, $apiUrl);
+
+        $userData = json_decode($websiteData);
+
+        if($userData && $userData->code == 1 && $userData->message == 'ok') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
     public function sendCurl($api, $method, $params = [], $apiKey = null, $apiUrl = null) {
         if(!$apiUrl) {
             $apiUrl = $this->_scopeConfig->getValue('payment/ezdefi_payment/gateway_api_url');
