@@ -23,25 +23,26 @@
         <div class="ezdefi__select-currency-box">
             <div class="ezdefi__select-currency--list">
                 <!-- ko foreach: {data: getCurrencies(), as: 'currency'} -->
-                <label class="ezdefi__select-currency--label" data-bind="attr: {for: 'ezdefi__select-currency-' + currency.currency_id}">
-                    <!-- ko if: currency.description -->
-                    <img data-bind="attr: {'src':currency.logo }" alt="" class="ezdefi-select-currency-item--logo" data-toggle="tooltip" title="{{ currency.description }}">
+                <label class="ezdefi__select-currency--label" data-bind="attr: {for: 'ezdefi__select-currency-' + currency._id}">
+                    <!-- ko if: currency.token.description -->
+                    <img data-bind="attr: {'src':currency.logo }" alt="" class="ezdefi-select-currency-item--logo" data-toggle="tooltip" title="{{ currency.token.description }}">
                     <!--/ko-->
                     <!-- ko ifnot: currency.description -->
-                    <img data-bind="attr: {'src':currency.logo }" alt="" class="ezdefi__select-currency-item--logo">
+                    <img data-bind="attr: {'src':currency.token.logo }" alt="" class="ezdefi__select-currency-item--logo">
                     <!--/ko-->
-                    <span class="ezdefi__select-currency-item--price" data-bind="text: currency.price"></span>
-                    <span class="ezdefi__select-currency-item--symbol" data-bind="text: currency.symbol"></span>
+                    <span class="ezdefi__select-currency-item--price" data-bind="text: currency.token.price"></span>
+                    <span class="ezdefi__select-currency-item--symbol" data-bind="text: currency.token.symbol"></span>
                     <span class="ezdefi__select-currency-item--discount" data-bind="text: '-' + (parseFloat(currency.discount))+'%'"></span>
                     <input  type="radio" name="currency-selected-to-order" class="hidden ezdefi__select-currency--checkbox"
-                            data-bind="attr: {'id'         : 'ezdefi__select-currency-' + currency.currency_id,
-                                            'value'        : currency.currency_id,
-                                            'data-name'    : currency.name,
-                                            'data-logo'    : currency.logo,
+                            data-bind="attr: {'id'         : 'ezdefi__select-currency-' + currency._id,
+                                            'value'        : currency._id,
+                                            'data-name'    : currency.token.name,
+                                            'data-logo'    : currency.token.logo,
                                             'data-discount': currency.discount}">
                 </label>
                 <!--/ko-->
             </div>
+            <button data-role="review-save" class="action primary ezdefi__btn-create-payment" data-bind="event: {click: function() { checkCreatePaymentAfterCheckType()} }"> Change </button>
 
             <!-- ko if: isPlaceOrder -->
             <button data-role="review-save" class="action primary ezdefi__btn-create-payment" data-bind="event: {click: function() { checkCreatePaymentAfterCheckType()} }"> Change </button>

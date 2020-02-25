@@ -45,19 +45,20 @@ class ConfigProvider implements ConfigProviderInterface
     {
         $totalPrice    = $this->_cart->getQuote()->getGrandTotal();
         $storeCurrency = $this->_cart->getQuote()->getStoreCurrencyCode();
+        $websiteData   = $this->_gatewayHelper->getWebsiteData();
 
-        $currencies          = $this->_currencyFactory->create()->getCollection()->setOrder('`order`', 'ASC')->getData();
+        $simpleMethod        = $websiteData->website->payAnyWallet;
+        $ezdefiMethod        = $websiteData->website->payEzdefiWallet;
+        $currencies          = $websiteData->coins;
         $currenciesWithPrice = $this->_gatewayHelper->getCurrenciesWithPrice($currencies, $totalPrice, $storeCurrency);
 
-        $paymentMethod = $this->_scopeConfig->getValue('payment/ezdefi_payment/payment_method');
-        $simpleMethod  = strpos($paymentMethod, 'simple') !== false ? 'enable' : false;
-        $ezdefiMethod  = strpos($paymentMethod, 'ezdefi') !== false ? 'enable' : false;
 
         return [
+            '$websiteData' => $websiteData,
             'currencies'   => $currenciesWithPrice,
             'simpleMethod' => $simpleMethod,
             'ezdefiMethod' => $ezdefiMethod,
-            'ezdefiLogo'=> $this->_assetRepo->getUrl("Ezdefi_Payment::image/ezdefi-logo.png")
+            'ezdefiLogo'   => $this->_assetRepo->getUrl("Ezdefi_Payment::image/ezdefi-logo.png")
         ];
     }
 }

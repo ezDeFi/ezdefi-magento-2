@@ -4,6 +4,7 @@
  */
 ?>
 <div class="payment-content--ezdefi">
+    <p><?php echo $block->getPaymentId(); ?></p>
     <div class="ezdefi-payment__value">
         <span class="ezdefi-payment__origin-value--ezdefi"><?php echo $block->getOriginValue(); ?></span>
         <span class="text-uppercase"> <?php echo $block->getOriginCurrency(); ?> </span>

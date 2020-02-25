@@ -54,6 +54,7 @@ define([
             },
 
             getCurrencies : function () {
+                console.log(checkoutConfig);
                 return window.checkoutConfig.currencies;
             },
 
@@ -66,7 +67,7 @@ define([
                 var currenies = this.getCurrencies();
                 for(let i = 0; i<3; i++) {
                     if (currenies[i]) {
-                        element += '<span><img src="'+currenies[i].logo+'" style="width: 20px; height: 20px; margin-left: 4px"></span>'
+                        element += '<span><img src="'+currenies[i].token.logo+'" style="width: 20px; height: 20px; margin-left: 4px"></span>'
                     }
                 }
                 if(currenies.length > 3) {
@@ -100,13 +101,13 @@ define([
                 
                 var that = this;
                 let urlCreatePayment = url.build('ezdefi/frontend/createpayment');
-                let currencyId = $(".ezdefi__select-currency--checkbox:checked").val();
+                let coinId = $(".ezdefi__select-currency--checkbox:checked").val();
 
                 storage.post(
                     urlCreatePayment,
                     JSON.stringify({
                         type: paymentType,
-                        currency_id: currencyId
+                        coin_id: coinId
                     }),
                     true
                 ).done(function(response) {
