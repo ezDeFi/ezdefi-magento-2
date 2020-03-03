@@ -56,8 +56,6 @@ class Action extends Column
                 $name = $this->getData('name');
                 if (isset($item['id'])) {
                     $payStatus = $item['paid'];
-
-
                     $item[$name]['delete'] = [
                         'href'    => $this->_urlBuilder->getUrl(
                             self::URL_DELETE_EXCEPTION,
@@ -86,7 +84,7 @@ class Action extends Column
                                 'message' => __('Are you sure you want to revert this order?')
                             ]
                         ];
-                    } else if ($payStatus == 0) {
+                    } else if ($payStatus == 0 || $payStatus == 2) {
                         $item[$name]['confirm'] = [
                             'href'    => $this->_urlBuilder->getUrl(
                                 self::URL_CONFIRM_PAID,

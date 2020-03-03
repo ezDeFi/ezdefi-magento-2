@@ -133,7 +133,7 @@
 }
 
 
-.btn-choose-payment-type {
+.btn-choose-payment-type, .btn-choose-payment-type-none {
     margin-top: 10px;
     padding: 10px 10px 0 10px;
     text-align: center;

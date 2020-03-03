@@ -24,6 +24,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         $this->getSelect()
             ->columns('order_table.customer_email')
+            ->columns('order_table.increment_id')
             ->joinLeft(
             ['order_table' => $this->getTable('sales_order')],
             'main_table.order_id = order_table.entity_id',

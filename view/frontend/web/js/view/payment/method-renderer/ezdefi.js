@@ -3,9 +3,10 @@ define([
         'ko',
         'Magento_Checkout/js/view/payment/default',
         'mage/storage',
+        'Magento_Checkout/js/model/quote',
         'mage/url'
     ],
-    function ($, ko, Component, storage, url) {
+    function ($, ko, Component, storage, quote, url) {
         'use strict';
 
         var selectors = {
@@ -21,6 +22,20 @@ define([
             $(selectors.selectCurrencyLabel + "[for='"+inputId+"']").css('border', '2px solid #54bdff').css('background', '#c0dcf9db');
             $(selectors.buttonCreatePayment).prop('disabled', false);
         });
+        let renderPrice = function () {
+            storage.post(
+                url.build('ezdefi/frontend/getCurrencies'),
+                JSON.stringify({}),
+                true
+            ).done(function(response) {
+                let currencies = response.currencies;
+                for(let i in currencies) {
+                    let currency = currencies[i];
+                    $('#currency-price-' + currency._id).html(currency.token.price);
+                }
+            });
+        }
+        renderPrice();
 
         return Component.extend({
             redirectAfterPlaceOrder: false,
@@ -40,6 +55,8 @@ define([
                 ezdefi          : null,
                 simple          : null
             },
+            loadedCurrencies: ko.observable(false),
+            currencies: null,
 
             defaults: {
                 template: 'Ezdefi_Payment/payment/ezdefi'
@@ -54,7 +71,6 @@ define([
             },
 
             getCurrencies : function () {
-                console.log(checkoutConfig);
                 return window.checkoutConfig.currencies;
             },
 

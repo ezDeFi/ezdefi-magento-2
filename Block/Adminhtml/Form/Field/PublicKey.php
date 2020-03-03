@@ -38,7 +38,7 @@ class PublicKey extends \Magento\Config\Block\System\Config\Form\Field
         $html = '<input id="payment_us_ezdefi_payment_public_key" 
                     name="groups[ezdefi_payment][fields][public_key][value]" 
                     value="'.$publicKey.'"
-                    class="required-entry input-text admin__control-text valid ezdefi__public-key"
+                    class="required-entry input-text admin__control-text ezdefi__public-key"
                     data-ui-id="text-groups-ezdefi-payment-fields-public-key-value" 
                     data-validate="{
                         required: true,

@@ -25,7 +25,7 @@
                 <field id="public_key" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30"
                        translate="label" type="text">
                     <frontend_model>Ezdefi\Payment\Block\Adminhtml\Form\Field\PublicKey</frontend_model>
-                    <label>API Key</label>
+                    <label>Public Key</label>
                 </field>
 <!--                <field id="payment_method" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30"-->
 <!--                       translate="label" type="checkboxes">-->

@@ -47,7 +47,7 @@ class Order extends Column
                             <tr>
                                 <td class="border-none">Order id</td>
                                 <td class="border-none">:</td>
-                                <td class="border-none">'.$items['order_id'].'</td>
+                                <td class="border-none">'.$items['increment_id'].'</td>
                             </tr>
                             <tr>
                                 <td class="border-none">Expiration</td>
