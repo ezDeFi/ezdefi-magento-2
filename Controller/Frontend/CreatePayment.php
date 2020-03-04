@@ -78,7 +78,7 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
                 ->setTemplate('Ezdefi_Payment::simpleMethod.phtml')
                 ->toHtml();
         } else if ($paymentType === 'ezdefi') {
-            $payment = $this->createPaymentEzdefi($order, $cryptoCurrency);
+            $payment = $this->createPaymentEzdefi($order, $coinId, $cryptoCurrency);
 
             $block = $resultPage->getLayout()
                 ->createBlock('Ezdefi\Payment\Block\Frontend\EzdefiMethod', 'render simple method block', ['data' => ['payment' => $payment, 'originValue' => $order->getTotalDue()]])
@@ -111,11 +111,11 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
         return $payment;
     }
 
-    private function createPaymentEzdefi($order, $cryptoCurrency)
+    private function createPaymentEzdefi($order, $coinId, $cryptoCurrency)
     {
         $payment = $this->_gatewayHelper->createPayment([
             'uoid'     => $order->getId() . '-0',
-            'amountId' => false,
+            'coinId'   => $coinId,
             'value'    => $order['grand_total'] * (100 - $cryptoCurrency['discount']) / 100,
             'to'       => $cryptoCurrency['walletAddress'],
             'currency' => $order['base_currency_code'] . ':' . $cryptoCurrency['token']['symbol'],
