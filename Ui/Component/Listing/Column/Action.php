@@ -69,7 +69,6 @@ class Action extends Column
                             'message' => __('Are you sure you want to delete this record?')
                         ]
                     ];
-
                     if($payStatus == 1) {
                         $item[$name]['revert'] = [
                             'href'    => $this->_urlBuilder->getUrl(

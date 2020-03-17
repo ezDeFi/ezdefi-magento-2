@@ -31,11 +31,12 @@ class Order extends Column
             foreach ($dataSource['data']['items'] as &$items) {
                 $orderHtml = '';
                 if($items['order_id']) {
-                    $payStatus= 'Not paid';
                     if($items['paid'] == 1) {
                         $payStatus = 'Paid on time';
                     } else if ($items['paid'] == 2) {
                         $payStatus = 'Paid after expired';
+                    } else {
+                        $payStatus= 'Not paid';
                     }
                     $explorerUrlRow = isset($items['explorer_url']) ? '<tr>
                                 <td class="border-none">Explorer url</td>

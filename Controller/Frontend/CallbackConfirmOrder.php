@@ -20,7 +20,7 @@ class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
     protected $_logger;
 
     CONST PAY_ON_TIME   = 1;
-    CONST PAID_OUT_TIME = 3;
+    CONST PAID_OUT_TIME = 2;
 
     public function __construct(
         Context $context,
@@ -69,6 +69,7 @@ class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
                 $exception->setData('paid', self::PAID_OUT_TIME);
                 $exception->setData('explorer_url', $payment['explorer_url']);
                 $exception->save();
+                $response->setData(['order_success' => 'expired done']);
             }
         } else {
             $transactionId = $this->_request->getParam('id');
@@ -80,7 +81,7 @@ class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
             if ($transaction->status === 'ACCEPTED') {
                 $this->addException($transaction->currency, $valueResponse, $transaction->explorerUrl);
             }
-
+            $response->setData(['order_success' => 'unknown transaction']);
         }
         return $response;
     }
