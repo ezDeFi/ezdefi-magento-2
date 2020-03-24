@@ -38,7 +38,7 @@ class Amount extends Column
 
                 $amountHtml = '<p>'.$amount.'</p>';
                 if (!$items['order_id']) {
-                    $amountHtml .= '<a href="" target="_blank">'.substr($items['explorer_url'],0,50).'</a>';
+                    $amountHtml .= '<a href="'.$items['explorer_url'].'" target="_blank">View Transaction Detail</a>';
                 }
 
                 $items['amount_id'] = $amountHtml;

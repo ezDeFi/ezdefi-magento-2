@@ -58,6 +58,7 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
         $coinId  = json_decode($this->_request->getContent())->coin_id;
 //        $cryptoCurrency    = $this->_currencyFactory->create()->getCollection()->addFieldToFilter('currency_id', $currencyId)->getData()[0];
         $cryptoCurrency = $this->_gatewayHelper->getCurrency($coinId);
+        $discount = (float)number_format((100 - $cryptoCurrency['discount']) / 100, 6);
 
         $order = $this->_orderRepo->get($orderId);
 
@@ -71,7 +72,7 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
                 ->createBlock('Ezdefi\Payment\Block\Frontend\SimpleMethod', 'render simple method block', [
                     'data' => [
                         'payment'        => $payment,
-                        'originValue'    => $order->getTotalDue() * (100 - $cryptoCurrency['discount']) / 100,
+                        'originValue'    => $order->getTotalDue() * $discount,
                         'originCurrency' => $order->getOrderCurrencyCode()
                     ]
                 ])
@@ -113,10 +114,12 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
 
     private function createPaymentEzdefi($order, $coinId, $cryptoCurrency)
     {
+        $discount = (float)number_format((100 - $cryptoCurrency['discount']) / 100, 6);
+
         $payment = $this->_gatewayHelper->createPayment([
             'uoid'     => $order->getId() . '-0',
             'coinId'   => $coinId,
-            'value'    => $order['grand_total'] * (100 - $cryptoCurrency['discount']) / 100,
+            'value'    => $order['grand_total'] * $discount,
             'to'       => $cryptoCurrency['walletAddress'],
             'currency' => $order['base_currency_code'] . ':' . $cryptoCurrency['token']['symbol'],
             'safedist' => $cryptoCurrency['blockConfirmation'],

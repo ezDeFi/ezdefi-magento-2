@@ -41,7 +41,7 @@ class Order extends Column
                     $explorerUrlRow = isset($items['explorer_url']) ? '<tr>
                                 <td class="border-none">Explorer url</td>
                                 <td class="border-none">:</td>
-                                <td class="border-none"><a target="_blank" href="'.$items['explorer_url'].'">'.substr($items['explorer_url'], 0, 50).'</a></td>
+                                <td class="border-none"><a target="_blank" href="'.$items['explorer_url'].'">View Transaction Detail</a></td>
                             </tr>' : '';
                     $orderHtml .= '<table>
                         <tbody>

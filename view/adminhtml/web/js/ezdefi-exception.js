@@ -72,8 +72,8 @@ require(
 
             $(buttonAssign).click(function () {
                 alert({
-                    title: $.mage.__('Some title'),
-                    content: $.mage.__('Some content'),
+                    title: $.mage.__('Assign order?'),
+                    content: $.mage.__('Are you sure you want to confirm this order?'),
                     actions: {
                         always: function () {
                         }
