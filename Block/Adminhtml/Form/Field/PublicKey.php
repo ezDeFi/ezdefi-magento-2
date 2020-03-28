@@ -51,7 +51,7 @@ class PublicKey extends \Magento\Config\Block\System\Config\Form\Field
                                 }
                             },
                         messages: {
-                            remote:  \'This Public Key is invalid\'
+                            remote:  \'This Site Id is invalid\'
                         }}"
                     type="text">';
         return $html;

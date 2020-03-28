@@ -2,16 +2,20 @@
 namespace Ezdefi\Payment\Block\Frontend;
 
 use \Magento\Framework\View\Element\Template\Context;
+use Ezdefi\Payment\Helper\GatewayHelper;
 
 class SimpleMethod extends \Magento\Framework\View\Element\Template
 {
     protected $_data;
+    protected $_gatewayHelper;
 
     public function __construct(
+        GatewayHelper $gatewayHelper,
         Context $context,
         $data
     )
     {
+        $this->_gatewayHelper    = $gatewayHelper;
         $this->_data = $data;
         parent::__construct($context);
     }
@@ -42,7 +46,9 @@ class SimpleMethod extends \Magento\Framework\View\Element\Template
 
     public function getCryptoValue()
     {
-        return __($this->_data['payment']->originValue);
+        $cyptoValue = $this->_gatewayHelper->convertExponentialToFloat((float)$this->_data['payment']->originValue);
+
+        return __($cyptoValue);
     }
 
     public function getGatewayQrCode() {

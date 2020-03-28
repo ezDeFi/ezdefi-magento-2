@@ -58,7 +58,8 @@ class GatewayHelper
             foreach ($exchangesData as $currencyExchange) {
                 foreach ($currencies as $key => $currency) {
                     if ($currency->token->symbol == $currencyExchange->token) {
-                        $currencies[$key]->token->price = round($currencyExchange->amount * ((100 - $currency->discount) / 100), self::DEFAULT_DECIMAL_LIST_COIN);
+                        $price = $currencyExchange->amount * ((100 - $currency->discount) / 100);
+                        $currencies[$key]->token->price = $this->convertExponentialToFloat($price);
                     }
                 }
             }
@@ -105,7 +106,12 @@ class GatewayHelper
         $payment = $this->sendCurl('/payment/create', 'POST', $param);
 
         if($payment) {
-            return json_decode($payment)->data;
+            $paymentData = json_decode($payment);
+            if($paymentData->code == -1) {
+                echo $paymentData->error; die;
+            } else {
+                return json_decode($payment)->data;
+            }
         }
     }
 
@@ -140,6 +146,23 @@ class GatewayHelper
         }
     }
 
+    public function convertExponentialToFloat($amount) {
+        $value = sprintf('%.8f',$amount);
+        $afterDot = explode('.', $value)[1];
+        $lengthToCut = 0;
+        for($i = strlen($afterDot) -1; $i >=0; $i--) {
+            if($afterDot[$i] === '0') {
+                $lengthToCut++;
+            } else {
+                break;
+            }
+        }
+        $value = substr($value, 0, strlen($value) - $lengthToCut);
+        if ($value [strlen($value ) - 1] === '.') {
+            $value  = substr($value , 0, -1);
+        }
+        return $value;
+    }
 
     public function sendCurl($api, $method, $params = [], $apiKey = null, $apiUrl = null) {
         if(!$apiUrl) {

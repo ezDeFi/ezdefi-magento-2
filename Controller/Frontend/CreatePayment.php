@@ -72,7 +72,7 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
                 ->createBlock('Ezdefi\Payment\Block\Frontend\SimpleMethod', 'render simple method block', [
                     'data' => [
                         'payment'        => $payment,
-                        'originValue'    => $order->getTotalDue() * $discount,
+                        'originValue'    => $this->_gatewayHelper->convertExponentialToFloat($order->getTotalDue() * $discount),
                         'originCurrency' => $order->getOrderCurrencyCode()
                     ]
                 ])
@@ -94,13 +94,14 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
     {
         $originCurrency = $order->getStoreCurrencyCode();
         $originValue    = $order->getTotalDue();
-        $amount         = round($this->_gatewayHelper->getExchange($originCurrency, $cryptoCurrency['token']['symbol']) * $originValue * (100 - $cryptoCurrency['discount']) / 100, $cryptoCurrency['decimal']);
+        $amount         = $this->_gatewayHelper->getExchange($originCurrency, $cryptoCurrency['token']['symbol']) * $originValue * (100 - $cryptoCurrency['discount']) / 100;
+        $value          = $this->_gatewayHelper->convertExponentialToFloat($amount);
 
         $payment = $this->_gatewayHelper->createPayment([
             'uoid'     => $order->getId() . '-1',
             'amountId' => true,
             'coinId'   => $coinId,
-            'value'    => $amount,
+            'value'    => $value,
             'to'       => $cryptoCurrency['walletAddress'],
             'currency' => $cryptoCurrency['token']['symbol'] . ':' . $cryptoCurrency['token']['symbol'],
             'safedist' => $cryptoCurrency['blockConfirmation'],
@@ -115,11 +116,12 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
     private function createPaymentEzdefi($order, $coinId, $cryptoCurrency)
     {
         $discount = (float)number_format((100 - $cryptoCurrency['discount']) / 100, 6);
+        $value          = $this->_gatewayHelper->convertExponentialToFloat($order['grand_total'] * $discount);
 
         $payment = $this->_gatewayHelper->createPayment([
             'uoid'     => $order->getId() . '-0',
             'coinId'   => $coinId,
-            'value'    => $order['grand_total'] * $discount,
+            'value'    => $value,
             'to'       => $cryptoCurrency['walletAddress'],
             'currency' => $order['base_currency_code'] . ':' . $cryptoCurrency['token']['symbol'],
             'safedist' => $cryptoCurrency['blockConfirmation'],
