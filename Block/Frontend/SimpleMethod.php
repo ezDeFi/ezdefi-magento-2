@@ -62,4 +62,9 @@ class SimpleMethod extends \Magento\Framework\View\Element\Template
     public function getWalletAddress() {
         return __($this->_data['payment']->to);
     }
+
+    public function getDeepLink()
+    {
+        return __($this->_data['payment']->deepLink);
+    }
 }

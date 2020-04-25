@@ -95,7 +95,7 @@ class CreatePayment extends \Magento\Framework\App\Action\Action
         $originCurrency = $order->getStoreCurrencyCode();
         $originValue    = $order->getTotalDue();
         $amount         = $this->_gatewayHelper->getExchange($originCurrency, $cryptoCurrency['token']['symbol']) * $originValue * (100 - $cryptoCurrency['discount']) / 100;
-        $value          = $this->_gatewayHelper->convertExponentialToFloat($amount);
+        $value          = $this->_gatewayHelper->convertExponentialToFloat($amount, $cryptoCurrency['decimal']);
 
         $payment = $this->_gatewayHelper->createPayment([
             'uoid'     => $order->getId() . '-1',

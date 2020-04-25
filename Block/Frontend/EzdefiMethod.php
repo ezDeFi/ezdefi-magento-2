@@ -53,4 +53,9 @@ class EzdefiMethod extends \Magento\Framework\View\Element\Template
     public function getExpiration() {
         return __($this->_data['payment']->expiredTime);
     }
+
+    public function getDeepLink()
+    {
+        return __($this->_data['payment']->deepLink);
+    }
 }
