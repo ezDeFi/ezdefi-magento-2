@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Ezdefi_Payment::ezdefi" title="Ezdefi" module="Ezdefi_Payment" sortOrder="51" resource="Ezdefi_Payment::parent"/>
-        <add id="Ezdefi_Payment::exception" title="Ezdefi Exception" module="Ezdefi_Payment" sortOrder="10" action="adminhtml/exception/index" resource="Ezdefi_Payment::exception" parent="Ezdefi_Payment::ezdefi"/>
+        <add id="Ezdefi_Payment::ezdefi" title="Ezdefi exception" module="Ezdefi_Payment" sortOrder="51" resource="Ezdefi_Payment::parent"/>
+        <add id="Ezdefi_Payment::exceptionPending" title="Ezdefi Exception Pending" module="Ezdefi_Payment" sortOrder="10" action="adminhtml/exception/index" resource="Ezdefi_Payment::exceptionPending" parent="Ezdefi_Payment::ezdefi"/>
+        <add id="Ezdefi_Payment::exceptionConfirmed" title="Ezdefi Exception Confirmed" module="Ezdefi_Payment" sortOrder="20" action="adminhtml/confirmed/index" resource="Ezdefi_Payment::exceptionConfirmed" parent="Ezdefi_Payment::ezdefi"/>
+        <add id="Ezdefi_Payment::exceptionArchived" title="Ezdefi Exception Archived" module="Ezdefi_Payment" sortOrder="30" action="adminhtml/archived/index" resource="Ezdefi_Payment::exceptionArchived" parent="Ezdefi_Payment::ezdefi"/>
     </menu>
 </config>

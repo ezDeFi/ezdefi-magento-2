@@ -19,4 +19,37 @@
         </arguments>
     </type>
 
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="ezdefi_payment_confirmed_listing_data_source" xsi:type="string">Ezdefi\Payment\Model\ResourceModel\Exception\Confirmed\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Ezdefi\Payment\Model\ResourceModel\Exception\Confirmed\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">ezdefi_exception</argument>
+            <argument name="eventPrefix" xsi:type="string">ezdefi_payment_confirmed_collection</argument>
+            <argument name="eventObject" xsi:type="string">ezdefi_confirmed_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Ezdefi\Payment\Model\ResourceModel\Exception</argument>
+        </arguments>
+    </type>
+
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="ezdefi_payment_archived_listing_data_source" xsi:type="string">Ezdefi\Payment\Model\ResourceModel\Exception\Archived\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Ezdefi\Payment\Model\ResourceModel\Exception\Archived\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">ezdefi_exception</argument>
+            <argument name="eventPrefix" xsi:type="string">ezdefi_payment_archived_collection</argument>
+            <argument name="eventObject" xsi:type="string">ezdefi_archived_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Ezdefi\Payment\Model\ResourceModel\Exception</argument>
+        </arguments>
+    </type>
 </config>

@@ -23,12 +23,27 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         parent::_initSelect();
 
         $this->getSelect()
-            ->columns('order_table.customer_email')
-            ->columns('order_table.increment_id')
             ->joinLeft(
-            ['order_table' => $this->getTable('sales_order')],
-            'main_table.order_id = order_table.entity_id',
-            []
-        );
+            ['od' => $this->getTable('sales_order')],
+            'main_table.order_id = od.entity_id',
+            [
+                'email' => 'od.customer_email',
+                'customer' => 'CONCAT(od.customer_firstname, " ", od.customer_lastname)',
+                'total' => 'od.grand_total',
+                'date' => 'od.created_at',
+                'increment_id' => 'od.increment_id'
+            ])->joinLeft(
+                array(
+                    'new_order' => $this->getTable('sales_order')
+                ),
+                'new_order.entity_id = main_table.order_assigned',
+                array(
+                    'new_email' => 'new_order.customer_email',
+                    'new_customer' => 'CONCAT(new_order.customer_firstname, " ", new_order.customer_lastname)',
+                    'new_total' => 'new_order.grand_total',
+                    'new_date' => 'new_order.created_at',
+                    'new_increment_id' => 'new_order.increment_id'
+                ))
+        ;
     }
 }
