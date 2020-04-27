@@ -47,19 +47,20 @@ class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
 
         if ($paymentId) {
             $payment = $this->_gatewayHelper->checkPaymentComplete($paymentId);
-            if ($payment['status'] == 'DONE') {
-                $uoid        = $payment['uoid'];
-                $orderId     = explode('-', $uoid)[0];
-                $hasAmountId = explode('-', $uoid)[1];
+            $uoid        = $payment['uoid'];
+            $orderId     = explode('-', $uoid)[0];
+            $hasAmountId = explode('-', $uoid)[1];
 
+            if ($payment['status'] == 'DONE') {
                 if ($hasAmountId == 1) {
                     $exceptionCollection = $this->_exceptionFactory->create()->getCollection()->addFieldToFilter('payment_id', $payment['_id']);
                     $exception           = $exceptionCollection->getFirstItem();
                     $exception->setData('paid', self::PAY_ON_TIME);
                     $exception->setData('explorer_url', $payment['explorer_url']);
                     $exception->save();
+                    $this->deleteExceptionByOrderId($orderId, $payment['_id']);
                 } else {
-                    $this->_exceptionFactory->create()->getCollection()->addFieldToFilter('order_id', $orderId)->walk('delete');
+                    $this->deleteExceptionByOrderId($orderId);
                 }
                 $response->setData(['order_success' => $this->setProcessingForOrder($orderId)]);
             }
@@ -70,6 +71,8 @@ class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
                 $exception->setData('explorer_url', $payment['explorer_url']);
                 $exception->save();
                 $response->setData(['order_success' => 'expired done']);
+
+                $this->deleteExceptionByOrderId($orderId, $payment['_id']);
             }
         } else {
             $transactionId = $this->_request->getParam('id');
@@ -84,6 +87,16 @@ class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
             $response->setData(['order_success' => 'unknown transaction']);
         }
         return $response;
+    }
+
+    private function deleteExceptionByOrderId($orderId, $paymentId = null) {
+        $collection =$this->_exceptionFactory->create()->getCollection()
+            ->addFieldToFilter('order_id', $orderId);
+
+        if($paymentId) {
+            $collection->addFieldToFilter('payment_id', array('neq' => $paymentId));
+        }
+        $collection->walk('delete');
     }
 
     private function addException($cryptoCurrency, $valueResponse, $exploreUrl)

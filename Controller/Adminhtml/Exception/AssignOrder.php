@@ -34,20 +34,51 @@ class AssignOrder extends \Magento\Backend\App\Action
 
         $exceptionId = (int) $this->getRequest()->getParam('id');
         $exception = $this->_exceptionFactory->create()->load($exceptionId);
-        $exceptionOrderId = $exception->getData()['order_id'];
+        $exception->setData('order_assigned', $orderIdToAssign);
+        $exception->setData('confirmed', 1);
+        $exception->save();
 
-        $this->setProcessingForOrder($orderIdToAssign);
-        $this->_exceptionFactory->create()->getCollection()->addFieldToFilter('order_id', $exceptionOrderId)->walk('delete');
-        $this->_exceptionFactory->create()->getCollection()->addFieldToFilter('id', $exceptionId)->walk('delete');
+        if($exception['order_id']  && $orderIdToAssign  != $exception['order_id']) {
+            $this->setStatusForOrder($exception['order_id'], 'new', 'pending');
+        }
+        $this->setStatusForOrder($orderIdToAssign, Order::STATE_PROCESSING, Order::STATE_PROCESSING);
+
+        if($exception['order_id']) {
+             $this->_exceptionFactory->create()->getCollection()
+                 ->addFieldToFilter('order_id', $orderIdToAssign)->walk('delete');
+        }
+
+//        $this->setProcessingForOrder($orderIdToAssign);
+//        $this->_exceptionFactory->create()->getCollection()->addFieldToFilter('order_id', $exceptionOrderId)->walk('delete');
+//        $this->_exceptionFactory->create()->getCollection()->addFieldToFilter('id', $exceptionId)->walk('delete');
 
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('*/*/index');
     }
 
-    private function setProcessingForOrder($orderId) {
+//    private function setStatusForOrder($orderId, $state, $status)
+//    {
+//        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+//        $order = $objectManager->create('\Magento\Sales\Model\Order')->load($orderId);
+//        $order->setData('state', $state);
+//        $order->setStatus($status);
+//        $order->addStatusHistoryComment('Order was set to ' . $status . ' by Ezdefi Exception management.', false);
+////        $history->setIsCustomerNotified(true);
+//        $order->save();
+//    }
+
+//    private function setStatusForOrder($orderId, $state, $status) {
+//        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+//        $order = $objectManager->create('\Magento\Sales\Model\Order')->load($orderId);
+//        $orderState = Order::STATE_PROCESSING;
+//        $order->setState($orderState)->setStatus(Order::STATE_PROCESSING);
+//        $order->save();
+//    }
+
+    private function setStatusForOrder($orderId, $state, $status) {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $order = $objectManager->create('\Magento\Sales\Model\Order')->load($orderId);
-        $orderState = Order::STATE_PROCESSING;
-        $order->setState($orderState)->setStatus(Order::STATE_PROCESSING);
+        $orderState = $state;
+        $order->setState($orderState)->setStatus($status);
         $order->save();
     }
 }

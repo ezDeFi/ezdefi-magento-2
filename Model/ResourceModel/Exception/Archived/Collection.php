@@ -132,6 +132,9 @@ class Collection extends EntityCollection implements SearchResultInterface
     {
         $request = $this->_request->getParams();
 
+        $this->addFieldToFilter('confirmed', 0);
+        $this->addFieldToFilter('explorer_url', array('null' => true));
+
         if(isset($request['filters']['amount_id'])) {
             $amount = $request['filters']['amount_id'];
             $this->addFieldToFilter('amount_id', ['like' => $amount.'%'])->setOrder('`amount_id`', 'ASC');

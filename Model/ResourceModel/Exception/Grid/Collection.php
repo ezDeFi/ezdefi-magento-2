@@ -131,12 +131,22 @@ class Collection extends EntityCollection implements SearchResultInterface
     protected function _renderFiltersBefore()
     {
         $request = $this->_request->getParams();
+
+        $this->addFieldToFilter('order_assigned', array('null' => true));
+        $this->addFieldToFilter('explorer_url', array('neq' => 'NULL'));
+
+        if(isset($request['filters']['increment_id'])) {
+            $incrementId = $request['filters']['increment_id'];
+            $this->addFieldToFilter('od.increment_id', $incrementId);
+        }
+
         if(isset($request['filters']['amount_id'])) {
             $amount = $request['filters']['amount_id'];
             $this->addFieldToFilter('amount_id', ['like' => $amount.'%'])->setOrder('`amount_id`', 'ASC');
         } else {
             $this->setOrder('`id`', 'DESC');
         }
+
         parent::_renderFiltersBefore();
     }
 }

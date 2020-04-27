@@ -1,4 +1,5 @@
 <?php
+
 namespace Ezdefi\Payment\Model\ResourceModel\Exception\Confirmed;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -27,7 +28,8 @@ class Collection extends EntityCollection implements SearchResultInterface
         $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
         $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
-    ) {
+    )
+    {
         parent::__construct(
             $entityFactory,
             $logger,
@@ -36,7 +38,7 @@ class Collection extends EntityCollection implements SearchResultInterface
             $connection,
             $resource
         );
-        $this->_request = $request;
+        $this->_request     = $request;
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
         $this->_init($model, $resourceModel);
@@ -123,7 +125,8 @@ class Collection extends EntityCollection implements SearchResultInterface
             $collection->getSelect()->addFieldToFilter('currency', 'eth');
 
             $where = $collection->getSelect()->getPart(\Magento\Framework\DB\Select::WHERE);
-            echo $collection->getSelect()->__toString();die;
+            echo $collection->getSelect()->__toString();
+            die;
         }
         return $collection;
     }
@@ -133,10 +136,11 @@ class Collection extends EntityCollection implements SearchResultInterface
         $request = $this->_request->getParams();
 
         $this->addFieldToFilter('confirmed', '1');
+        $this->addFieldToFilter('order_assigned', array('neq' => 'NULL'));
 
-        if(isset($request['filters']['amount_id'])) {
+        if (isset($request['filters']['amount_id'])) {
             $amount = $request['filters']['amount_id'];
-            $this->addFieldToFilter('amount_id', ['like' => $amount.'%'])->setOrder('`amount_id`', 'ASC');
+            $this->addFieldToFilter('amount_id', ['like' => $amount . '%'])->setOrder('`amount_id`', 'ASC');
         } else {
             $this->setOrder('`id`', 'DESC');
         }

@@ -21,7 +21,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function _initSelect()
     {
         parent::_initSelect();
-
         $this->getSelect()
             ->joinLeft(
             ['od' => $this->getTable('sales_order')],
@@ -43,7 +42,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                     'new_total' => 'new_order.grand_total',
                     'new_date' => 'new_order.created_at',
                     'new_increment_id' => 'new_order.increment_id'
-                ))
-        ;
+                ));
+        $this->addFilterToMap('increment_id', 'od.increment_id');
+        $this->addFilterToMap('new_increment_id', 'new_order.increment_id');
+
     }
 }

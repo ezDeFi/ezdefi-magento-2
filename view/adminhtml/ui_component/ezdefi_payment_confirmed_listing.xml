@@ -115,15 +115,7 @@
                 </item>
             </argument>
         </column>
-<!--        <column name="email">-->
-<!--            <argument name="data" xsi:type="array">-->
-<!--                <item name="config" xsi:type="array">-->
-<!--                    <item name="filter" xsi:type="string">text</item>-->
-<!--                    <item name="label" xsi:type="string" translate="true">Customer Email</item>-->
-<!--                </item>-->
-<!--            </argument>-->
-<!--        </column>-->
-        <column name="order_assigned" class="Ezdefi\Payment\Ui\Component\ExceptionConfirmed\Column\OrderAssign">
+        <column name="new_increment_id" class="Ezdefi\Payment\Ui\Component\ExceptionConfirmed\Column\OrderAssign">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
@@ -133,24 +125,22 @@
                 </item>
             </argument>
         </column>
-
-        <column name="order_id" class="Ezdefi\Payment\Ui\Component\ExceptionConfirmed\Column\Order">
+        <column name="increment_id" class="Ezdefi\Payment\Ui\Component\ExceptionConfirmed\Column\Order">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Old Order</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
                 </item>
             </argument>
         </column>
-
         <column name="payment_id" class="Ezdefi\Payment\Ui\Component\ExceptionConfirmed\Column\PaymentInfo">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="label" xsi:type="string" translate="true">Payment Information</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
                 </item>
             </argument>
         </column>
@@ -161,6 +151,7 @@
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
                     <item name="resizeDefaultWidth" xsi:type="string">107</item>
                     <item name="indexField" xsi:type="string">id</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
                 </item>
             </argument>
         </actionsColumn>

@@ -1,5 +1,5 @@
 <?php
-namespace Ezdefi\Payment\Controller\Adminhtml\Confirmed;
+namespace Ezdefi\Payment\Controller\Adminhtml\Archived;
 
 use \Magento\Framework\Controller\ResultFactory;
 use \Magento\Framework\App\Action\Context;

@@ -38,23 +38,38 @@ class RevertOrder extends \Magento\Backend\App\Action
 
         $exception   = $this->_exceptionFactory->create()->load($exceptionId);
 
-        // set order status to pendding
-        $orderId = $exception->getOrderId();
-        $this->setPendingForOrder($orderId);
+        if($exception['order_id'] && $exception['order_assigned'] != $exception['order_id'] && $exception['paid'] == 1) {
+            $this->setStatusForOrder($exception['order_id'], Order::STATE_PROCESSING, Order::STATE_PROCESSING);
+        }
+        $this->setStatusForOrder($exception['order_assigned'], 'new', 'pending');
 
-        // set exception to unknown transaction
-        $exception->setOrderId(null);
-        $exception->setPaid(3);
+        $exception->setData('order_assigned', NULL);
         $exception->save();
+
+        if(!$exception['explorer_url']) {
+            $exceptionsToUpdate =  $this->_exceptionFactory->create()->getCollection()
+                ->addFieldToFilter('order_id', $exception['order_id']);
+            foreach ($exceptionsToUpdate as $exceptionToUpdate) {
+                $exceptionToUpdate->setData('confirmed', 0);
+                $exceptionToUpdate->save();
+            }
+        } else {
+            $exceptionsToUpdate = $this->_exceptionFactory->create()->getCollection()
+                ->addFieldToFilter('id', $exception['id']);
+            foreach ($exceptionsToUpdate as $exceptionToUpdate) {
+                $exceptionToUpdate->setData('confirmed', 0);
+                $exceptionToUpdate->save();
+            }
+        }
 
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('*/*/index');
     }
 
-    private function setPendingForOrder($orderId) {
+    private function setStatusForOrder($orderId, $state, $status) {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $order = $objectManager->create('\Magento\Sales\Model\Order')->load($orderId);
-        $orderState = 'new';
-        $order->setState($orderState)->setStatus('pending');
+        $orderState = $state;
+        $order->setState($orderState)->setStatus($status);
         $order->save();
     }
 }

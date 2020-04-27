@@ -38,34 +38,28 @@ class Order extends Column
                     } else {
                         $payStatus= 'Not paid';
                     }
-                    $explorerUrlRow = isset($items['explorer_url']) ? '<tr>
-                                <td class="border-none">Explorer url</td>
-                                <td class="border-none">:</td>
-                                <td class="border-none"><a target="_blank" href="'.$items['explorer_url'].'">View Transaction Detail</a></td>
-                            </tr>' : '';
                     $orderHtml .= '<table>
                         <tbody>
                             <tr>
-                                <td class="border-none">Order id</td>
-                                <td class="border-none">:</td>
+                                <td class="border-none" style="width: 130px">Order id</td>
                                 <td class="border-none">'.$items['increment_id'].'</td>
                             </tr>
                             <tr>
-                                <td class="border-none">Expiration</td>
-                                <td class="border-none">:</td>
-                                <td class="border-none">'.$items['expiration'].'</td>
+                                <td class="border-none">Email</td>
+                                <td class="border-none">'.$items['email'].'</td>
                             </tr>
                             <tr>
-                                <td class="border-none">Paid</td>
-                                <td class="border-none">:</td>
-                                <td class="border-none">'.$payStatus.'</td>
+                                <td class="border-none">Customer</td>
+                                <td class="border-none">'.$items['customer'].'</td>
                             </tr>
                             <tr>
-                                <td class="border-none">Pay by ezdefi wallet</td>
-                                <td class="border-none">:</td>
-                                <td class="border-none">'.($items['has_amount'] ? 'No' : 'Yes').'</td>
+                                <td class="border-none">Total</td>
+                                <td class="border-none">'.$items['total'].'</td>
                             </tr>
-                            '.$explorerUrlRow.'
+                            <tr>
+                                <td class="border-none">Created at</td>
+                                <td class="border-none">'.$items['date'].'</td>
+                            </tr>
                         </tbody>
                     </table>';
                 }
@@ -85,7 +79,7 @@ class Order extends Column
                         'id' => $items['id']
                     ]).'">Assign</button>';
 
-                $items['order_id'] = $orderHtml;
+                $items['increment_id'] = $orderHtml;
             }
         }
         return $dataSource;

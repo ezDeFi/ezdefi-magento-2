@@ -54,7 +54,7 @@ class OrderAssign extends Column
                     </tbody>
                 </table>';
 
-                $items['order_assigned'] = $orderHtml;
+                $items['new_increment_id'] = $orderHtml;
             }
         }
         return $dataSource;
