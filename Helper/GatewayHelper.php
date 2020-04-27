@@ -73,16 +73,6 @@ class GatewayHelper
             $paymentData = json_decode($payment)->data;
             $value = $paymentData->value * pow(10, - $paymentData->decimal);
 
-            return [
-                'status' => "DONE",
-                'code' => self::DONE,
-                'uoid'=> $paymentData->uoid,
-                'currency' => $paymentData->currency,
-                'value' => $value,
-                'explorer_url' => $paymentData->explorer->tx,
-                '_id' => $paymentData->_id
-            ];
-
             if($paymentData->status == "PENDING") {
                 return ['status' => "PENDING", 'code' => self::PENDING];
             } elseif ($paymentData->status == "DONE") {
