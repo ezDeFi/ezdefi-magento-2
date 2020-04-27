@@ -13,6 +13,8 @@ use \Magento\Framework\DB\Ddl\Table;
  */
 class InstallSchema implements InstallSchemaInterface
 {
+    CONST TIME_REMOVE_EXCEPTION = 7;
+
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -21,173 +23,6 @@ class InstallSchema implements InstallSchemaInterface
     {
         $installer = $setup;
         $installer->startSetup();
-        $table = $installer->getConnection()->newTable(
-            $installer->getTable('ezdefi_currency'))
-            ->addColumn(
-                'id',
-                Table::TYPE_INTEGER,
-                11,
-                [
-                    'identity' => true,
-                    'nullable' => false,
-                    'primary'  => true,
-                    'unsigned' => true,
-                ],
-                'id'
-            )
-            ->addColumn(
-                'currency_id',
-                Table::TYPE_TEXT,
-                50,
-                [
-                    'nullable' => false,
-                ],
-                'currency\'s id'
-            )
-            ->addColumn(
-                'order',
-                Table::TYPE_INTEGER,
-                11,
-                [
-                    'nullable' => false,
-                    'default'  => 0
-                ],
-                'order factor, the factor to sort currency'
-            )
-            ->addColumn(
-                'logo',
-                Table::TYPE_TEXT,
-                255,
-                ['nullable' => false],
-                'logo'
-            )
-            ->addColumn(
-                'symbol',
-                Table::TYPE_TEXT,
-                255,
-                ['nullable' => false],
-                'symbol'
-            )
-            ->addColumn(
-                'name',
-                Table::TYPE_TEXT,
-                255,
-                ['nullable' => false],
-                'name'
-            )->addColumn(
-                'discount',
-                Table::TYPE_FLOAT,
-                '5,2',
-                [],
-                'discount'
-            )->addColumn(
-                'payment_lifetime',
-                Table::TYPE_INTEGER,
-                11,
-                [],
-                'payment lifetime'
-            )
-            ->addColumn(
-                'wallet_address',
-                Table::TYPE_TEXT,
-                255,
-                ['nullable' => false],
-                'wallet address'
-            )
-            ->addColumn(
-                'block_confirmation',
-                Table::TYPE_INTEGER,
-                11,
-                [],
-                'block confirmation'
-            )->addColumn(
-                'decimal',
-                Table::TYPE_INTEGER,
-                11,
-                [],
-                'decimal, to create amount id'
-            )->addColumn(
-                'currency_decimal',
-                Table::TYPE_INTEGER,
-                11,
-                [],
-                'currency decimal'
-            )->addColumn(
-                'description',
-                Table::TYPE_TEXT,
-                255,
-                ['default' => ''],
-                'description'
-            )->addIndex(
-                $installer->getIdxName(
-                    $installer->getTable('ezdefi_currency'),
-                    ['currency_id'],
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-                ),
-                'currency_id',
-                ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
-            )->setComment('Ezdefi currency Table');
-        $installer->getConnection()->createTable($table);
-
-
-        $tableAmount = $installer->getConnection()->newTable(
-            $installer->getTable('ezdefi_amount'))
-            ->addColumn(
-                'id',
-                Table::TYPE_INTEGER,
-                11,
-                [
-                    'identity' => true,
-                    'nullable' => false,
-                    'primary'  => true,
-                    'unsigned' => true,
-                ],
-                'id'
-            )
-            ->addColumn(
-                'temp',
-                Table::TYPE_INTEGER,
-                11,
-                [
-                    'nullable' => false,
-                ],
-                'temp'
-            )
-            ->addColumn(
-                'amount',
-                Table::TYPE_DECIMAL,
-                '60,30',
-                ['nullable' => false],
-                'amount'
-            )
-            ->addColumn(
-                'tag_amount',
-                Table::TYPE_DECIMAL,
-                '60,30',
-                ['nullable' => false],
-                'tag_amount'
-            )
-            ->addColumn(
-                'expiration',
-                Table::TYPE_TIMESTAMP,
-                null,
-                ['nullable' => false],
-                'expiration'
-            )->addColumn(
-                'currency',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                50,
-                [],
-                'currency'
-            )->addColumn(
-                'decimal',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                5,
-                ['nullable' => false],
-                'decimal'
-            )->setComment('Ezdefi amount Table');
-        $installer->getConnection()->createTable($tableAmount);
-
         $tableException = $installer->getConnection()->newTable(
             $installer->getTable('ezdefi_exception'))
             ->addColumn(
@@ -218,6 +53,16 @@ class InstallSchema implements InstallSchemaInterface
                 11,
                 ['nullable' => true],
                 'order id'
+            )
+            ->addColumn(
+                'order_assigned',
+                Table::TYPE_INTEGER,
+                11,
+                [
+                    'nullable' => true,
+                    'default'  => null
+                ],
+                'order assigned id'
             )
             ->addColumn(
                 'amount_id',
@@ -259,11 +104,23 @@ class InstallSchema implements InstallSchemaInterface
                     'default' => null
                 ],
                 'explorer url'
+            )->addColumn(
+                'confirmed',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                2,
+                ['default' => 0],
+                '0: not confirm from exceptin, 1: be confirmed from exception'
             )
             ->setComment('Ezdefi exception Table');
         $installer->getConnection()->createTable($tableException);
 
-
+        $installer->run("
+            CREATE EVENT  IF NOT EXISTS `ezdefi_remove_exception_event`
+            ON SCHEDULE EVERY ".self::TIME_REMOVE_EXCEPTION." DAY
+            STARTS DATE(NOW())
+            DO
+            DELETE FROM `{$installer->getTable('ezdefi_cryptocurrencypayment/exception')}` WHERE DATEDIFF( NOW( ) ,  expiration ) >= 5;
+        ");
 
         $installer->endSetup();
     }
