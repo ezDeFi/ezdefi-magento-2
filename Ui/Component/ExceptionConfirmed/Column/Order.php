@@ -29,30 +29,34 @@ class Order extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$items) {
-                $orderHtml = '<table>
-                    <tbody>
-                        <tr>
-                            <td class="border-none" style="width: 130px">Order id</td>
-                            <td class="border-none">'.$items['increment_id'].'</td>
-                        </tr>
-                        <tr>
-                            <td class="border-none">Email</td>
-                            <td class="border-none">'.$items['email'].'</td>
-                        </tr>
-                        <tr>
-                            <td class="border-none">Customer</td>
-                            <td class="border-none">'.$items['customer'].'</td>
-                        </tr>
-                        <tr>
-                            <td class="border-none">Total</td>
-                            <td class="border-none">'.$items['total'].'</td>
-                        </tr>
-                        <tr>
-                            <td class="border-none">Created at</td>
-                            <td class="border-none">'.$items['date'].'</td>
-                        </tr>
-                    </tbody>
-                </table>';
+                if($items['order_id']) {
+                    $orderHtml = '<table>
+                        <tbody>
+                            <tr>
+                                <td class="border-none" style="width: 130px">Order id</td>
+                                <td class="border-none">' . $items['increment_id'] . '</td>
+                            </tr>
+                            <tr>
+                                <td class="border-none">Email</td>
+                                <td class="border-none">' . $items['email'] . '</td>
+                            </tr>
+                            <tr>
+                                <td class="border-none">Customer</td>
+                                <td class="border-none">' . $items['customer'] . '</td>
+                            </tr>
+                            <tr>
+                                <td class="border-none">Total</td>
+                                <td class="border-none">' . $items['total'] . '</td>
+                            </tr>
+                            <tr>
+                                <td class="border-none">Created at</td>
+                                <td class="border-none">' . $items['date'] . '</td>
+                            </tr>
+                        </tbody>
+                    </table>';
+                } else {
+                    $orderHtml ='';
+                }
 
                 $items['increment_id'] = $orderHtml;
             }

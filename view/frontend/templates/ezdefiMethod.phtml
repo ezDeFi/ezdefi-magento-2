@@ -3,6 +3,7 @@
  * @var \Mageplaza\HelloWorld\Block\Display $block
  */
 ?>
+<?php if(!$block->isError()): ?>
 <div class="payment-content--ezdefi">
     <div class="ezdefi-payment__value">
         <span class="ezdefi-payment__origin-value--ezdefi"><?php echo $block->getOriginValue(); ?></span>
@@ -29,6 +30,12 @@
         <a href="https://ezdefi.com/android" target="_blank"><img src="<?php echo $this->getViewFileUrl('Ezdefi_Payment/image/android-icon.png'); ?>" alt=""></a>
     </div>
 </div>
+<?php endif; ?>
+<?php if($this->isError()): ?>
+    <div class="payment-error--simple">
+        <?php echo __('Can\'t create payment. Please contact with shop owner.'); ?>
+    </div>
+<?php endif; ?>
 <!--<div class="payment-error--ezdefi">-->
 <!--    {{ error_cant_create_payment }}-->
 <!--</div>-->

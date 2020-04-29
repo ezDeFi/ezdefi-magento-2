@@ -20,7 +20,6 @@ class SimpleMethod extends \Magento\Framework\View\Element\Template
         parent::__construct($context);
     }
 
-
     public function isError() {
         return !$this->_data['payment'];
     }

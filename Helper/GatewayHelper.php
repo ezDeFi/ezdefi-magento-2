@@ -109,7 +109,7 @@ class GatewayHelper
         if($payment) {
             $paymentData = json_decode($payment);
             if($paymentData->code == -1) {
-                echo $paymentData->error; die;
+                echo __('Can\'t create payment. Please contact with shop owner.'); die;
             } else {
                 return json_decode($payment)->data;
             }

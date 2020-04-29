@@ -48,6 +48,6 @@ class Index extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Webkul_Grid::grid_list');
+        return $this->_authorization->isAllowed('Ezdefi_Payment::exception');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ezdefi\Payment\Ui\Component\Listing\Column;
+namespace Ezdefi\Payment\Ui\Component\ExceptionPending\Column;
 
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;

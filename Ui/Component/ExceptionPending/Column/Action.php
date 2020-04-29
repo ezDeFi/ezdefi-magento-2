@@ -1,6 +1,6 @@
 <?php
 
-namespace Ezdefi\Payment\Ui\Component\Listing\Column;
+namespace Ezdefi\Payment\Ui\Component\ExceptionPending\Column;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -12,8 +12,6 @@ class Action extends Column
     /** Url path */
     const URL_DELETE_EXCEPTION = 'adminhtml/exception/delete';
     const URL_CONFIRM_PAID     = 'adminhtml/exception/confirmpaid';
-    const URL_ASSIGN_ORDER     = 'adminhtml/exception/assignorder';
-    const URL_REVERT_ORDER     = 'adminhtml/exception/revertorder';
     /** @var UrlInterface */
     protected $_urlBuilder;
 
@@ -68,6 +66,21 @@ class Action extends Column
                             'message' => __('Are you sure you want to delete this record?')
                         ]
                     ];
+                    if($item['order_id']) {
+                        $item[$name]['confirm'] = [
+                            'href'    => $this->_urlBuilder->getUrl(
+                                self::URL_CONFIRM_PAID,
+                                [
+                                    'id' => $item['id']
+                                ]
+                            ),
+                            'label'   => __('Confirm'),
+                            'confirm' => [
+                                'title'   => __('Confirm Exception'),
+                                'message' => __('Are you sure you want to confirm this order?')
+                            ]
+                        ];
+                    }
                 }
             }
         }

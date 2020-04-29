@@ -20,6 +20,10 @@ class EzdefiMethod extends \Magento\Framework\View\Element\Template
         parent::__construct($context);
     }
 
+    public function isError() {
+        return !$this->_data['payment'];
+    }
+
     public function getPaymentId()
     {
         return __($this->_data['payment']->_id);

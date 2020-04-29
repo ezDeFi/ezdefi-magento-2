@@ -106,7 +106,7 @@
                 </item>
             </argument>
         </column>
-        <column name="amount_id" class="Ezdefi\Payment\Ui\Component\Listing\Column\Amount">
+        <column name="amount_id" class="Ezdefi\Payment\Ui\Component\ExceptionPending\Column\Amount">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
@@ -115,32 +115,29 @@
                 </item>
             </argument>
         </column>
-        <column name="increment_id" class="Ezdefi\Payment\Ui\Component\Listing\Column\Order">
+        <column name="increment_id" class="Ezdefi\Payment\Ui\Component\ExceptionPending\Column\Order">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Order</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
                 </item>
             </argument>
         </column>
-        <column name="payment_id" class="Ezdefi\Payment\Ui\Component\Listing\Column\PaymentInfo">
+        <column name="payment_id" class="Ezdefi\Payment\Ui\Component\ExceptionPending\Column\PaymentInfo">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="label" xsi:type="string" translate="true">Payment Information</item>
-                    <item name="sortOrder" xsi:type="number">20</item>
                 </item>
             </argument>
         </column>
-        <actionsColumn name="actions" class="Ezdefi\Payment\Ui\Component\Listing\Column\Action">
+        <actionsColumn name="actions" class="Ezdefi\Payment\Ui\Component\ExceptionPending\Column\Action">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
                     <item name="resizeDefaultWidth" xsi:type="string">107</item>
                     <item name="indexField" xsi:type="string">id</item>
-                    <item name="sortOrder" xsi:type="number">30</item>
                 </item>
             </argument>
         </actionsColumn>

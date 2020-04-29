@@ -8,7 +8,7 @@ use \Ezdefi\Payment\Model\ExceptionFactory;
 use Magento\Framework\UrlInterface;
 use Magento\Sales\Model\Order;
 
-class AssignOrder extends \Magento\Backend\App\Action
+class ConfirmPaid extends \Magento\Backend\App\Action
 {
     protected $_pageFactory;
 
@@ -30,28 +30,23 @@ class AssignOrder extends \Magento\Backend\App\Action
 
     public function execute()
     {
-        $orderIdToAssign = (int) $this->getRequest()->getParam('order_id');
-
         $exceptionId = (int) $this->getRequest()->getParam('id');
         $exception = $this->_exceptionFactory->create()->load($exceptionId);
-        $exception->setData('order_assigned', $orderIdToAssign);
-        $exception->setData('confirmed', 1);
+        $exception->setData('order_assigned',$exception['order_id']);
         $exception->save();
 
-        if($exception['order_id']  && $orderIdToAssign  != $exception['order_id']) {
-            $this->setStatusForOrder($exception['order_id'], 'new', 'pending');
-        }
-        $this->setStatusForOrder($orderIdToAssign, Order::STATE_PROCESSING, Order::STATE_PROCESSING);
+        $orderId = $exception->getData()['order_id'];
+        $this->setStatusForOrder($orderId, Order::STATE_PROCESSING, Order::STATE_PROCESSING);
 
-        if(!$exception['order_id']) {
-             $this->_exceptionFactory->create()->getCollection()
-                 ->addFieldToFilter('order_id', $orderIdToAssign)->walk('delete');
+        $exceptionsToUpdate = $this->_exceptionFactory->create()->getCollection()
+            ->addFieldToFilter('order_id', $orderId);
+        foreach ($exceptionsToUpdate as $exceptionToUpdate) {
+            $exceptionToUpdate->setData('confirmed', 1);
+            $exceptionToUpdate->save();
         }
-
 
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('*/*/index');
     }
-
 
     private function setStatusForOrder($orderId, $state, $status) {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();

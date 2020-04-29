@@ -30,40 +30,38 @@ class PaymentInfo extends Column
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$items) {
                 $orderHtml = '';
-                if($items['order_id']) {
-                    if($items['paid'] == 1) {
-                        $payStatus = 'Paid on time';
-                    } else if ($items['paid'] == 2) {
-                        $payStatus = 'Paid after expired';
-                    } else {
-                        $payStatus= 'Not paid';
-                    }
-                    $explorerUrlRow = isset($items['explorer_url']) ? '<tr>
-                                <td class="border-none">Explorer url</td>
-                                <td class="border-none">:</td>
-                                <td class="border-none"><a target="_blank" href="'.$items['explorer_url'].'">View Transaction Detail</a></td>
-                            </tr>' : '';
-                    $orderHtml .= '<table>
-                        <tbody>
-                            <tr>
-                                <td class="border-none">Expiration</td>
-                                <td class="border-none">:</td>
-                                <td class="border-none">'.$items['expiration'].'</td>
-                            </tr>
-                            <tr>
-                                <td class="border-none">Paid</td>
-                                <td class="border-none">:</td>
-                                <td class="border-none">'.$payStatus.'</td>
-                            </tr>
-                            <tr>
-                                <td class="border-none">Pay by ezdefi wallet</td>
-                                <td class="border-none">:</td>
-                                <td class="border-none">'.($items['has_amount'] ? 'No' : 'Yes').'</td>
-                            </tr>
-                            '.$explorerUrlRow.'
-                        </tbody>
-                    </table>';
+                if($items['paid'] == 1) {
+                    $payStatus = 'Paid on time';
+                } else if ($items['paid'] == 2) {
+                    $payStatus = 'Paid after expired';
+                } else {
+                    $payStatus= 'Not paid';
                 }
+                $explorerUrlRow = isset($items['explorer_url']) ? '<tr>
+                            <td class="border-none">Explorer url</td>
+                            <td class="border-none">:</td>
+                            <td class="border-none"><a target="_blank" href="'.$items['explorer_url'].'">View Transaction Detail</a></td>
+                        </tr>' : '';
+                $orderHtml .= '<table>
+                    <tbody>
+                        <tr>
+                            <td class="border-none">Expiration</td>
+                            <td class="border-none">:</td>
+                            <td class="border-none">'.$items['expiration'].'</td>
+                        </tr>
+                        <tr>
+                            <td class="border-none">Paid</td>
+                            <td class="border-none">:</td>
+                            <td class="border-none">'.$payStatus.'</td>
+                        </tr>
+                        <tr>
+                            <td class="border-none">Pay by ezdefi wallet</td>
+                            <td class="border-none">:</td>
+                            <td class="border-none">'.($items['has_amount'] ? 'No' : 'Yes').'</td>
+                        </tr>
+                        '.$explorerUrlRow.'
+                    </tbody>
+                </table>';
 
                 $items['payment_id'] = $orderHtml;
             }
