@@ -52,6 +52,10 @@ class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
             $hasAmountId = explode('-', $uoid)[1];
 
             if ($payment['status'] == 'DONE') {
+                $message = 'Payment ID: ' . $paymentId . '<br> 
+                            Status: ' . $payment['status'] . '<br>
+                            Use Ezdefi Wallet: ' . ($hasAmountId ? 'false' : 'true').'<br>
+                            Tx: '.($payment['explorer_url'] ? $payment['explorer_url'] : 'none');
                 if ($hasAmountId == 1) {
                     $exceptionCollection = $this->_exceptionFactory->create()->getCollection()->addFieldToFilter('payment_id', $payment['_id']);
                     $exception           = $exceptionCollection->getFirstItem();
@@ -62,7 +66,7 @@ class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
                 } else {
                     $this->deleteExceptionByOrderId($orderId);
                 }
-                $response->setData(['order_success' => $this->setProcessingForOrder($orderId)]);
+                $response->setData(['order_success' => $this->setProcessingForOrder($orderId, $message)]);
             }
             if ($payment['status'] == 'EXPIRED_DONE') {
                 $exceptionCollection = $this->_exceptionFactory->create()->getCollection()->addFieldToFilter('payment_id', $payment['_id']);
@@ -115,12 +119,14 @@ class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
         $exceptionModel->save();
     }
 
-    private function setProcessingForOrder($orderId)
+    private function setProcessingForOrder($orderId, $message)
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $order         = $objectManager->create('\Magento\Sales\Model\Order')->load($orderId);
         $orderState    = Order::STATE_PROCESSING;
         $order->setState($orderState)->setStatus(Order::STATE_PROCESSING);
+        $history = $order->addStatusHistoryComment($message, false);
+        $history->setIsCustomerNotified(true);
         $order->save();
         return 'true';
     }
