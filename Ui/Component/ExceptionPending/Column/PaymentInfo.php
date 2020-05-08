@@ -30,6 +30,11 @@ class PaymentInfo extends Column
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$items) {
                 $orderHtml = '';
+                $explorerUrlRow = isset($items['explorer_url']) ? '<tr>
+                                <td class="border-none">Explorer url</td>
+                                <td class="border-none">:</td>
+                                <td class="border-none"><a target="_blank" href="'.$items['explorer_url'].'">View Transaction Detail</a></td>
+                            </tr>' : '';
                 if($items['order_id']) {
                     if($items['paid'] == 1) {
                         $payStatus = 'Paid on time';
@@ -38,11 +43,7 @@ class PaymentInfo extends Column
                     } else {
                         $payStatus= 'Not paid';
                     }
-                    $explorerUrlRow = isset($items['explorer_url']) ? '<tr>
-                                <td class="border-none">Explorer url</td>
-                                <td class="border-none">:</td>
-                                <td class="border-none"><a target="_blank" href="'.$items['explorer_url'].'">View Transaction Detail</a></td>
-                            </tr>' : '';
+
                     $orderHtml .= '<table>
                         <tbody>
                             <tr>
@@ -60,6 +61,12 @@ class PaymentInfo extends Column
                                 <td class="border-none">:</td>
                                 <td class="border-none">'.($items['has_amount'] ? 'No' : 'Yes').'</td>
                             </tr>
+                            '.$explorerUrlRow.'
+                        </tbody>
+                    </table>';
+                } else {
+                    $orderHtml .= '<table>
+                        <tbody>
                             '.$explorerUrlRow.'
                         </tbody>
                     </table>';

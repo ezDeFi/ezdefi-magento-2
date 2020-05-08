@@ -109,7 +109,7 @@ require(
                                     <tr>
                                         <td>Order id</td>
                                         <td class="padding-left-md">:</td>
-                                        <td class="exception__order-pending--data">${parseInt(repo.increment_id)}</td>
+                                        <td class="exception__order-pending--data">${repo.increment_id}</td>
                                     </tr>
                                     <tr>
                                         <td class="exception-order-label-2">Email</td>

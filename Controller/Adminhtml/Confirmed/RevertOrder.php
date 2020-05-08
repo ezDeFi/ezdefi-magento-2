@@ -43,8 +43,7 @@ class RevertOrder extends \Magento\Backend\App\Action
         }
         $this->setStatusForOrder($exception['order_assigned'], 'new', 'pending');
 
-        $exception->setData('order_assigned', NULL);
-        $exception->save();
+
 
         if(!$exception['explorer_url']) {
             $exceptionsToUpdate =  $this->_exceptionFactory->create()->getCollection()
@@ -55,12 +54,15 @@ class RevertOrder extends \Magento\Backend\App\Action
             }
         } else {
             $exceptionsToUpdate = $this->_exceptionFactory->create()->getCollection()
-                ->addFieldToFilter('id', $exception['id']);
+                ->addFieldToFilter(['id', 'order_id'], [$exception['id'],  $exception['order_assigned']]);
             foreach ($exceptionsToUpdate as $exceptionToUpdate) {
                 $exceptionToUpdate->setData('confirmed', 0);
                 $exceptionToUpdate->save();
             }
         }
+
+        $exception->setData('order_assigned', NULL);
+        $exception->save();
 
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('*/*/index');
     }

@@ -43,9 +43,12 @@ class AssignOrder extends \Magento\Backend\App\Action
         }
         $this->setStatusForOrder($orderIdToAssign, Order::STATE_PROCESSING, Order::STATE_PROCESSING);
 
-        if(!$exception['order_id']) {
-             $this->_exceptionFactory->create()->getCollection()
-                 ->addFieldToFilter('order_id', $orderIdToAssign)->walk('delete');
+        $exceptionsToDelete = $this->_exceptionFactory->create()
+            ->getCollection()
+            ->addFieldToFilter('order_id', $orderIdToAssign);
+        foreach ($exceptionsToDelete as $exceptionToDelete) {
+            $exceptionToDelete->setData('confirmed', 2);
+            $exceptionToDelete->save();
         }
 
 
