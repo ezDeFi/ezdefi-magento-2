@@ -6,6 +6,7 @@ use \Magento\Framework\App\Action\Context;
 use \Magento\Framework\View\Result\PageFactory;
 use \Ezdefi\Payment\Model\ExceptionFactory;
 use Magento\Framework\UrlInterface;
+use Magento\Sales\Model\Order;
 
 class RevertOrder extends \Magento\Backend\App\Action
 {
