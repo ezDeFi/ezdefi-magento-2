@@ -41,11 +41,11 @@ class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
-        $this->_logger->debug('have callback');
         $response  = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $paymentId = $this->_request->getParam('paymentid');
 
         if ($paymentId) {
+            $this->_logger->debug('payment id:' . $this->_request->getParam('paymentid'));
             $payment = $this->_gatewayHelper->checkPaymentComplete($paymentId);
             $uoid        = $payment['uoid'];
             $orderId     = explode('-', $uoid)[0];
@@ -79,6 +79,7 @@ class CallbackConfirmOrder extends \Magento\Framework\App\Action\Action
                 $this->deleteExceptionByOrderId($orderId, $payment['_id']);
             }
         } else {
+            $this->_logger->debug('transaction id:' . $this->_request->getParam('id'));
             $transactionId = $this->_request->getParam('id');
             $explorerUrl   = $this->_request->getParam('explorerUrl');
 
