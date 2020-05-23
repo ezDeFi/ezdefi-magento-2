@@ -23,6 +23,7 @@ class InstallSchema implements InstallSchemaInterface
     {
         $installer = $setup;
         $installer->startSetup();
+        $installer->run("DROP TABLE IF EXISTS ".$installer->getTable('ezdefi_exception'));
         $tableException = $installer->getConnection()->newTable(
             $installer->getTable('ezdefi_exception'))
             ->addColumn(
@@ -113,14 +114,6 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->setComment('Ezdefi exception Table');
         $installer->getConnection()->createTable($tableException);
-
-        $installer->run("
-            CREATE EVENT  IF NOT EXISTS `ezdefi_remove_exception_event`
-            ON SCHEDULE EVERY ".self::TIME_REMOVE_EXCEPTION." DAY
-            STARTS DATE(NOW())
-            DO
-            DELETE FROM `{$installer->getTable('ezdefi_cryptocurrencypayment/exception')}` WHERE DATEDIFF( NOW( ) ,  expiration ) >= 5;
-        ");
 
         $installer->endSetup();
     }
